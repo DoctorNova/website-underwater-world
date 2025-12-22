@@ -27,7 +27,7 @@
   "homepage": "https://github.com/DoctorNova/website-underwater-world#readme",
   "devDependencies": {
     "@types/node": "^25.0.3",
-    "@types/three": "0.160.0",
+    "@types/three": "^0.182.0",
     "@vitest/expect": "^4.0.16",
     "@vitest/ui": "^4.0.16",
     "typescript": "^5.9.2",
@@ -37,6 +37,6 @@
   },
   "dependencies": {
     "open-simplex-noise": "^2.5.0",
-    "three": "0.160.0"
+    "three": "^0.182.0"
   }
 }

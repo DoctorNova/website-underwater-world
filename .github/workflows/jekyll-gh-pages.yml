@@ -32,6 +32,8 @@ jobs:
         uses: actions/configure-pages@v5
       - name: Build
         run: |
+          rm -rf node_modules
+          rm -rf dist
           npm ci
           npm run build
       - name: Upload static files as artifact
