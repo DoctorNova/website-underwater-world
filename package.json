@@ -1,5 +1,5 @@
 {
-  "name": "threejs-learning",
+  "name": "website-underwater-world",
   "version": "1.0.0",
   "description": "",
   "main": "src/main.js",
@@ -23,7 +23,7 @@
   "homepage": "https://github.com/DoctorNova/website-underwater-world#readme",
   "devDependencies": {
     "@types/node": "^25.0.3",
-    "@types/three": "^0.178.1",
+    "@types/three": "0.182.0",
     "@vitest/expect": "^4.0.16",
     "@vitest/ui": "^4.0.16",
     "typescript": "^5.9.2",
@@ -33,6 +33,6 @@
   },
   "dependencies": {
     "open-simplex-noise": "^2.5.0",
-    "three": "^0.179.0"
+    "three": "0.182.0"
   }
 }
