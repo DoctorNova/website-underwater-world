@@ -10,6 +10,31 @@
       "preLaunchTask": "npm: dev",
       "postDebugTask": "Terminate task",
       "runtimeArgs": ["--remote-debugging-port=9222"]
+    },
+    {
+      "name": "Debug Vitest (all tests)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
+      "args": [
+        "run",
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "autoAttachChildProcesses": true
+    },
+    {
+      "name": "Debug current Vitest file",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
+      "args": [
+        "run",
+        "${file}",
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
     }
   ]
 }

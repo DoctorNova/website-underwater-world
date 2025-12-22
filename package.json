@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:watch": "vitest --watch"
   },
   "repository": {
     "type": "git",
@@ -19,9 +22,14 @@
   },
   "homepage": "https://github.com/DoctorNova/website-underwater-world#readme",
   "devDependencies": {
+    "@types/node": "^25.0.3",
     "@types/three": "^0.178.1",
+    "@vitest/expect": "^4.0.16",
+    "@vitest/ui": "^4.0.16",
     "typescript": "^5.9.2",
-    "vite": "^7.0.6"
+    "vite": "^7.0.6",
+    "vite-tsconfig-paths": "^6.0.3",
+    "vitest": "^4.0.16"
   },
   "dependencies": {
     "open-simplex-noise": "^2.5.0",

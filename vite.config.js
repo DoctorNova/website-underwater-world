@@ -1,5 +1,6 @@
 import { readFileSync } from 'fs';
 import { defineConfig } from 'vite';
+import tsconfigPaths from "vite-tsconfig-paths";
 
 const packageJson = JSON.parse(readFileSync(new URL('./package.json', import.meta.url)));
 let repoName = '';
@@ -13,10 +14,23 @@ if (packageJson.repository && packageJson.repository.url) {
 export default defineConfig({
   assetsInclude: ["**/shaders/*"],
   base: repoName ? `/${repoName}/` : '/',
-  plugins: [],
+  plugins: [tsconfigPaths()],
   server: {
     watch: {
       usePolling: true,
     },
+  },
+  test: {
+    globals: true,      // Jest-like global functions
+    environment: 'node', // Node environment for testing functions
+    coverage: {
+      reporter: ['text', 'lcov'],
+    },
+
+    // Single fork to allow debugging with breakpoints
+    pool: "forks",
+    forks: { 
+      singleFork: true 
+    }
   },
 });
