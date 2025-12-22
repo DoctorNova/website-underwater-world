@@ -24,11 +24,11 @@ export class AnimationComponent extends Component {
     this.animationMixer = new THREE.AnimationMixer(animationRoot);
     this.owner.transform.add(animationRoot);
 
-    if (this.initialAnimationClipName) {
-      if (typeof this.initialAnimationClipName === 'number') {
-        const clipNames = this.animationResource!.gltf.animations[this.initialAnimationClipName]?.name;
-        this.initialAnimationClipName = clipNames;
-      }
+    if (typeof this.initialAnimationClipName === 'number') {
+      const clipNames = this.animationResource!.gltf.animations[this.initialAnimationClipName]?.name;
+      this.initialAnimationClipName = clipNames;
+    }
+    if (typeof this.initialAnimationClipName === 'string') {
       this.PlayAnimationClip(this.initialAnimationClipName);
     }
   }

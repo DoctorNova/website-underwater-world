@@ -1,13 +1,9 @@
+import { FILES_ON_SERVER } from 'Resources/AvailableResources';
 import * as THREE from 'three';
 import { CustomGLTFLoader } from './CustomGLTFLoader';
 import type { CustomResourceLoader } from './CustomResourceLoader';
 
-
-const filesOnServer = {
-  emperorAngelfish: 'assets/emperor_angelfish.glb',
-  fusilier: 'assets/fusilier.glb',
-};
-export type ResourceName = keyof typeof filesOnServer;
+export type ResourceName = keyof typeof FILES_ON_SERVER;
 
 export type OnProgressCallback = (url: string, itemsLoaded: number, itemsTotal: number) => void;
 export type OnSuccessCallback = () => void;
@@ -19,13 +15,23 @@ export type LoadOptions = {
   onError?: OnErrorCallback;
 };
 
+const defaultLoadOptions: LoadOptions = {
+  onProgress: undefined,
+  onSuccess: undefined,
+  onError: (url: string) => { console.error(`Failed to load resource: ${url}`); },
+};
+
 export class ResourceManager {
   private static resources: Map<ResourceName, Promise<any>> = new Map();
   private loadingManager: THREE.LoadingManager;
   private resourceLoaders: Map<string, CustomResourceLoader>;
 
   constructor(options?: LoadOptions) {
-    this.loadingManager = new THREE.LoadingManager(options?.onSuccess, options?.onProgress, options?.onError);
+    this.loadingManager = new THREE.LoadingManager(
+      options?.onSuccess ?? defaultLoadOptions.onSuccess, 
+      options?.onProgress ?? defaultLoadOptions.onProgress, 
+      options?.onError ?? defaultLoadOptions.onError
+    );
     this.resourceLoaders = new Map<string, CustomResourceLoader>([['glb', new CustomGLTFLoader(this.loadingManager)]]);
   }
 
@@ -43,7 +49,7 @@ export class ResourceManager {
         continue; // already loading or loaded
       }
 
-      const resourcePath = filesOnServer[resourceName];
+      const resourcePath = FILES_ON_SERVER[resourceName];
       const fileType = resourcePath.split('.').pop()?.toLowerCase() || '';
       const loader = this.resourceLoaders.get(fileType);
 

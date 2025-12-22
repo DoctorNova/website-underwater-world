@@ -1,6 +1,6 @@
 import { globalBaseComponentManager } from "Composition/BaseComponentManager";
 import { globalGameObjectManager } from "Composition/GameObjectManager";
-import { CreateGameObjects } from "CreateGameObjects";
+import { CreateGameScene } from "CreateGameScene";
 import { globalGraphicSystem } from "Graphics/GraphicSystem";
 import { globalInputManager } from "Input/InputManager";
 import type { ResourceName } from "Resources";
@@ -63,7 +63,7 @@ export class Application {
     });
     resourceLoader.Load(...requiredResources);
 
-    CreateGameObjects(this.scene);
+    CreateGameScene(this.scene);
   }
 
   public RenderLoop() {
