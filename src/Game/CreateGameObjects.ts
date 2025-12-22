@@ -1,7 +1,7 @@
 import { CreateGameObject } from 'Composition';
 import { globalGraphicSystem } from 'Graphics/GraphicSystem';
 import { AnimationComponent } from 'Graphics/SkinComponent';
-import { OceanSkyBox } from 'SkyBox/OceanSkybox';
+import { OceanSkyBox } from 'SkyBox/OceanSkyBox';
 import * as THREE from 'three';
 
 export function CreateGameObjects(scene: THREE.Scene): void {

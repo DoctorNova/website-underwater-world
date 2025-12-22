@@ -1,4 +1,4 @@
-import { Application } from "Game";
+import { Application } from "Application";
 
 const application = new Application();
 application.Initialize();

@@ -1,5 +1,5 @@
-import * as THREE from 'three';
 import { globals } from 'Utility/global';
+import * as THREE from 'three';
 import fragmentShader from './Shaders/OceanSkyBox.frag?raw';
 import vertexShader from './Shaders/OceanSkyBox.vert?raw';
 

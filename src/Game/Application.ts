@@ -1,6 +1,6 @@
 import { globalBaseComponentManager } from "Composition/BaseComponentManager";
 import { globalGameObjectManager } from "Composition/GameObjectManager";
-import { CreateGameObjects } from "Game/CreateGameObjects";
+import { CreateGameObjects } from "CreateGameObjects";
 import { globalGraphicSystem } from "Graphics/GraphicSystem";
 import { globalInputManager } from "Input/InputManager";
 import type { ResourceName } from "Resources";
