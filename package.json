@@ -11,6 +11,10 @@
     "test:ui": "vitest --ui",
     "test:watch": "vitest --watch"
   },
+  "engines": {
+    "node": ">=20",
+    "npm": ">=9.6"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/DoctorNova/website-underwater-world.git"
