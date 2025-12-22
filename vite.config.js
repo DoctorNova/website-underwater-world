@@ -22,8 +22,8 @@ export default defineConfig({
     },
   },
   test: {
-    globals: true,      // Jest-like global functions
-    environment: 'node', // Node environment for testing functions
+    globals: true,        // Jest-like global functions
+    environment: 'jsdom', // browser environment for testing functions
     coverage: {
       reporter: ['text', 'lcov'],
     },

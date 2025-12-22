@@ -67,6 +67,13 @@ class GraphicSystem {
   get Canvas(): HTMLCanvasElement | undefined {
     return this.renderer?.domElement;
   }
+
+  GetActiveCamera(): THREE.Camera {
+    if (this.cameras.length === 0) {
+      throw new Error("No cameras available in GraphicSystem.");
+    }
+    return this.cameras[0];
+  }
 }
 
 export const globalGraphicSystem = new GraphicSystem();

@@ -2,8 +2,9 @@ import { globalBaseComponentManager } from "Composition/BaseComponentManager";
 import { globalGameObjectManager } from "Composition/GameObjectManager";
 import { CreateGameObjects } from "Game/CreateGameObjects";
 import { globalGraphicSystem } from "Graphics/GraphicSystem";
-import type { ResourceName } from "ResourceManager";
-import { ResourceManager } from "ResourceManager/Manager";
+import { globalInputManager } from "Input/InputManager";
+import type { ResourceName } from "Resources";
+import { ResourceManager } from "Resources/ResourceManager";
 import * as THREE from "three";
 import { globals } from "Utility/global";
 
@@ -50,6 +51,7 @@ export class Application {
     globalGameObjectManager.Initialize();
     globalBaseComponentManager.Initialize();
     globalGraphicSystem.Initialize(this.canvasElement);
+    globalInputManager.Initialize();
 
     const requiredResources: ResourceName[] = [
       'emperorAngelfish',
@@ -87,6 +89,7 @@ export class Application {
     globalGraphicSystem.Shutdown();
     globalGameObjectManager.Shutdown();
     globalBaseComponentManager.Shutdown();
+    globalInputManager.Shutdown();
   }
 
 }

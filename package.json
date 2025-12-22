@@ -30,6 +30,7 @@
     "@types/three": "^0.182.0",
     "@vitest/expect": "^4.0.16",
     "@vitest/ui": "^4.0.16",
+    "jsdom": "^27.3.0",
     "typescript": "^5.9.2",
     "vite": "^7.0.6",
     "vite-tsconfig-paths": "^6.0.3",
