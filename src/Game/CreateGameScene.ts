@@ -1,4 +1,4 @@
-import { PlayerControlComponent } from 'Components/PlayerControlComponent';
+import { CameraControlComponent } from 'Components/CameraControlComponent';
 import { CreateGameObject } from 'Composition';
 import { globalGraphicSystem } from 'Graphics/GraphicSystem';
 import { AnimationComponent } from 'Graphics/SkinComponent';
@@ -62,7 +62,7 @@ export function CreateGameScene(scene: THREE.Scene): void {
   CreateGameObject({
     parent: scene, 
     componentsToCreate: [
-      [PlayerControlComponent, [camera]],
+      [CameraControlComponent, [camera]],
       [AnimationComponent, ["emperorAngelfish", "EmperorAngelfish|Take 001|BaseLayer"]]
     ]
   });
