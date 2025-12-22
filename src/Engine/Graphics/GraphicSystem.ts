@@ -1,9 +1,11 @@
 import * as THREE from "three";
 
+export type ResizeCallback = (this: Window, ev: UIEvent) => void;
+
 class GraphicSystem {
   private cameras: Array<THREE.Camera> = [];
   private renderer?: THREE.WebGLRenderer;
-  private resizeObservers: ResizeObserver[] = [];
+  private resizeObservers: ResizeCallback[] = [];
 
   public Initialize(canvas: HTMLCanvasElement): void {
     this.renderer = new THREE.WebGLRenderer({ canvas });
@@ -20,7 +22,7 @@ class GraphicSystem {
 
   public Shutdown(): void {
     // Shutdown logic for the graphic system
-    this.resizeObservers.forEach(observer => observer.disconnect());
+    this.resizeObservers.forEach(callback => this.OffResize(callback));
   }
 
   public AddCamera(camera: THREE.Camera): void {
@@ -34,12 +36,13 @@ class GraphicSystem {
     }
   }
 
-  public OnResize(callback: ResizeObserverCallback): void {
-    if (this.renderer && this.renderer.domElement) {
-      const observer = new ResizeObserver(callback);
-      this.resizeObservers.push(observer);
-      observer.observe(this.renderer.domElement);
-    }
+  public OnResize(callback: ResizeCallback): void {
+    window.addEventListener('resize', callback);
+    this.resizeObservers.push(callback);
+  }
+
+  public OffResize(callback: ResizeCallback): void {
+    window.removeEventListener('resize', callback);
   }
 
   private ResizeCanvasToDisplaySize(): void {
@@ -48,11 +51,11 @@ class GraphicSystem {
     }
 
     const canvas = this.renderer.domElement;
-    const width = canvas.clientWidth;
-    const height = canvas.clientHeight;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
     if (canvas.width !== width || canvas.height !== height) {
       // you must pass false here or three.js sadly fights the browser
-      this.renderer.setSize(width, height, false);
+      this.renderer.setSize(width, height);
 
       // adjust any cameras you have here
       for (const camera of this.cameras) {
