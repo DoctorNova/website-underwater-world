@@ -12,7 +12,8 @@ if (packageJson.repository && packageJson.repository.url) {
 }
 
 export default defineConfig({
-  assetsInclude: ["**/shaders/*"],
+  // Include shader files as assets that are used directly in the code as strings
+  assetsInclude: ["./src/**/*.vert", "./src/**/*.frag"],
   base: repoName ? `/${repoName}/` : '/',
   plugins: [tsconfigPaths()],
   server: {
