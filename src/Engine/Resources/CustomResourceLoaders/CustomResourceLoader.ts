@@ -1,3 +1,3 @@
-export interface CustomResourceLoader {
+export type CustomResourceLoader = {
   Load(resourcePath: string): Promise<any>;
 }

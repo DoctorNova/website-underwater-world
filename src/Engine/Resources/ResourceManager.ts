@@ -1,7 +1,8 @@
 import { FILES_ON_SERVER } from 'Resources/AvailableResources';
+import { LoaderWrapper } from 'Resources/CustomResourceLoaders/LoaderWrapper';
 import * as THREE from 'three';
-import { CustomGLTFLoader } from './CustomGLTFLoader';
-import type { CustomResourceLoader } from './CustomResourceLoader';
+import { CustomGLTFLoader } from './CustomResourceLoaders/CustomGLTFLoader';
+import type { CustomResourceLoader } from './CustomResourceLoaders/CustomResourceLoader';
 
 export type ResourceName = keyof typeof FILES_ON_SERVER;
 
@@ -32,7 +33,11 @@ export class ResourceManager {
       options?.onProgress ?? defaultLoadOptions.onProgress, 
       options?.onError ?? defaultLoadOptions.onError
     );
-    this.resourceLoaders = new Map<string, CustomResourceLoader>([['glb', new CustomGLTFLoader(this.loadingManager)]]);
+    this.resourceLoaders = new Map<string, CustomResourceLoader>([
+      ['glb', new CustomGLTFLoader(this.loadingManager)],
+      ['png', new LoaderWrapper(new THREE.TextureLoader(this.loadingManager))],
+      ['jpg', new LoaderWrapper(new THREE.TextureLoader(this.loadingManager))],
+    ]);
   }
 
   RequestResource<T>(resourceName: ResourceName): Promise<T> | undefined {
