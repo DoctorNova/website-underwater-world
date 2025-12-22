@@ -6,7 +6,7 @@ import { globalInputManager } from "Input/InputManager";
 import type { ResourceName } from "Resources";
 import { ResourceManager } from "Resources/ResourceManager";
 import * as THREE from "three";
-import { globals } from "Utility/global";
+import { globalFrameTime } from "Utility/FrameTime";
 
 export class Application {
   private loadingBarElement = document.querySelector<HTMLElement>('#loading');
@@ -48,11 +48,17 @@ export class Application {
       throw new Error("Canvas element with id 'display' not found or is not a canvas.");
     }
 
+    // -------------------------------------------------------------
+    // Initialize all the global systems used in the application
+    // -------------------------------------------------------------
     globalGameObjectManager.Initialize();
     globalBaseComponentManager.Initialize();
     globalGraphicSystem.Initialize(this.canvasElement);
     globalInputManager.Initialize();
 
+    // -------------------------------------------------------------
+    // Load all the resources needed before we can play the game
+    // -------------------------------------------------------------
     const requiredResources: ResourceName[] = [
       'emperorAngelfish',
     ];
@@ -63,22 +69,27 @@ export class Application {
     });
     resourceLoader.Load(...requiredResources);
 
+    // -------------------------------------------------------------
+    // Create the main game scene
+    // -------------------------------------------------------------
     CreateGameScene(this.scene);
   }
 
-  public RenderLoop() {
-    let then = 0;
+  public GameLoop() {
     const render = (now: number) => {
-      // convert to seconds
-      globals.time = now * 0.001;
-      // make sure delta time isn't too big.
-      globals.deltaTime = Math.min(globals.time - then, 1 / 20);
-      then = globals.time;
+      // ---------------------------------------------
+      // Calculate total time and delta time
+      // ---------------------------------------------
+      globalFrameTime.Update(now);
 
-      globalGameObjectManager.Update(globals.deltaTime);
-      globalBaseComponentManager.Update(globals.deltaTime);
-      globalGraphicSystem.Render(globals.deltaTime, this.scene);
+      // ---------------------------------------------
+      // Update all global systems
+      // ---------------------------------------------
+      globalGameObjectManager.Update(globalFrameTime.DeltaTime);
+      globalBaseComponentManager.Update(globalFrameTime.DeltaTime);
+      globalGraphicSystem.Render(globalFrameTime.DeltaTime, this.scene);
 
+      // Request the next frame
       requestAnimationFrame(render);
     }
 

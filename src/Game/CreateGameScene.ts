@@ -29,10 +29,13 @@ function CreateGround(scene: THREE.Scene) {
 }
 
 export function CreateGameScene(scene: THREE.Scene): void {
+
+  // Set up camera
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.set(0, 0, 5);
   globalGraphicSystem.AddCamera(camera);
 
+  // Set up lighting
   const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
   directionalLight.position.set(10, 10, 10);
   scene.add(directionalLight);
@@ -40,11 +43,14 @@ export function CreateGameScene(scene: THREE.Scene): void {
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
   scene.add(ambientLight);
 
+  // Set up skybox
   const skybox = new OceanSkyBox();
   scene.add(skybox);
 
+  // Set up ground
   CreateGround(scene);
 
+  // Create game objects
   CreateGameObject({
     parent: scene, 
     scale: 10,

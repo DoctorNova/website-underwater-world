@@ -1,4 +1,4 @@
-import { globals } from 'Utility/global';
+import { globalFrameTime } from 'Utility/FrameTime';
 import * as THREE from 'three';
 import fragmentShader from './Shaders/OceanSkyBox.frag?raw';
 import vertexShader from './Shaders/OceanSkyBox.vert?raw';
@@ -32,7 +32,7 @@ export class OceanSkyBox extends THREE.Mesh {
       //material: Material,
       //group: Group
     ) => {
-      material.uniforms.iTime.value = globals.time;
+      material.uniforms.iTime.value = globalFrameTime.Time;
       material.uniforms.iResolution.value = new THREE.Vector2(_renderer.domElement.width, _renderer.domElement.height);
       
       camera.getWorldPosition(material.uniforms.iCameraPosition.value);

@@ -11,7 +11,7 @@ export abstract class Component {
   // All these methods are called by the owning ComponentList (owned by a GameObject)
   // ------------------------
   GetDependencies(): readonly(new (...args: any[]) => Component)[] { return DEPENDENCY_CACHE; }
-  async LoadResources(signal: AbortSignal): Promise<any> { return await RESOLVE_PROMISE; }
+  async LoadResources(_signal: AbortSignal): Promise<any> { return await RESOLVE_PROMISE; }
 
   AddToSystem(): void { globalBaseComponentManager.Add(this); };
   RemoveFromSystem(): void { globalBaseComponentManager.Remove(this); };
