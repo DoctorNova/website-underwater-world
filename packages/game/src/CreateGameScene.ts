@@ -2,7 +2,6 @@ import { CreateGameObject } from '@engine/Composition';
 import type { SceneRoot } from '@engine/Composition/SceneObject';
 import { globalGraphicSystem } from '@engine/Graphics/GraphicSystem';
 import { AnimationComponent } from '@engine/Graphics/SkinComponent';
-import { CameraControlComponent } from '@game/Components/CameraControlComponent';
 import { OceanSkyBox } from '@game/SkyBox/OceanSkyBox';
 import * as THREE from 'three';
 
@@ -57,14 +56,6 @@ export function CreateGameScene(scene: SceneRoot): void {
     scale: 10,
     componentsToCreate: [
       [AnimationComponent, ["fusilier", 0]]
-    ]
-  });
-
-  CreateGameObject({
-    parent: scene, 
-    componentsToCreate: [
-      [CameraControlComponent, [camera]],
-      [AnimationComponent, ["emperorAngelfish", "EmperorAngelfish|Take 001|BaseLayer"]]
     ]
   });
 }

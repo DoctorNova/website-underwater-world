@@ -6,7 +6,7 @@ import { globalInputManager } from "@engine/Input/InputManager";
 import type { ResourceName } from "@engine/Resources";
 import { ResourceManager } from "@engine/Resources/ResourceManager";
 import { globalFrameTime } from "@engine/Utility/FrameTime";
-import { CreateGameScene } from "@game/CreateGameScene";
+import { CreateEditorScene } from "packages/editor/src/CreateEditorScene";
 
 export class EditorApplication {
   private loadingBarElement = document.querySelector<HTMLElement>('#loading');
@@ -74,7 +74,7 @@ export class EditorApplication {
     // -------------------------------------------------------------
     // Create the main game scene
     // -------------------------------------------------------------
-    CreateGameScene(this.scene);
+    CreateEditorScene(this.scene);
   }
 
   public GameLoop() {
