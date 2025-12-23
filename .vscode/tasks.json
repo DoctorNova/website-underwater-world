@@ -22,6 +22,11 @@
           "endsPattern": "ready in"
         }
       }
+    },
+    {
+      "label": "Terminate task",
+      "type": "process",
+      "command": "${command:workbench.action.terminal.kill}",
     }
   ]
 }

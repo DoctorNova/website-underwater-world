@@ -8,6 +8,7 @@
       "url": "http://localhost:5173",
       "webRoot": "${workspaceFolder}",
       "preLaunchTask": "dev:game",
+      "postDebugTask": "Terminate task",
       "sourceMaps": true
     }
   ]
