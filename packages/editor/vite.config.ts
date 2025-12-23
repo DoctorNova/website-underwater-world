@@ -15,8 +15,8 @@ export default defineConfig(({ command }) => {
 
   return {
     ...defaultConfig,
-    // Redirect request to public folder to the game projects public folder
-    publicDir: resolve(__dirname, '../game/public'),
+    // Redirect request to static files to the public project
+    publicDir: resolve(__dirname, '..', 'assets', 'public'),
     build: {
       sourcemap: !isBuild
     }
