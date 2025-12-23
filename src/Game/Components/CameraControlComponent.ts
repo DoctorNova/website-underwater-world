@@ -6,8 +6,7 @@ import * as THREE from "three";
 export class CameraControlComponent extends Component {
   private speed: number = 5;
   private camera: THREE.PerspectiveCamera;
-  private viewVector: THREE.Vector3 = new THREE.Vector3(0, 0, 1);
-  
+
   constructor(owner: GameObject, camera: THREE.PerspectiveCamera) {
     super(owner);
     this.camera = camera;
@@ -44,8 +43,6 @@ export class CameraControlComponent extends Component {
     // Make the camera look at the updated target position
     const target = this.owner.transform.position.clone().add(cameraForward);
     this.camera.lookAt(target);
-
-
   }
 
   Shutdown(): void {

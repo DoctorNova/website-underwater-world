@@ -1,6 +1,17 @@
 import { globalGraphicSystem } from 'Graphics/GraphicSystem';
 import * as THREE from 'three';
 
+/**
+ * @file InputManager.ts
+ * Manages keyboard and mouse input, providing query functions for key/button states,
+ * mouse position conversions (viewport, NDC, world), and a world-space mouse ray.
+ * Lifecycle: call `Initialize()`, per-frame call `BeginFrame()` → your logic → `EndFrame()`,
+ * and `Shutdown()` to detach listeners and clear state.
+ */
+
+/**
+ * Supported keyboard keys captured from `KeyboardEvent.key`.
+ */
 export type InputKey =
   | "Backspace" | "Tab" | "Enter" | "Shift" | "Control" | "Alt" | "Pause" | "CapsLock"
   | "Escape" | " " | "PageUp" | "PageDown" | "End" | "Home"
@@ -10,123 +21,324 @@ export type InputKey =
   | "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j"
   | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t"
   | "u" | "v" | "w" | "x" | "y" | "z"
-  | "F1" | "F2" | "F3" | "F4" | "F5" | "F6" | "F7" | "F8" | "F9"
-  | "F10" | "F11" | "F12"
+  | "F1" | "F2" | "F3" | "F4" | "F5" | "F6" | "F7" | "F8" | "F9" | "F10" | "F11" | "F12"
   | "NumLock" | "ScrollLock"
   | "AudioVolumeMute" | "AudioVolumeUp" | "AudioVolumeDown"
   | "MediaTrackNext" | "MediaTrackPrevious" | "MediaStop" | "MediaPlayPause";
 
-export type MouseButton = 'Left' | 'Middle' | 'Right' | 'Back' | 'Forward';
+/**
+ * Mouse button indices matching `MouseEvent.button`.
+ */
+export enum MouseButton {
+  Left = 0,
+  Middle = 1,
+  Right = 2,
+  Back = 3,
+  Forward = 4,
+}
 
+/**
+ * Function signature for mouse event callbacks.
+ * @param event Mouse event.
+ */
 export type MouseEventCallback = (event: MouseEvent) => void;
 
+/**
+ * Internal per-frame state of a mouse button.
+ * - Released: transitioned to up state on this frame and becomes Up in `EndFrame()`.
+ * - Pressed: currently pressed.
+ * - Up: not pressed.
+ * @private
+ */
+enum MouseButtonState {
+  Released,
+  Pressed,
+  Up,
+}
+
+/**
+ * Central input manager providing keyboard and mouse state queries.
+ * Attach with `Initialize()`. Each frame: call `BeginFrame()` to snapshot scroll,
+ * then `EndFrame()` to advance transient states. Detach with `Shutdown()`.
+ */
 class InputManager {
-  private mouseButtonMapping: MouseButton[] = ['Left', 'Middle', 'Right', 'Back', 'Forward'];
+  /** Per-button transient states for the current frame. */
+  private mouseButtonStates: MouseButtonState[] = [
+    MouseButtonState.Up, //Left 
+    MouseButtonState.Up, //Middle 
+    MouseButtonState.Up, //Right 
+    MouseButtonState.Up, //Back
+    MouseButtonState.Up, //Forward
+  ];
+
+  /** Map of pressed state for supported keys. */
   private keyStates: Map<InputKey, boolean> = new Map();
-  private mouseButtonStates: Map<MouseButton, boolean> = new Map();
+
+  /** Mouse position in viewport (CSS pixels, top-left origin). */
   private mousePosition: THREE.Vector2 = new THREE.Vector2(0, 0);
 
+  /** Accumulated scroll deltas since last `BeginFrame()`. */
+  private mouseScroll: THREE.Vector2 = new THREE.Vector2();
+
+  /** Scroll delta snapshot for the current frame. */
+  private mouseScrollFrame: THREE.Vector2 = new THREE.Vector2();
+
+  /**
+   * Binds event handler methods.
+   */
   constructor() {
     this.OnKeydown = this.OnKeydown.bind(this);
     this.OnKeyup = this.OnKeyup.bind(this);
     this.OnMousedown = this.OnMousedown.bind(this);
     this.OnMouseup = this.OnMouseup.bind(this);
     this.OnMouseMove = this.OnMouseMove.bind(this);
+    this.OnMouseWheel = this.OnMouseWheel.bind(this);
   }
 
+  /**
+   * Handles `keydown` and marks the key as pressed.
+   * @private
+   * @param {KeyboardEvent} event Keyboard event.
+   */
   private OnKeydown(event: KeyboardEvent) {
     this.keyStates.set(event.key as InputKey, true);
   }
 
+  /**
+   * Handles `keyup` and marks the key as released.
+   * @private
+   * @param {KeyboardEvent} event Keyboard event.
+   */
   private OnKeyup(event: KeyboardEvent) {
     this.keyStates.set(event.key as InputKey, false);
   }
 
+  /**
+   * Handles `mousedown` and sets button state to Pressed.
+   * @private
+   * @param {MouseEvent} event Mouse event.
+   */
   private OnMousedown(event: MouseEvent) {
-    const button = this.GetMouseButton(event.button);
-    if (button) {
-      this.mouseButtonStates.set(button, true);
+    if (event.button < 0 || event.button >= this.mouseButtonStates.length) {
+      return;
     }
+    this.mouseButtonStates[event.button] = MouseButtonState.Pressed;
   }
 
+  /**
+   * Handles `mouseup` and sets button state to Released.
+   * @private
+   * @param {MouseEvent} event Mouse event.
+   */
   private OnMouseup(event: MouseEvent) {
-    const button = this.GetMouseButton(event.button);
-    if (button) {
-      this.mouseButtonStates.set(button, false);
+    if (event.button < 0 || event.button >= this.mouseButtonStates.length) {
+      return;
     }
+    this.mouseButtonStates[event.button] = MouseButtonState.Released;
   }
 
+  /**
+   * Handles `mousemove` and updates the viewport-space position.
+   * @private
+   * @param {MouseEvent} event Mouse event.
+   */
   private OnMouseMove(event: MouseEvent) {
     this.mousePosition.set(event.clientX, event.clientY);
   }
 
-  private GetMouseButton(button: number) {
-    if (button >= 0 && button < this.mouseButtonMapping.length) {
-      return this.mouseButtonMapping[button];
-    }
-    return null;
+  /**
+   * Handles `wheel` and accumulates scroll deltas until `BeginFrame()`.
+   * @private
+   * @param {WheelEvent} event Wheel event.
+   */
+  private OnMouseWheel(event: WheelEvent) {
+    this.mouseScroll.x += event.deltaX;
+    this.mouseScroll.y += event.deltaY;
   }
 
+  /**
+   * Attaches DOM listeners for keyboard and mouse input.
+   */
   Initialize(): void {
     window.addEventListener('keydown', this.OnKeydown);
     window.addEventListener('keyup', this.OnKeyup);
     window.addEventListener('mousedown', this.OnMousedown);
     window.addEventListener('mouseup', this.OnMouseup);
     window.addEventListener('mousemove', this.OnMouseMove);
+    window.addEventListener('wheel', this.OnMouseWheel);
   }
 
+  /**
+   * Begins a new frame: snapshots scroll deltas and resets the accumulator.
+   */
+  BeginFrame(): void {
+    this.mouseScrollFrame.copy(this.mouseScroll);
+    this.mouseScroll.set(0, 0);
+  }
+
+  /**
+   * Ends the frame: advances transient button states (Released → Up).
+   */
+  EndFrame(): void {
+    for (let i = 0; i < this.mouseButtonStates.length; i++) {
+      if (this.mouseButtonStates[i] === MouseButtonState.Released) {
+        this.mouseButtonStates[i] = MouseButtonState.Up;
+      }
+    }
+  }
+
+  /**
+   * Detaches listeners and clears input state.
+   */
   Shutdown(): void {
     window.removeEventListener('keydown', this.OnKeydown);
     window.removeEventListener('keyup', this.OnKeyup);
     window.removeEventListener('mousedown', this.OnMousedown);
     window.removeEventListener('mouseup', this.OnMouseup);
     window.removeEventListener('mousemove', this.OnMouseMove);
+    window.removeEventListener('wheel', this.OnMouseWheel);
 
     this.keyStates.clear();
-    this.mouseButtonStates.clear();
+    this.mouseButtonStates.fill(MouseButtonState.Up);
   }
 
+  /**
+   * Checks if the document window is focused.
+   * @returns {boolean} True if the window has focus.
+   */
+  IsWindowFocused(): boolean {
+    return document.hasFocus();
+  }
+
+  /**
+   * Requests pointer lock on the document body.
+   * Note: Typically requires a user gesture in browsers.
+   */
+  LookPointerToWindow(): void {
+    document.body.requestPointerLock();
+  }
+
+  /**
+   * Convenience check for Control key state.
+   * @returns {boolean} True if Control is pressed.
+   */
+  IsCtrlPressed(): boolean {
+    return this.IsKeyPressed("Control");
+  }
+
+  /**
+   * Convenience check for Shift key state.
+   * @returns {boolean} True if Shift is pressed.
+   */
+  IsShiftPressed(): boolean {
+    return this.IsKeyPressed("Shift");
+  }
+
+  /**
+   * Checks if a specific key is currently pressed.
+   * @param {InputKey} key The key to query.
+   * @returns {boolean} True if pressed; otherwise false.
+   */
   IsKeyPressed(key: InputKey): boolean {
     return this.keyStates.get(key) || false;
   }
 
+  /**
+   * Checks if a mouse button is currently pressed.
+   * @param {MouseButton} button Mouse button to query.
+   * @returns {boolean} True if pressed.
+   */
   IsMouseButtonPressed(button: MouseButton): boolean {
-    return this.mouseButtonStates.get(button) || false;
+    return this.mouseButtonStates[button] === MouseButtonState.Pressed;
   }
 
-  OnMouseClick(callback: MouseEventCallback): void {
-    window.addEventListener('click', callback);
+  /**
+   * Checks if a mouse button was released on this frame.
+   * @param {MouseButton} button Mouse button to query.
+   * @returns {boolean} True if released this frame (transient).
+   */
+  IsMouseButtonReleased(button: MouseButton): boolean {
+    return this.mouseButtonStates[button] === MouseButtonState.Released;
   }
 
-  OffMouseClick(callback: MouseEventCallback): void {
-    window.removeEventListener('click', callback);
-  }
-
+  /**
+   * Gets the mouse position in viewport coordinates (CSS pixels).
+   * @returns {THREE.Vector2} Clone of the current mouse position (top-left origin).
+   */
   GetMousePositionInViewport(): THREE.Vector2 {
     return this.mousePosition.clone();
   }
 
-  GetMousePositionInWorld(camera?: THREE.Camera): THREE.Vector2 {
+  /**
+   * Gets the mouse position in Normalized Device Coordinates (NDC).
+   * @returns {THREE.Vector2} NDC vector where X,Y ∈ [-1, 1]. Returns (0,0) if canvas is unavailable.
+   */
+  GetMousePositionInNDC(): THREE.Vector2 {
     const canvas = globalGraphicSystem.Canvas;
 
     if (!canvas) {
       return new THREE.Vector2(0, 0);
     }
 
+    // Convert to NDC
+    const ndc = new THREE.Vector2(
+      (this.mousePosition.x / canvas.clientWidth) * 2 - 1,
+      -(this.mousePosition.y / canvas.clientHeight) * 2 + 1
+    );
+
+    return ndc;
+  }
+
+  /**
+   * Projects the mouse position to world space using a camera.
+   * @param {THREE.Camera} [camera] Optional camera; defaults to the active camera.
+   * @returns {THREE.Vector3} World-space position at z=0.5 along the ray through the mouse NDC.
+   */
+  GetMousePositionInWorld(camera?: THREE.Camera): THREE.Vector3 {
+    if (!camera) {
+      camera = globalGraphicSystem.GetActiveCamera();
+    }
+    const ndc = this.GetMousePositionInNDC();
+    // NDC -> World
+    const world = new THREE.Vector3(ndc.x, ndc.y, 0.5);
+    world.unproject(camera);
+
+    return world;
+  }
+
+  /**
+   * Computes a world-space ray from the mouse position.
+   * @param {THREE.Camera} [camera] Optional camera; defaults to the active camera.
+   * @returns {THREE.Ray} Ray starting at the camera origin and passing through the mouse NDC.
+   * Returns an empty ray if NDC is zero-length (no canvas or position).
+   */
+  GetMouseRay(camera?: THREE.Camera): THREE.Ray {
     if (!camera) {
       camera = globalGraphicSystem.GetActiveCamera();
     }
 
-    const mouse = new THREE.Vector2();
-    mouse.x = (this.mousePosition.x / canvas.clientWidth) * 2 - 1;  // -1 to 1
-    mouse.y = -(this.mousePosition.y / canvas.clientHeight) * 2 + 1; // -1 to 1 (note the minus!)
+    const ndc = this.GetMousePositionInNDC();
 
-    const vector = new THREE.Vector3(mouse.x, mouse.y, 0.5); // z=0 is near, z=1 is far
-    vector.unproject(camera); // Converts from NDC to world coordinates
+    if (ndc.lengthSq() === 0) {
+      return new THREE.Ray();
+    }
 
-    return mouse;
+    const rayCaster = new THREE.Raycaster();
+    rayCaster.setFromCamera(ndc, camera);
+
+    return rayCaster.ray.clone();
+  }
+
+  /**
+   * Gets the wheel scroll delta captured for the current frame.
+   * @returns {THREE.Vector2} Frame snapshot of scroll deltas since the last `BeginFrame()`.
+   */
+  GetMouseScroll(): THREE.Vector2 {
+    return this.mouseScrollFrame.clone();
   }
 }
 
+/**
+ * Global singleton instance for input handling.
+ */
 export const globalInputManager = new InputManager();
-

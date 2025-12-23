@@ -81,6 +81,7 @@ export class Application {
       // Calculate total time and delta time
       // ---------------------------------------------
       globalFrameTime.Update(now);
+      globalInputManager.BeginFrame();
 
       // ---------------------------------------------
       // Update all global systems
@@ -89,6 +90,7 @@ export class Application {
       globalBaseComponentManager.Update(globalFrameTime.DeltaTime);
       globalGraphicSystem.Render(globalFrameTime.DeltaTime, this.scene);
 
+      globalInputManager.EndFrame();
       // Request the next frame
       requestAnimationFrame(render);
     }
