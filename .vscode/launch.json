@@ -2,12 +2,22 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug Game (Chrome)",
+      "name": "Game (Chrome)",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:5173",
       "webRoot": "${workspaceFolder}",
       "preLaunchTask": "dev:game",
+      "postDebugTask": "Terminate task",
+      "sourceMaps": true
+    }, 
+    {
+      "name": "Editor (Chrome)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:5174",
+      "webRoot": "${workspaceFolder}",
+      "preLaunchTask": "dev:editor",
       "postDebugTask": "Terminate task",
       "sourceMaps": true
     }

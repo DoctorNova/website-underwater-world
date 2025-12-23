@@ -6,9 +6,9 @@ import { globalInputManager } from "@engine/Input/InputManager";
 import type { ResourceName } from "@engine/Resources";
 import { ResourceManager } from "@engine/Resources/ResourceManager";
 import { globalFrameTime } from "@engine/Utility/FrameTime";
-import { CreateGameScene } from "./CreateGameScene";
+import { CreateGameScene } from "@game/CreateGameScene";
 
-export class GameApplication {
+export class EditorApplication {
   private loadingBarElement = document.querySelector<HTMLElement>('#loading');
   private progressBarElement = document.querySelector<HTMLElement>('#progressbar');
   private progressInfoElement = document.querySelector<HTMLElement>('.info > p');
@@ -59,15 +59,17 @@ export class GameApplication {
     // -------------------------------------------------------------
     // Load all the resources needed before we can play the game
     // -------------------------------------------------------------
-    const requiredResources: ResourceName[] = [
-      'emperorAngelfish',
-    ];
-    const resourceLoader = new ResourceManager({
-      onSuccess: this.OnRequiredResourcesLoaded.bind(this),
-      onProgress: this.OnRequiredResourcesProgress.bind(this),
-      onError: this.OnRequiredResourcesLoaded.bind(this),
-    });
-    resourceLoader.Load(...requiredResources);
+    const requiredResources: ResourceName[] = [];
+    if (requiredResources.length > 0){
+      const resourceLoader = new ResourceManager({
+        onSuccess: this.OnRequiredResourcesLoaded.bind(this),
+        onProgress: this.OnRequiredResourcesProgress.bind(this),
+        onError: this.OnRequiredResourcesLoaded.bind(this),
+      });
+      resourceLoader.Load(...requiredResources);
+    } else {
+      this.OnRequiredResourcesLoaded();
+    }
 
     // -------------------------------------------------------------
     // Create the main game scene
