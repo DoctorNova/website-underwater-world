@@ -37,7 +37,6 @@
     "vitest": "^4.0.16"
   },
   "dependencies": {
-    "open-simplex-noise": "^2.5.0",
     "three": "^0.182.0"
   }
 }
