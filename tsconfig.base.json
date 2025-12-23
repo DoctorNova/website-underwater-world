@@ -24,11 +24,9 @@
     /* Path mapping */
     "baseUrl": ".",
     "paths": {
-      "*": ["src/Engine/*", "src/Game/*"]
+      "@engine/*": ["packages/engine/src/*"],
+      "@game/*": ["packages/game/src/*"]
     },
-
-    /* Test config */
-    "types": ["vitest/globals"]
+    "types": ["vite/client", "vitest"]
   },
-  "include": ["src"]
 }

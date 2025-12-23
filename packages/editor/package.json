@@ -1,0 +1,15 @@
+{
+  "name": "@underwater-world/editor",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@underwater-world/engine": "*",
+    "@underwater-world/game": "*",
+    "three": "^0.182.0"
+  }
+}

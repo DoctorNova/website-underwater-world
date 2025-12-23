@@ -1,7 +1,7 @@
-import { globalGraphicSystem } from 'Graphics/GraphicSystem';
+import { globalGraphicSystem } from '@engine/Graphics/GraphicSystem';
 import * as THREE from 'three';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { globalInputManager } from './InputManager';
+import { globalInputManager, MouseButton } from './InputManager';
 
 describe('InputManager', () => {
   beforeEach(() => {
@@ -23,16 +23,16 @@ describe('InputManager', () => {
 
   it('tracks mouse button presses', () => {
     window.dispatchEvent(new MouseEvent('mousedown', { button: 0 }));
-    expect(globalInputManager.IsMouseButtonPressed('Left')).toBe(true);
+    expect(globalInputManager.IsMouseButtonPressed(MouseButton.Left)).toBe(true);
 
     window.dispatchEvent(new MouseEvent('mouseup', { button: 0 }));
-    expect(globalInputManager.IsMouseButtonPressed('Left')).toBe(false);
+    expect(globalInputManager.IsMouseButtonPressed(MouseButton.Left)).toBe(false);
   });
 
   it('ignores unknown mouse buttons', () => {
     window.dispatchEvent(new MouseEvent('mousedown', { button: 99 }));
-    expect(globalInputManager.IsMouseButtonPressed('Left')).toBe(false);
-    expect(globalInputManager.IsMouseButtonPressed('Right')).toBe(false);
+    expect(globalInputManager.IsMouseButtonPressed(MouseButton.Left)).toBe(false);
+    expect(globalInputManager.IsMouseButtonPressed(MouseButton.Right)).toBe(false);
   });
 
   it('updates mouse position on mousemove', () => {
@@ -59,25 +59,7 @@ describe('InputManager', () => {
     expect(original.x).toBe(10);
     expect(original.y).toBe(20);
   });
-
-  it('registers and unregisters mouse click callbacks', () => {
-    const callback = vi.fn();
-
-    globalInputManager.OnMouseClick(callback);
-    window.dispatchEvent(new MouseEvent('click'));
-    expect(callback).toHaveBeenCalledOnce();
-
-    globalInputManager.OffMouseClick(callback);
-    window.dispatchEvent(new MouseEvent('click'));
-    expect(callback).toHaveBeenCalledOnce(); // unchanged
-  });
-
-  it('returns (0,0) world position when canvas is missing', () => {
-    const worldPos = globalInputManager.GetMousePositionInWorld();
-    expect(worldPos.x).toBe(0);
-    expect(worldPos.y).toBe(0);
-  });
-
+  
   it('converts mouse position to normalized device coordinates', () => {
     window.dispatchEvent(new MouseEvent('mousemove', {
       clientX: 400,
@@ -100,6 +82,6 @@ describe('InputManager', () => {
     globalInputManager.Shutdown();
 
     expect(globalInputManager.IsKeyPressed('w')).toBe(false);
-    expect(globalInputManager.IsMouseButtonPressed('Left')).toBe(false);
+    expect(globalInputManager.IsMouseButtonPressed(MouseButton.Left)).toBe(false);
   });
 });

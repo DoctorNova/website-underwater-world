@@ -1,6 +1,6 @@
-import type { GameObject } from "Composition";
-import { Component } from "Composition/Component";
-import { globalInputManager } from "Input/InputManager";
+import type { GameObject } from "@engine/Composition";
+import { Component } from "@engine/Composition/Component";
+import { globalInputManager } from "@engine/Input/InputManager";
 import * as THREE from "three";
 
 export class CameraControlComponent extends Component {

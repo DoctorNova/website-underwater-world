@@ -1,8 +1,8 @@
-import { CameraControlComponent } from 'Components/CameraControlComponent';
-import { CreateGameObject } from 'Composition';
-import { globalGraphicSystem } from 'Graphics/GraphicSystem';
-import { AnimationComponent } from 'Graphics/SkinComponent';
-import { OceanSkyBox } from 'SkyBox/OceanSkyBox';
+import { CreateGameObject } from '@engine/Composition';
+import { globalGraphicSystem } from '@engine/Graphics/GraphicSystem';
+import { AnimationComponent } from '@engine/Graphics/SkinComponent';
+import { CameraControlComponent } from '@game/Components/CameraControlComponent';
+import { OceanSkyBox } from '@game/SkyBox/OceanSkyBox';
 import * as THREE from 'three';
 
 function CreateGround(scene: THREE.Scene) {

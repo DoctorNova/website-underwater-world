@@ -1,9 +1,8 @@
-import type { GameObject } from "Composition";
-import { Component } from "Composition/Component";
+import type { GameObject } from "@engine/Composition";
+import { Component } from "@engine/Composition/Component";
 import * as THREE from "three";
 
 export class PlayerControlComponent extends Component {
-  private speed: number = 5;
   private camera: THREE.PerspectiveCamera;
   
   constructor(owner: GameObject, camera: THREE.PerspectiveCamera) {

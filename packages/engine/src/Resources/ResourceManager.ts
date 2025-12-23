@@ -1,8 +1,8 @@
-import { FILES_ON_SERVER } from 'Resources/AvailableResources';
-import { LoaderWrapper } from 'Resources/CustomResourceLoaders/LoaderWrapper';
 import * as THREE from 'three';
+import { FILES_ON_SERVER } from './AvailableResources';
 import { CustomGLTFLoader } from './CustomResourceLoaders/CustomGLTFLoader';
 import type { CustomResourceLoader } from './CustomResourceLoaders/CustomResourceLoader';
+import { LoaderWrapper } from './CustomResourceLoaders/LoaderWrapper';
 
 export type ResourceName = keyof typeof FILES_ON_SERVER;
 

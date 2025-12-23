@@ -1,4 +1,4 @@
-import { Application } from "Application";
+import { Application } from "./Application";
 
 const application = new Application();
 application.Initialize();

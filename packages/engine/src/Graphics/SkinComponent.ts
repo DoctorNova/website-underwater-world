@@ -1,8 +1,8 @@
+import { Component } from "@engine/Composition/Component";
+import type { GameObject } from "@engine/Composition/GameObject";
+import { type AnimationResource, FetchResource, type ResourceName } from "@engine/Resources";
 import * as THREE from 'three';
 import { SkeletonUtils } from "three/examples/jsm/Addons.js";
-import { Component } from "../Composition/Component";
-import type { GameObject } from "../Composition/GameObject";
-import { type AnimationResource, FetchResource, type ResourceName } from "../Resources";
 
 export class AnimationComponent extends Component {
   private resourceName: ResourceName;

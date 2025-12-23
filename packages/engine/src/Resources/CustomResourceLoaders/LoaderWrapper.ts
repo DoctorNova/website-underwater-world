@@ -1,5 +1,5 @@
-import type { CustomResourceLoader } from 'Resources/CustomResourceLoaders/CustomResourceLoader';
 import * as THREE from 'three';
+import type { CustomResourceLoader } from './CustomResourceLoader';
 
 export class LoaderWrapper<T> implements CustomResourceLoader {
   constructor(private loader: THREE.Loader<T>) {}

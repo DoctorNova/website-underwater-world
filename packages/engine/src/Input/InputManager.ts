@@ -1,4 +1,4 @@
-import { globalGraphicSystem } from 'Graphics/GraphicSystem';
+import { globalGraphicSystem } from '@engine/Graphics/GraphicSystem';
 import * as THREE from 'three';
 
 /**

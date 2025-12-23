@@ -1,0 +1,15 @@
+{
+  "name": "@underwater-world/engine",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "sideEffects": false,
+  "scripts": {
+    "test": "vitest"
+  },
+  "dependencies": {
+    "three": "^0.182.0"
+  }
+}

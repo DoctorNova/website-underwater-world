@@ -1,5 +1,5 @@
 import type { Scene } from "three";
-import { beforeEach, describe, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Component } from "./Component";
 import { GameObject, type ComponentsToCreateList } from "./GameObject";
 import { globalGameObjectManager } from "./GameObjectManager";

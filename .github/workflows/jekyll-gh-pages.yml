@@ -32,15 +32,13 @@ jobs:
         uses: actions/configure-pages@v5
       - name: Build
         run: |
-          rm -rf node_modules
-          rm -rf dist
           npm ci
-          npm run build
+          npm run build:game
       - name: Upload static files as artifact
         id: deployment
         uses: actions/upload-pages-artifact@v3 # or specific "vX.X.X" version tag for this action
         with:
-          path: dist/
+          path: packages/game/dist/
 
   # Deployment job
   deploy:

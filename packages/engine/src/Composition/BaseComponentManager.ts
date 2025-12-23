@@ -1,4 +1,4 @@
-import { ArrayContainer } from "Utility/ArrayContainer";
+import { ArrayContainer } from "@engine/Utility/ArrayContainer";
 import type { Component } from "./Component";
 
 export class BaseComponentManager extends ArrayContainer<Component> {

@@ -1,12 +1,12 @@
-import { globalBaseComponentManager } from "Composition/BaseComponentManager";
-import { globalGameObjectManager } from "Composition/GameObjectManager";
-import { CreateGameScene } from "CreateGameScene";
-import { globalGraphicSystem } from "Graphics/GraphicSystem";
-import { globalInputManager } from "Input/InputManager";
-import type { ResourceName } from "Resources";
-import { ResourceManager } from "Resources/ResourceManager";
+import { globalBaseComponentManager } from "@engine/Composition/BaseComponentManager";
+import { globalGameObjectManager } from "@engine/Composition/GameObjectManager";
+import { globalGraphicSystem } from "@engine/Graphics/GraphicSystem";
+import { globalInputManager } from "@engine/Input/InputManager";
+import type { ResourceName } from "@engine/Resources";
+import { ResourceManager } from "@engine/Resources/ResourceManager";
+import { globalFrameTime } from "@engine/Utility/FrameTime";
 import * as THREE from "three";
-import { globalFrameTime } from "Utility/FrameTime";
+import { CreateGameScene } from "./CreateGameScene";
 
 export class Application {
   private loadingBarElement = document.querySelector<HTMLElement>('#loading');
