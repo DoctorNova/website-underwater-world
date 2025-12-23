@@ -1,4 +1,4 @@
-import type { Scene } from "three";
+import type { SceneRoot } from "@engine/Composition/SceneObject";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Component } from "./Component";
 import { GameObject, type ComponentsToCreateList } from "./GameObject";
@@ -8,7 +8,7 @@ describe("GameObjectManager", () => {
 
   class mockGameObject extends GameObject {
     constructor(componentsToCreate: ComponentsToCreateList = []) {
-      super({ add: vi.fn() } as unknown as Scene, componentsToCreate);
+      super({ add: vi.fn() } as unknown as SceneRoot, componentsToCreate);
     }
 
     Initialize = vi.fn();

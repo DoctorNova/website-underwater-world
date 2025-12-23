@@ -1,11 +1,11 @@
 import { globalBaseComponentManager } from "@engine/Composition/BaseComponentManager";
 import { globalGameObjectManager } from "@engine/Composition/GameObjectManager";
+import { SceneRoot } from "@engine/Composition/SceneObject";
 import { globalGraphicSystem } from "@engine/Graphics/GraphicSystem";
 import { globalInputManager } from "@engine/Input/InputManager";
 import type { ResourceName } from "@engine/Resources";
 import { ResourceManager } from "@engine/Resources/ResourceManager";
 import { globalFrameTime } from "@engine/Utility/FrameTime";
-import * as THREE from "three";
 import { CreateGameScene } from "./CreateGameScene";
 
 export class Application {
@@ -13,7 +13,7 @@ export class Application {
   private progressBarElement = document.querySelector<HTMLElement>('#progressbar');
   private progressInfoElement = document.querySelector<HTMLElement>('.info > p');
   private canvasElement = document.getElementById("display");
-  private scene = new THREE.Scene();
+  private scene = new SceneRoot();
 
   /**
    * Called when all required resources are loaded
@@ -88,7 +88,7 @@ export class Application {
       // ---------------------------------------------
       globalGameObjectManager.Update(globalFrameTime.DeltaTime);
       globalBaseComponentManager.Update(globalFrameTime.DeltaTime);
-      globalGraphicSystem.Render(globalFrameTime.DeltaTime, this.scene);
+      globalGraphicSystem.Render(globalFrameTime.DeltaTime, this.scene.transform);
 
       globalInputManager.EndFrame();
       // Request the next frame

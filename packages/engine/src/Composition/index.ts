@@ -1,4 +1,4 @@
-import type { Scene } from "three";
+import type { SceneObject } from "@engine/Composition/SceneObject";
 import * as THREE from "three";
 import { GameObject, type ComponentsToCreateList } from "./GameObject";
 import { globalGameObjectManager } from "./GameObjectManager";
@@ -6,7 +6,7 @@ import { globalGameObjectManager } from "./GameObjectManager";
 export * from "./GameObject";
 
 export interface GameObjectConfig {
-    parent: GameObject | Scene, 
+    parent: SceneObject, 
     position?: THREE.Vector3,
     rotation?: THREE.Euler, 
     scale?: THREE.Vector3 | number, 

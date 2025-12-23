@@ -1,4 +1,5 @@
 import { CreateGameObject } from '@engine/Composition';
+import type { SceneRoot } from '@engine/Composition/SceneObject';
 import { globalGraphicSystem } from '@engine/Graphics/GraphicSystem';
 import { AnimationComponent } from '@engine/Graphics/SkinComponent';
 import { CameraControlComponent } from '@game/Components/CameraControlComponent';
@@ -28,7 +29,7 @@ function CreateGround(scene: THREE.Scene) {
   scene.add(mesh);
 }
 
-export function CreateGameScene(scene: THREE.Scene): void {
+export function CreateGameScene(scene: SceneRoot): void {
 
   // Set up camera
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -38,17 +39,17 @@ export function CreateGameScene(scene: THREE.Scene): void {
   // Set up lighting
   const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
   directionalLight.position.set(10, 10, 10);
-  scene.add(directionalLight);
+  scene.transform.add(directionalLight);
 
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
-  scene.add(ambientLight);
+  scene.transform.add(ambientLight);
 
   // Set up skybox
   const skybox = new OceanSkyBox();
-  scene.add(skybox);
+  scene.transform.add(skybox);
 
   // Set up ground
-  CreateGround(scene);
+  CreateGround(scene.transform);
 
   // Create game objects
   CreateGameObject({

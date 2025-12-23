@@ -1,4 +1,6 @@
-import { Object3D, Quaternion, Scene, Vector3 } from "three";
+import type { SceneObject } from "@engine/Composition/SceneObject";
+import { RemoveItemFromArray } from "@engine/Utility/ArrayUtils";
+import { Object3D, Quaternion, Vector3 } from "three";
 import type { Component, ComponentConstructor } from "./Component";
 
 /**
@@ -17,18 +19,18 @@ export type ComponentsToCreateList = [ComponentConstructor<Component, any[]>, an
  * A scene entity that owns a `transform` and a set of `Component`s.
  * Supports hierarchical parenting and component lifecycle management.
  */
-export class GameObject {
+export class GameObject implements SceneObject {
   public transform = new Object3D();
   private components = new Array<Component>();
-  private parentGameObject: GameObject | Scene;
-  private children: GameObject[] = [];
+  private parentGameObject: SceneObject;
+  public children: GameObject[] = [];
 
   /**
    * Creates a `GameObject`, sets its parent, and instantiates components.
-   * @param {GameObject | Scene} parent Parent `GameObject` or three.js `Scene`.
+   * @param {SceneObject} parent Parent `GameObject` or three.js `Scene`.
    * @param {ComponentsToCreateList} [componentsToCreate=[]] Components with constructor args to create.
    */
-  constructor(parent: GameObject | Scene, componentsToCreate: ComponentsToCreateList = []) {
+  constructor(parent: SceneObject, componentsToCreate: ComponentsToCreateList = []) {
     // Setup hierarchy
     this.parentGameObject = parent; // To tell typescript that parent will be initialized
     this.SetParent(parent);
@@ -65,51 +67,27 @@ export class GameObject {
   }
 
   /**
-   * Removes a child `GameObject` from this object's children list.
-   * @param {GameObject} object Child object to remove.
-   * @protected
-   */
-  protected RemoveChild(object: GameObject) {
-    const ndx = this.children.indexOf(object);
-    if (ndx >= 0) {
-      this.children.splice(ndx, 1);
-    }
-  }
-
-  /**
    * Reparents this `GameObject` to `newParent` and updates transforms.
    * Removes from previous parent, then attaches to the new parent.
-   * @param {GameObject | Scene} newParent New parent.
+   * @param {SceneObject} newParent New parent.
    */
-  SetParent(newParent: GameObject | Scene) {
+  SetParent(newParent: SceneObject) {
     // Remove from current parent
     if (this.parentGameObject instanceof GameObject){
-      this.parentGameObject.RemoveChild(this);
+      RemoveItemFromArray(this.parentGameObject.children, this);
     }
     // Add to new parent
-    if (newParent instanceof GameObject) {
-      newParent.transform.add(this.transform);
-      newParent.children.push(this);
-    } else {
-      newParent.add(this.transform);
-    }
+    newParent.transform.add(this.transform);
+    newParent.children.push(this);
     this.parentGameObject = newParent;
   }
 
   /**
    * Gets the current parent.
-   * @returns {GameObject | Scene} Parent `GameObject` or `Scene`.
+   * @returns {SceneObject} Parent `GameObject` or `Scene`.
    */
-  get Parent() {
+  get Parent(): SceneObject {
     return this.parentGameObject;
-  }
-
-  /**
-   * Gets the list of child `GameObject`s.
-   * @returns {Readonly<Array<GameObject>>} Read-only children array.
-   */
-  get Children(): Readonly<Array<GameObject>> {
-    return this.children;
   }
 
   /**
@@ -173,7 +151,7 @@ export class GameObject {
    */
   Shutdown(): void {
     if (this.parentGameObject instanceof GameObject) {
-      this.parentGameObject.RemoveChild(this);
+      RemoveItemFromArray(this.parentGameObject.children, this);
     }
 
     for (const component of this.components) {
