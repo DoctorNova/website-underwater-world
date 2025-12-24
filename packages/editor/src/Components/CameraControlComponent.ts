@@ -59,7 +59,8 @@ export class CameraControlComponent extends Component {
     // --------------------------------------------------------
     const targetMovement = new THREE.Vector3();
 
-    if (globalInputManager.IsWindowFocused() && globalInputManager.IsCanvasHovered()) {
+    const mouseMovement = globalInputManager.GetMousePositionChange();
+    if (globalInputManager.IsWindowFocused() && globalInputManager.IsCanvasHovered() && mouseMovement.lengthSq() == 0) {
       // rotate based on mouse movement
       // Edge-rotation: keep rotating when near canvas edges
       const ndc = globalInputManager.GetMousePositionInNDC();
