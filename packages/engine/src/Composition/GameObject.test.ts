@@ -1,7 +1,7 @@
-import type { Scene } from "three";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Component } from "./Component";
 import { GameObject } from "./GameObject";
+import type {SceneRoot} from "@engine/Composition/SceneObject.ts";
 
 describe("GameObject", () => {
   let mockedLoadResourceFunction = vi.fn();
@@ -41,7 +41,7 @@ describe("GameObject", () => {
     LoadResources = mockedLoadResourceFunction;
   }
 
-  const scene = { add: vi.fn() } as unknown as Scene;
+  const scene = { transform: { add: vi.fn() } } as unknown as SceneRoot;
 
   beforeEach(() => {
     vi.clearAllMocks(); // resets call counts, last calls, etc.
@@ -52,7 +52,7 @@ describe("GameObject", () => {
     const gameObject = new GameObject(scene, [[MockComponent1, []]]);
     const component = gameObject.FindComponent(MockComponent1);
     expect(gameObject.Parent).toBe(scene);
-    expect(scene.add).toHaveBeenCalledWith(gameObject.transform);
+    expect(scene.transform.add).toHaveBeenCalledWith(gameObject.transform);
     expect(component).toBeInstanceOf(MockComponent1);
   });
 
@@ -61,8 +61,8 @@ describe("GameObject", () => {
     const gameObject = new GameObject(parentGameObject, [[MockComponent1, []]]);
 
     expect(gameObject.Parent).toBe(parentGameObject);
-    expect(scene.add).toHaveBeenCalled();
-    expect(parentGameObject.Children).toContain(gameObject);
+    expect(scene.transform.add).toHaveBeenCalled();
+    expect(parentGameObject.children).toContain(gameObject);
   });
 
   it("Creates a component with constructor arguments", () => {

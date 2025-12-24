@@ -1,28 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
+<head>
+    <meta charset="utf-8"/>
     <title>Editor</title>
-    <link rel="stylesheet" href="/editor/css/loading-bar.css" />
-    <link rel="stylesheet" href="/editor/css/main.css" />
-  </head>
-  <body>
-    <div class="editor-layout">
-      <div class="panel-left"></div>
-      <div class="panel-center">
-        <div class="panel-top"></div>
-        <div class="panel-viewport">
-          <canvas id="display"></canvas>
-        </div>
-      </div>
-      <div class="panel-right"></div>
+    <link rel="stylesheet" href="/editor/css/loading-bar.css"/>
+    <link rel="stylesheet" href="/editor/css/main.css"/>
+</head>
+<body>
+<div class="editor-layout">
+    <div class="panel-left"></div>
+    <div class="panel-top">
+        <button class="game-play">
+            <svg class="play-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                <path d="M64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576C178.6 576 64 461.4 64 320zM252.3 211.1C244.7 215.3 240 223.4 240 232L240 408C240 416.7 244.7 424.7 252.3 428.9C259.9 433.1 269.1 433 276.6 428.4L420.6 340.4C427.7 336 432.1 328.3 432.1 319.9C432.1 311.5 427.7 303.8 420.6 299.4L276.6 211.4C269.2 206.9 259.9 206.7 252.3 210.9z"/>
+            </svg>
+            <svg class="pause-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                <path d="M320 576C461.4 576 576 461.4 576 320C576 178.6 461.4 64 320 64C178.6 64 64 178.6 64 320C64 461.4 178.6 576 320 576zM288 256L288 384C288 401.7 273.7 416 256 416C238.3 416 224 401.7 224 384L224 256C224 238.3 238.3 224 256 224C273.7 224 288 238.3 288 256zM416 256L416 384C416 401.7 401.7 416 384 416C366.3 416 352 401.7 352 384L352 256C352 238.3 366.3 224 384 224C401.7 224 416 238.3 416 256z"/>
+            </svg>
+        </button>
+        <button class="game-reset">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                <path d="M88 256L232 256C241.7 256 250.5 250.2 254.2 241.2C257.9 232.2 255.9 221.9 249 215L202.3 168.3C277.6 109.7 386.6 115 455.8 184.2C530.8 259.2 530.8 380.7 455.8 455.7C380.8 530.7 259.3 530.7 184.3 455.7C174.1 445.5 165.3 434.4 157.9 422.7C148.4 407.8 128.6 403.4 113.7 412.9C98.8 422.4 94.4 442.2 103.9 457.1C113.7 472.7 125.4 487.5 139 501C239 601 401 601 501 501C601 401 601 239 501 139C406.8 44.7 257.3 39.3 156.7 122.8L105 71C98.1 64.2 87.8 62.1 78.8 65.8C69.8 69.5 64 78.3 64 88L64 232C64 245.3 74.7 256 88 256z"/>
+            </svg>
+        </button>
     </div>
-    <div id="loading">
-      <div class="info">
+    <div class="panel-viewport">
+        <canvas id="display"></canvas>
+    </div>
+    <div class="panel-right"></div>
+</div>
+<div id="loading">
+    <div class="info">
         <div>...loading...</div>
-        <div class="progress"><div id="progressbar"></div></div>
-      </div>
+        <div class="progress">
+            <div id="progressbar"></div>
+        </div>
     </div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
+</div>
+<script type="module" src="/src/main.js"></script>
+</body>
 </html>

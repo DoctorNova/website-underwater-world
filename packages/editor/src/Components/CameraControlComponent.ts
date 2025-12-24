@@ -2,6 +2,7 @@ import type { GameObject } from "@engine/Composition";
 import { Component } from "@engine/Composition/Component";
 import { globalInputManager } from "@engine/Input/InputManager";
 import * as THREE from "three";
+import {globalEditorComponentManager} from "./EditorComponentSystem.ts";
 
 export class CameraControlComponent extends Component {
   private speed: number = 5;
@@ -16,6 +17,14 @@ export class CameraControlComponent extends Component {
 
     owner.transform.add(this.camera);
     this.camera.lookAt(owner.transform.position.clone().add(new THREE.Vector3(0, 0, 1)));
+  }
+
+  AddToSystem() {
+    globalEditorComponentManager.Add(this);
+  }
+
+  RemoveFromSystem() {
+    globalEditorComponentManager.Remove(this);
   }
 
   Initialize(): void {

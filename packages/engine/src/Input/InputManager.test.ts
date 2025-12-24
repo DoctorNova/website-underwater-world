@@ -66,7 +66,7 @@ describe('InputManager', () => {
       clientY: 300,
     }));
 
-    globalGraphicSystem.AddCamera(new THREE.PerspectiveCamera(75, 800 / 600, 0.1, 1000));
+    globalGraphicSystem.AddCamera(true, new THREE.PerspectiveCamera(75, 800 / 600, 0.1, 1000));
     const camera = globalGraphicSystem.GetActiveCamera();
     const ndc = globalInputManager.GetMousePositionInWorld(camera);
 

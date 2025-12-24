@@ -29,12 +29,6 @@ function CreateGround(scene: THREE.Scene) {
 }
 
 export function CreateGameScene(scene: SceneRoot): void {
-
-  // Set up camera
-  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.set(0, 0, 5);
-  globalGraphicSystem.AddCamera(camera);
-
   // Set up lighting
   const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
   directionalLight.position.set(10, 10, 10);

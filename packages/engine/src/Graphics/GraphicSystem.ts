@@ -1,11 +1,18 @@
 import * as THREE from "three";
+import type {Scene} from "three";
 
 export type ResizeCallback = (this: Window, ev: UIEvent) => void;
 
+interface CameraSceneMapping {
+  camera: THREE.Camera;
+  scenes: Scene[];
+}
+
 class GraphicSystem {
-  private cameras: Array<THREE.Camera> = [];
+  private cameras: Array<CameraSceneMapping> = [];
   private renderer?: THREE.WebGLRenderer;
   private resizeObservers: ResizeCallback[] = [];
+  private mainCamera: number = -1;
 
   public Initialize(canvas: HTMLCanvasElement): void {
     this.renderer = new THREE.WebGLRenderer({ canvas });
@@ -15,9 +22,11 @@ class GraphicSystem {
     this.OnResize(() => this.ResizeCanvasToDisplaySize());
   }
 
-  public Render(_deltaTime: number, scene: THREE.Scene): void {
-    for (const camera of this.cameras) {
-      this.renderer?.render(scene, camera);
+  public Render(_deltaTime: number): void {
+    for (const { camera, scenes } of this.cameras) {
+      for(const scene of scenes) {
+        this.renderer?.render(scene, camera);
+      }
     }
   }
 
@@ -26,12 +35,15 @@ class GraphicSystem {
     this.resizeObservers.forEach(callback => this.OffResize(callback));
   }
 
-  public AddCamera(camera: THREE.Camera): void {
-    this.cameras.push(camera);
+  public AddCamera(isMainCamera: boolean, camera: THREE.Camera, ...scenes: Scene[]): void {
+    if (isMainCamera) {
+      this.mainCamera = this.cameras.length;
+    }
+    this.cameras.push({camera, scenes: scenes});
   }
 
   public RemoveCamera(camera: THREE.Camera): void {
-    const index = this.cameras.indexOf(camera);
+    const index = this.cameras.findIndex(item => { return item.camera == camera; });
     if (index >= 0) {
       this.cameras.splice(index, 1);
     }
@@ -61,7 +73,7 @@ class GraphicSystem {
     this.renderer.setSize(cssWidth, cssHeight, false);
 
     // adjust any cameras you have here
-    for (const camera of this.cameras) {
+    for (const { camera } of this.cameras) {
       if (camera instanceof THREE.PerspectiveCamera) {
         camera.aspect = (cssWidth || 1) / (cssHeight || 1);
         camera.updateProjectionMatrix();
@@ -74,10 +86,10 @@ class GraphicSystem {
   }
 
   GetActiveCamera(): THREE.Camera {
-    if (this.cameras.length === 0) {
+    if (this.mainCamera < 0 || this.mainCamera >= this.cameras.length) {
       throw new Error("No cameras available in GraphicSystem.");
     }
-    return this.cameras[0];
+    return this.cameras[this.mainCamera].camera;
   }
 }
 

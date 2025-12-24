@@ -11,7 +11,7 @@ export interface GameObjectConfig {
     rotation?: THREE.Euler, 
     scale?: THREE.Vector3 | number, 
     componentsToCreate?: ComponentsToCreateList
-};
+}
 
 export async function CreateGameObject(config: GameObjectConfig): Promise<GameObject> {
   const object = new GameObject(config.parent, config.componentsToCreate ?? []);

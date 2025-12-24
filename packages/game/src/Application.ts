@@ -1,19 +1,21 @@
-import { globalBaseComponentManager } from "@engine/Composition/BaseComponentManager";
-import { globalGameObjectManager } from "@engine/Composition/GameObjectManager";
-import { SceneRoot } from "@engine/Composition/SceneObject";
-import { globalGraphicSystem } from "@engine/Graphics/GraphicSystem";
-import { globalInputManager } from "@engine/Input/InputManager";
-import type { ResourceName } from "@engine/Resources";
-import { ResourceManager } from "@engine/Resources/ResourceManager";
-import { globalFrameTime } from "@engine/Utility/FrameTime";
 import { CreateGameScene } from "./CreateGameScene";
+import {Engine} from "@engine/index.ts";
 
-export class GameApplication {
+export class EditorApplication {
   private loadingBarElement = document.querySelector<HTMLElement>('#loading');
   private progressBarElement = document.querySelector<HTMLElement>('#progressbar');
   private progressInfoElement = document.querySelector<HTMLElement>('.info > p');
   private canvasElement = document.getElementById("display");
-  private scene = new SceneRoot();
+  private engine = new Engine({
+    requiredResourcesConfig: {
+      resources: ['emperorAngelfish'],
+      options: {
+        onSuccess: this.OnRequiredResourcesLoaded.bind(this),
+        onProgress: this.OnRequiredResourcesProgress.bind(this),
+        onError: this.OnRequiredResourcesLoaded.bind(this),
+      }
+    }
+  });
 
   /**
    * Called when all required resources are loaded
@@ -48,61 +50,20 @@ export class GameApplication {
       throw new Error("Canvas element with id 'display' not found or is not a canvas.");
     }
 
-    // -------------------------------------------------------------
-    // Initialize all the global systems used in the application
-    // -------------------------------------------------------------
-    globalGameObjectManager.Initialize();
-    globalBaseComponentManager.Initialize();
-    globalGraphicSystem.Initialize(this.canvasElement);
-    globalInputManager.Initialize();
-
-    // -------------------------------------------------------------
-    // Load all the resources needed before we can play the game
-    // -------------------------------------------------------------
-    const requiredResources: ResourceName[] = [
-      'emperorAngelfish',
-    ];
-    const resourceLoader = new ResourceManager({
-      onSuccess: this.OnRequiredResourcesLoaded.bind(this),
-      onProgress: this.OnRequiredResourcesProgress.bind(this),
-      onError: this.OnRequiredResourcesLoaded.bind(this),
-    });
-    resourceLoader.Load(...requiredResources);
+    this.engine.Initialize(this.canvasElement);
 
     // -------------------------------------------------------------
     // Create the main game scene
     // -------------------------------------------------------------
-    CreateGameScene(this.scene);
+    CreateGameScene(this.engine.AddScene());
   }
 
   public GameLoop() {
-    const render = (now: number) => {
-      // ---------------------------------------------
-      // Calculate total time and delta time
-      // ---------------------------------------------
-      globalFrameTime.Update(now);
-      globalInputManager.BeginFrame();
-
-      // ---------------------------------------------
-      // Update all global systems
-      // ---------------------------------------------
-      globalGameObjectManager.Update(globalFrameTime.DeltaTime);
-      globalBaseComponentManager.Update(globalFrameTime.DeltaTime);
-      globalGraphicSystem.Render(globalFrameTime.DeltaTime, this.scene.transform);
-
-      globalInputManager.EndFrame();
-      // Request the next frame
-      requestAnimationFrame(render);
-    }
-
-    requestAnimationFrame(render);
+    this.engine.GameLoop();
   }
 
   public Shutdown() {
-    globalGraphicSystem.Shutdown();
-    globalGameObjectManager.Shutdown();
-    globalBaseComponentManager.Shutdown();
-    globalInputManager.Shutdown();
+    this.engine.Shutdown();
   }
 
 }
