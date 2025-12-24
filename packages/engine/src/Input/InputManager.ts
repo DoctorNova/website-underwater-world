@@ -75,13 +75,18 @@ class InputManager {
   private keyStates: Map<InputKey, boolean> = new Map();
 
   /** Mouse position in viewport (CSS pixels, top-left origin). */
-  private mousePosition: THREE.Vector2 = new THREE.Vector2(0, 0);
+  private mousePosition = new THREE.Vector2(0, 0);
+
+  private mousePositionDelta = new THREE.Vector2(0, 0);
+  private mousePositionDeltaFrame = new THREE.Vector2();
 
   /** Accumulated scroll deltas since last `BeginFrame()`. */
-  private mouseScroll: THREE.Vector2 = new THREE.Vector2();
+  private mouseScroll = new THREE.Vector2();
 
   /** Scroll delta snapshot for the current frame. */
-  private mouseScrollFrame: THREE.Vector2 = new THREE.Vector2();
+  private mouseScrollFrame = new THREE.Vector2();
+
+  private isMouseHoveringCanvas = false;
 
   /**
    * Binds event handler methods.
@@ -93,6 +98,8 @@ class InputManager {
     this.OnMouseup = this.OnMouseup.bind(this);
     this.OnMouseMove = this.OnMouseMove.bind(this);
     this.OnMouseWheel = this.OnMouseWheel.bind(this);
+    this.OnMouseEnter = this.OnMouseEnter.bind(this);
+    this.OnMouseLeave = this.OnMouseLeave.bind(this);
   }
 
   /**
@@ -143,7 +150,21 @@ class InputManager {
    * @param {MouseEvent} event Mouse event.
    */
   private OnMouseMove(event: MouseEvent) {
-    this.mousePosition.set(event.clientX, event.clientY);
+    const canvas = globalGraphicSystem.Canvas;
+    const relativeX = event.clientX - (canvas?.offsetLeft ?? 0);
+    const relativeY = event.clientY - (canvas?.offsetTop ?? 0);
+
+    const change = new THREE.Vector2(relativeX, relativeY).sub(this.mousePosition);
+    this.mousePositionDelta.add(change);
+    this.mousePosition.set(relativeX, relativeY);
+  }
+
+  private OnMouseEnter(_: MouseEvent){
+    this.isMouseHoveringCanvas = true;
+  }
+
+  private OnMouseLeave(_: MouseEvent){
+    this.isMouseHoveringCanvas = false;
   }
 
   /**
@@ -166,6 +187,10 @@ class InputManager {
     window.addEventListener('mouseup', this.OnMouseup);
     window.addEventListener('mousemove', this.OnMouseMove);
     window.addEventListener('wheel', this.OnMouseWheel);
+
+    const canvas = globalGraphicSystem.Canvas;
+    canvas?.addEventListener('mouseenter', this.OnMouseEnter);
+    canvas?.addEventListener('mouseleave', this.OnMouseLeave);
   }
 
   /**
@@ -174,6 +199,9 @@ class InputManager {
   BeginFrame(): void {
     this.mouseScrollFrame.copy(this.mouseScroll);
     this.mouseScroll.set(0, 0);
+
+    this.mousePositionDeltaFrame.copy(this.mousePositionDelta);
+    this.mousePositionDelta.set(0, 0);
   }
 
   /**
@@ -197,6 +225,10 @@ class InputManager {
     window.removeEventListener('mouseup', this.OnMouseup);
     window.removeEventListener('mousemove', this.OnMouseMove);
     window.removeEventListener('wheel', this.OnMouseWheel);
+    
+    const canvas = globalGraphicSystem.Canvas;
+    canvas?.removeEventListener('mouseenter', this.OnMouseEnter);
+    canvas?.removeEventListener('mouseleave', this.OnMouseLeave);
 
     this.keyStates.clear();
     this.mouseButtonStates.fill(MouseButtonState.Up);
@@ -208,6 +240,14 @@ class InputManager {
    */
   IsWindowFocused(): boolean {
     return document.hasFocus();
+  }
+
+  /**
+   * Checks if the mouse is over the canvas.
+   * @returns {boolean} True if the window has focus.
+   */
+  IsCanvasHovered(): boolean {
+    return this.isMouseHoveringCanvas;
   }
 
   /**
@@ -259,6 +299,14 @@ class InputManager {
    */
   IsMouseButtonReleased(button: MouseButton): boolean {
     return this.mouseButtonStates[button] === MouseButtonState.Released;
+  }
+
+  /**
+   * Gets how much the mouse position changed in this frame, in viewport coordinates (CSS pixels).
+   * @returns {THREE.Vector2} Clone of the current change in mouse position.
+   */
+  GetMousePositionChange(): THREE.Vector2{
+    return this.mousePositionDeltaFrame.clone();
   }
 
   /**

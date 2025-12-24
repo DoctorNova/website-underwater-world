@@ -54,7 +54,7 @@ export class EditorApplication {
     globalGameObjectManager.Initialize();
     globalBaseComponentManager.Initialize();
     globalGraphicSystem.Initialize(this.canvasElement);
-    globalInputManager.Initialize();
+    globalInputManager.Initialize(this.canvasElement);
 
     // -------------------------------------------------------------
     // Load all the resources needed before we can play the game

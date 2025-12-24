@@ -10,7 +10,8 @@ class GraphicSystem {
   public Initialize(canvas: HTMLCanvasElement): void {
     this.renderer = new THREE.WebGLRenderer({ canvas });
     this.renderer.setClearColor(0x000000, 1);
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    // Respect CSS sizing; use device pixel ratio for crisp rendering
+    this.ResizeCanvasToDisplaySize();
     this.OnResize(() => this.ResizeCanvasToDisplaySize());
   }
 
@@ -51,18 +52,19 @@ class GraphicSystem {
     }
 
     const canvas = this.renderer.domElement;
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    if (canvas.width !== width || canvas.height !== height) {
-      // you must pass false here or three.js sadly fights the browser
-      this.renderer.setSize(width, height);
+    const cssWidth = canvas.clientWidth;
+    const cssHeight = canvas.clientHeight;
+    const dpr = window.devicePixelRatio || 1;
 
-      // adjust any cameras you have here
-      for (const camera of this.cameras) {
-        if (camera instanceof THREE.PerspectiveCamera) {
-          camera.aspect = width / height;
-          camera.updateProjectionMatrix();
-        }
+    // Update only internal drawing buffer to match CSS size
+    this.renderer.setPixelRatio(dpr);
+    this.renderer.setSize(cssWidth, cssHeight, false);
+
+    // adjust any cameras you have here
+    for (const camera of this.cameras) {
+      if (camera instanceof THREE.PerspectiveCamera) {
+        camera.aspect = (cssWidth || 1) / (cssHeight || 1);
+        camera.updateProjectionMatrix();
       }
     }
   }

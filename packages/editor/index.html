@@ -3,10 +3,20 @@
   <head>
     <meta charset="utf-8" />
     <title>Editor</title>
-    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/editor/css/loading-bar.css" />
+    <link rel="stylesheet" href="/editor/css/main.css" />
   </head>
   <body>
-    <canvas id="display"></canvas>
+    <div class="editor-layout">
+      <div class="panel-left"></div>
+      <div class="panel-center">
+        <div class="panel-top"></div>
+        <div class="panel-viewport">
+          <canvas id="display"></canvas>
+        </div>
+      </div>
+      <div class="panel-right"></div>
+    </div>
     <div id="loading">
       <div class="info">
         <div>...loading...</div>

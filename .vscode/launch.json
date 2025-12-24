@@ -6,7 +6,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:5173",
-      "webRoot": "${workspaceFolder}",
+      "webRoot": "${workspaceFolder}/packages/game/src",
       "preLaunchTask": "dev:game",
       "postDebugTask": "Terminate task",
       "sourceMaps": true
@@ -16,7 +16,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:5174",
-      "webRoot": "${workspaceFolder}",
+      "webRoot": "${workspaceFolder}/packages/editor/src",
       "preLaunchTask": "dev:editor",
       "postDebugTask": "Terminate task",
       "sourceMaps": true
