@@ -1,12 +1,11 @@
-import { globalBaseComponentManager } from "@engine/Composition/BaseComponentManager";
-import { globalGameObjectManager } from "@engine/Composition/GameObjectManager";
-import { SceneRoot } from "@engine/Composition/SceneObject";
-import { globalGraphicSystem } from "@engine/Graphics/GraphicSystem";
-import { globalInputManager } from "@engine/Input/InputManager";
-import type { ResourceName } from "@engine/Resources";
+import {globalBaseComponentManager} from "@engine/Composition/BaseComponentManager";
+import {globalGraphicSystem} from "@engine/Graphics/GraphicSystem";
+import {globalInputManager} from "@engine/Input/InputManager";
+import type {ResourceName} from "@engine/Resources";
 import {type LoadOptions, ResourceManager} from "@engine/Resources/ResourceManager";
-import { globalFrameTime } from "@engine/Utility/FrameTime";
-import {RemoveItemFromArray} from "@engine/Utility/ArrayUtils.ts";
+import {globalFrameTime} from "@engine/Utility/FrameTime";
+import {SceneRoot} from "@engine/Composition/SceneRoot.ts";
+import {EventDispatcher} from "three";
 
 export interface EngineOptions {
     paused?: boolean;
@@ -18,26 +17,46 @@ export interface EngineOptions {
 
 export interface GameLoopHooks {
     onUpdate?: (deltaTime: number) => void;
-    beforeRender? :(deltaTime: number) => void;
+    beforeRender?: (deltaTime: number) => void;
 }
 
-export class Engine {
+export type EngineEvents = {
+    SceneInitialized: {
+        scene: SceneRoot;
+    },
+    SceneCleared: {
+        scene: SceneRoot;
+    }
+};
+
+class Engine extends EventDispatcher<EngineEvents> {
     private scenes: SceneRoot[] = [];
     private paused = false;
+    private options?: EngineOptions;
 
-    constructor(private options?: EngineOptions)
-    {
+    public SetConfig(options: EngineOptions) {
+        this.options = options;
         this.paused = options?.paused ?? false;
     }
 
-    public AddScene(): SceneRoot {
+    public AddScene(name: string): SceneRoot {
         const newScene = new SceneRoot();
+        newScene.transform.name = name;
         this.scenes.push(newScene);
+        newScene.Initialize();
+        this.dispatchEvent({
+            type: "SceneInitialized",
+            scene: newScene,
+        });
         return newScene;
     }
 
-    public RemoveScene(scene: SceneRoot){
-        RemoveItemFromArray(this.scenes, scene);
+    public EmptyScene(scene: SceneRoot) {
+        scene.Clear();
+        this.dispatchEvent({
+            type: "SceneCleared",
+            scene,
+        });
     }
 
     public get isPaused() {
@@ -52,7 +71,7 @@ export class Engine {
         this.paused = true;
     }
 
-    private LoadRequiredResource(config: Required<EngineOptions>["requiredResourcesConfig"]) : void {
+    private LoadRequiredResource(config: Required<EngineOptions>["requiredResourcesConfig"]): void {
         if (config.resources.length > 0) {
             const resourceLoader = new ResourceManager(config.options);
             resourceLoader.Load(...config.resources);
@@ -68,7 +87,6 @@ export class Engine {
         // -------------------------------------------------------------
         // Initialize all the global systems used in the application
         // -------------------------------------------------------------
-        globalGameObjectManager.Initialize();
         globalBaseComponentManager.Initialize();
         globalGraphicSystem.Initialize(canvasElement);
         globalInputManager.Initialize();
@@ -93,9 +111,11 @@ export class Engine {
             // ---------------------------------------------
             // Update all global systems
             // ---------------------------------------------
-            if (!this.paused){
-                globalGameObjectManager.Update(globalFrameTime.DeltaTime);
+            if (!this.paused) {
                 globalBaseComponentManager.Update(globalFrameTime.DeltaTime);
+                for (const scene of this.scenes) {
+                    scene.Update(globalFrameTime.DeltaTime);
+                }
                 hooks?.onUpdate?.(globalFrameTime.DeltaTime);
             }
             hooks?.beforeRender?.(globalFrameTime.DeltaTime);
@@ -111,9 +131,9 @@ export class Engine {
 
     public Shutdown() {
         globalGraphicSystem.Shutdown();
-        globalGameObjectManager.Shutdown();
         globalBaseComponentManager.Shutdown();
         globalInputManager.Shutdown();
     }
-
 }
+
+export const globalEngine = new Engine();

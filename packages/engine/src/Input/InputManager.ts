@@ -1,5 +1,6 @@
 import { globalGraphicSystem } from '@engine/Graphics/GraphicSystem';
 import * as THREE from 'three';
+import type {CameraComponent} from "@engine/Graphics/CameraComponent.ts";
 
 /**
  * @file InputManager.ts
@@ -251,14 +252,6 @@ class InputManager {
   }
 
   /**
-   * Requests pointer lock on the document body.
-   * Note: Typically requires a user gesture in browsers.
-   */
-  LookPointerToWindow(): void {
-    document.body.requestPointerLock();
-  }
-
-  /**
    * Convenience check for Control key state.
    * @returns {boolean} True if Control is pressed.
    */
@@ -329,12 +322,10 @@ class InputManager {
     }
 
     // Convert to NDC
-    const ndc = new THREE.Vector2(
+    return new THREE.Vector2(
       (this.mousePosition.x / canvas.clientWidth) * 2 - 1,
       -(this.mousePosition.y / canvas.clientHeight) * 2 + 1
     );
-
-    return ndc;
   }
 
   /**
@@ -342,14 +333,14 @@ class InputManager {
    * @param {THREE.Camera} [camera] Optional camera; defaults to the active camera.
    * @returns {THREE.Vector3} World-space position at z=0.5 along the ray through the mouse NDC.
    */
-  GetMousePositionInWorld(camera?: THREE.Camera): THREE.Vector3 {
+  GetMousePositionInWorld(camera?: CameraComponent): THREE.Vector3 {
     if (!camera) {
       camera = globalGraphicSystem.GetActiveCamera();
     }
     const ndc = this.GetMousePositionInNDC();
     // NDC -> World
     const world = new THREE.Vector3(ndc.x, ndc.y, 0.5);
-    world.unproject(camera);
+    world.unproject(camera.camera);
 
     return world;
   }
@@ -360,7 +351,7 @@ class InputManager {
    * @returns {THREE.Ray} Ray starting at the camera origin and passing through the mouse NDC.
    * Returns an empty ray if NDC is zero-length (no canvas or position).
    */
-  GetMouseRay(camera?: THREE.Camera): THREE.Ray {
+  GetMouseRay(camera?: CameraComponent): THREE.Ray {
     if (!camera) {
       camera = globalGraphicSystem.GetActiveCamera();
     }
@@ -372,7 +363,7 @@ class InputManager {
     }
 
     const rayCaster = new THREE.Raycaster();
-    rayCaster.setFromCamera(ndc, camera);
+    rayCaster.setFromCamera(ndc, camera.camera);
 
     return rayCaster.ray.clone();
   }

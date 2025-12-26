@@ -1,14 +1,15 @@
-import { Component } from "@engine/Composition/Component";
-import type { GameObject } from "@engine/Composition/GameObject";
-import { type AnimationResource, FetchResource, type ResourceName } from "@engine/Resources";
+import {Component} from "@engine/Composition/Component";
+import type {GameObject} from "@engine/Composition/GameObject";
+import {type AnimationResource, FetchResource, type ResourceName} from "@engine/Resources";
 import * as THREE from 'three';
-import { SkeletonUtils } from "three/examples/jsm/Addons.js";
+import {SkeletonUtils} from "three/examples/jsm/Addons.js";
 
 export class AnimationComponent extends Component {
   private resourceName: ResourceName;
   private animationResource?: AnimationResource;
   private animationMixer?: THREE.AnimationMixer;
   private actions: { [animName: string]: THREE.AnimationAction } = {};
+  private worldForward = new THREE.Vector3(0, 0, 1);
 
   constructor(gameObject: GameObject, resourceName: ResourceName, protected initialAnimationClipName?: string | number) {
     super(gameObject);
@@ -23,17 +24,23 @@ export class AnimationComponent extends Component {
     const animationRoot = SkeletonUtils.clone(this.animationResource!.gltf.scene);
     this.animationMixer = new THREE.AnimationMixer(animationRoot);
     this.owner.transform.add(animationRoot);
+    animationRoot.getWorldDirection(this.worldForward);
 
     if (typeof this.initialAnimationClipName === 'number') {
-      const clipNames = this.animationResource!.gltf.animations[this.initialAnimationClipName]?.name;
-      this.initialAnimationClipName = clipNames;
+      this.initialAnimationClipName = this.animationResource!.gltf.animations[this.initialAnimationClipName]?.name;
     }
     if (typeof this.initialAnimationClipName === 'string') {
       this.PlayAnimationClip(this.initialAnimationClipName);
     }
   }
   Shutdown(): void {
-    
+    // Stop all animation actions and dispose of the mixer
+    if (this.animationMixer) {
+      this.animationMixer.stopAllAction();
+      this.animationMixer.uncacheRoot(this.animationMixer.getRoot());
+      this.animationMixer = undefined;
+    }
+    this.actions = {};
   }
   Update(deltaTime: number): void {
     this.animationMixer?.update(deltaTime);

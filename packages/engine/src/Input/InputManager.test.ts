@@ -2,6 +2,8 @@ import { globalGraphicSystem } from '@engine/Graphics/GraphicSystem';
 import * as THREE from 'three';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { globalInputManager, MouseButton } from './InputManager';
+import {CameraComponent} from "@engine/Graphics/CameraComponent.ts";
+import type {GameObject} from "@engine/Composition/GameObject.ts";
 
 describe('InputManager', () => {
   beforeEach(() => {
@@ -66,7 +68,9 @@ describe('InputManager', () => {
       clientY: 300,
     }));
 
-    globalGraphicSystem.AddCamera(true, new THREE.PerspectiveCamera(75, 800 / 600, 0.1, 1000));
+    const cameraComponent = new CameraComponent({} as unknown as GameObject, new THREE.PerspectiveCamera(75, 800 / 600, 0.1, 1000), true, []);
+
+    globalGraphicSystem.AddCamera(true, cameraComponent);
     const camera = globalGraphicSystem.GetActiveCamera();
     const ndc = globalInputManager.GetMousePositionInWorld(camera);
 

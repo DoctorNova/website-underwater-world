@@ -1,18 +1,14 @@
 import * as THREE from "three";
-import type {Scene} from "three";
+import type {CameraComponent} from "@engine/Graphics/CameraComponent.ts";
+import {RemoveItemFromArray} from "@engine/Utility/ArrayUtils.ts";
 
 export type ResizeCallback = (this: Window, ev: UIEvent) => void;
 
-interface CameraSceneMapping {
-  camera: THREE.Camera;
-  scenes: Scene[];
-}
-
 class GraphicSystem {
-  private cameras: Array<CameraSceneMapping> = [];
+  private cameras: Array<CameraComponent> = [];
   private renderer?: THREE.WebGLRenderer;
   private resizeObservers: ResizeCallback[] = [];
-  private mainCamera: number = -1;
+  private mainCamera: CameraComponent | undefined;
 
   public Initialize(canvas: HTMLCanvasElement): void {
     this.renderer = new THREE.WebGLRenderer({ canvas });
@@ -25,7 +21,7 @@ class GraphicSystem {
   public Render(_deltaTime: number): void {
     for (const { camera, scenes } of this.cameras) {
       for(const scene of scenes) {
-        this.renderer?.render(scene, camera);
+        this.renderer?.render(scene.transform, camera);
       }
     }
   }
@@ -35,17 +31,17 @@ class GraphicSystem {
     this.resizeObservers.forEach(callback => this.OffResize(callback));
   }
 
-  public AddCamera(isMainCamera: boolean, camera: THREE.Camera, ...scenes: Scene[]): void {
+  public AddCamera(isMainCamera: boolean, camera: CameraComponent): void {
     if (isMainCamera) {
-      this.mainCamera = this.cameras.length;
+      this.mainCamera = camera;
     }
-    this.cameras.push({camera, scenes: scenes});
+    this.cameras.push(camera);
   }
 
-  public RemoveCamera(camera: THREE.Camera): void {
-    const index = this.cameras.findIndex(item => { return item.camera == camera; });
-    if (index >= 0) {
-      this.cameras.splice(index, 1);
+  public RemoveCamera(camera: CameraComponent): void {
+    RemoveItemFromArray(this.cameras, camera);
+    if(this.mainCamera == camera){
+      this.mainCamera = undefined;
     }
   }
 
@@ -85,11 +81,11 @@ class GraphicSystem {
     return this.renderer?.domElement;
   }
 
-  GetActiveCamera(): THREE.Camera {
-    if (this.mainCamera < 0 || this.mainCamera >= this.cameras.length) {
+  GetActiveCamera(): CameraComponent {
+    if (this.mainCamera === undefined) {
       throw new Error("No cameras available in GraphicSystem.");
     }
-    return this.cameras[this.mainCamera].camera;
+    return this.mainCamera;
   }
 }
 

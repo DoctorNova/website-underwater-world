@@ -1,5 +1,5 @@
 import {CreateEditorScene} from "packages/editor/src/CreateEditorScene";
-import {Engine} from "@engine/index.ts";
+import {globalEngine} from "@engine/index.ts";
 import {EditorUI} from "./EditorUI.ts";
 import {globalEditorComponentManager} from "./Components/EditorComponentSystem.ts";
 import {CreateGameScene} from "@game/CreateGameScene.ts";
@@ -9,17 +9,6 @@ export class EditorApplication {
     private progressBarElement = document.querySelector<HTMLElement>('#progressbar');
     private progressInfoElement = document.querySelector<HTMLElement>('.info > p');
     private canvasElement = document.getElementById("display");
-    private engine = new Engine({
-        paused: true,
-        requiredResourcesConfig: {
-            resources: [],
-            options: {
-                onSuccess: this.OnRequiredResourcesLoaded.bind(this),
-                onProgress: this.OnRequiredResourcesProgress.bind(this),
-                onError: this.OnRequiredResourcesLoaded.bind(this),
-            }
-        }
-    });
 
     /**
      * Called when all required resources are loaded
@@ -53,28 +42,41 @@ export class EditorApplication {
         if (!(this.canvasElement instanceof HTMLCanvasElement)) {
             throw new Error("Canvas element with id 'display' not found or is not a canvas.");
         }
+        
+        globalEngine.SetConfig({
+            paused: true,
+            requiredResourcesConfig: {
+                resources: [],
+                options: {
+                    onSuccess: this.OnRequiredResourcesLoaded.bind(this),
+                    onProgress: this.OnRequiredResourcesProgress.bind(this),
+                    onError: this.OnRequiredResourcesLoaded.bind(this),
+                }
+            }
+        });
 
-        this.engine.Initialize(this.canvasElement);
-        new EditorUI(this.engine, document.querySelector('.panel-left'), document.querySelector('.panel-top'), document.querySelector('.panel-right'));
+        globalEngine.Initialize(this.canvasElement);
         globalEditorComponentManager.Initialize();
         // -------------------------------------------------------------
         // Create the main game scene
         // -------------------------------------------------------------
-        const editorScene = this.engine.AddScene();
-        const gameScene = this.engine.AddScene();
+        const editorScene = globalEngine.AddScene("editorScene");
+        const gameScene = globalEngine.AddScene("gameScene");
         CreateEditorScene(editorScene, gameScene);
         CreateGameScene(gameScene);
+
+        new EditorUI(gameScene, document.querySelector('.panel-left'), document.querySelector('.panel-top'), document.querySelector('.panel-right'));
     }
 
     public GameLoop() {
-        this.engine.GameLoop({
+        globalEngine.GameLoop({
             beforeRender: (deltaTime) => {globalEditorComponentManager.Update(deltaTime);},
         });
     }
 
     public Shutdown() {
         globalEditorComponentManager.Shutdown();
-        this.engine.Shutdown();
+        globalEngine.Shutdown();
     }
 
 }

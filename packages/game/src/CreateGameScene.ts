@@ -1,11 +1,9 @@
-import { CreateGameObject } from '@engine/Composition';
-import type { SceneRoot } from '@engine/Composition/SceneObject';
-import { globalGraphicSystem } from '@engine/Graphics/GraphicSystem';
 import { AnimationComponent } from '@engine/Graphics/SkinComponent';
 import { OceanSkyBox } from '@game/SkyBox/OceanSkyBox';
 import * as THREE from 'three';
+import type {SceneRoot} from "@engine/Composition/SceneRoot.ts";
 
-function CreateGround(scene: THREE.Scene) {
+function CreateGround(scene: SceneRoot) {
   const planeSize = 40;
  
   const loader = new THREE.TextureLoader();
@@ -25,7 +23,7 @@ function CreateGround(scene: THREE.Scene) {
   const mesh = new THREE.Mesh(planeGeo, planeMat);
   mesh.rotation.x = Math.PI * -.5;
   mesh.position.y = -5;
-  scene.add(mesh);
+  scene.transform.add(mesh);
 }
 
 export function CreateGameScene(scene: SceneRoot): void {
@@ -42,10 +40,11 @@ export function CreateGameScene(scene: SceneRoot): void {
   scene.transform.add(skybox);
 
   // Set up ground
-  CreateGround(scene.transform);
+  CreateGround(scene);
 
   // Create game objects
-  CreateGameObject({
+  scene.NewGameObject({
+    name: "Fish",
     parent: scene, 
     scale: 10,
     componentsToCreate: [

@@ -1,22 +1,22 @@
-import type { GameObject } from "@engine/Composition";
 import { Component } from "@engine/Composition/Component";
+import type { GameObject } from "@engine/Composition/GameObject.ts";
+import { CameraComponent } from "@engine/Graphics/CameraComponent.ts";
+import { type EngineEvents, globalEngine } from "@engine/index.ts";
 import { globalInputManager } from "@engine/Input/InputManager";
 import * as THREE from "three";
-import {globalEditorComponentManager} from "./EditorComponentSystem.ts";
+import { globalEditorComponentManager } from "./EditorComponentSystem.ts";
 
 export class CameraControlComponent extends Component {
   private speed: number = 5;
-  private camera: THREE.PerspectiveCamera;
+  private cameraComp: CameraComponent | undefined;
 
   private edgeRotateThreshold: number = 0.7; // NDC threshold to start edge rotation
   private edgeRotateScale: number = 0.75;    // scales edge-induced rotation amount
 
-  constructor(owner: GameObject, camera: THREE.PerspectiveCamera) {
+  constructor(owner: GameObject) {
     super(owner);
-    this.camera = camera;
 
-    owner.transform.add(this.camera);
-    this.camera.lookAt(owner.transform.position.clone().add(new THREE.Vector3(0, 0, 1)));
+    this.AddSceneToCamera = this.AddSceneToCamera.bind(this);
   }
 
   AddToSystem() {
@@ -27,17 +27,34 @@ export class CameraControlComponent extends Component {
     globalEditorComponentManager.Remove(this);
   }
 
-  Initialize(): void {
+  private AddSceneToCamera({ scene }: EngineEvents["SceneInitialized"]) {
+    const index = this.cameraComp?.scenes.indexOf(scene) ?? -1;
+    if (index >= 0) {
+      return;
+    }
+    this.cameraComp?.scenes.push(scene);
+  }
 
+  Initialize(): void {
+    globalEngine.addEventListener("SceneInitialized", this.AddSceneToCamera);
+
+    this.cameraComp = this.owner.RequireComponent(CameraComponent);
+
+    this.owner.transform.add(this.cameraComp?.camera);
+    this.cameraComp.camera.lookAt(this.owner.transform.position.clone().add(new THREE.Vector3(0, 0, 1)));
   }
 
   Update(deltaTime: number): void {
+    if (!this.cameraComp) {
+      return;
+    }
+
     const moveDistance = this.speed * deltaTime;
     const cameraForward = new THREE.Vector3();
-    this.camera.getWorldDirection(cameraForward);
+    this.cameraComp.camera.getWorldDirection(cameraForward);
     // After calculating cameraForward and cameraRight
     const cameraUp = new THREE.Vector3(0, 1, 0); // Default up vector
-    cameraUp.applyQuaternion(this.camera.quaternion); // Adjust up vector based on camera's rotation
+    cameraUp.applyQuaternion(this.cameraComp.camera.quaternion); // Adjust up vector based on camera's rotation
     const cameraRight = cameraForward.clone().cross(cameraUp).normalize();
 
     const cameraMovement = new THREE.Vector3();
@@ -91,14 +108,14 @@ export class CameraControlComponent extends Component {
     // yawn (rotate around y-axis) with e and q keys.
     globalInputManager.IsKeyPressed("q") && targetMovement.add(cameraRight);
     globalInputManager.IsKeyPressed("e") && targetMovement.sub(cameraRight);
-    this.camera.position.add(targetMovement.normalize().multiplyScalar(moveDistance));
+    this.cameraComp.camera.position.add(targetMovement.normalize().multiplyScalar(moveDistance));
 
     // Make the camera look at the updated target position
     const target = this.owner.transform.position.clone().add(cameraForward);
-    this.camera.lookAt(target);
+    this.cameraComp.camera.lookAt(target);
   }
 
   Shutdown(): void {
-
+    globalEngine.removeEventListener("SceneInitialized", this.AddSceneToCamera);
   }
 }

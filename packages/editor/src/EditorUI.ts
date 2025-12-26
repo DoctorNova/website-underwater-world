@@ -1,12 +1,19 @@
-import {Pane} from "tweakpane";
-import type {Engine} from "@engine/index.ts";
+import type { SceneRoot } from "@engine/Composition/SceneRoot.ts";
+import { globalEngine } from "@engine/index.ts";
+import { CreateGameScene } from "@game/CreateGameScene.ts";
+import { Pane } from "tweakpane";
 
 export class EditorUI {
     private leftPanel: Pane;
     private centerPanel: HTMLElement;
     private rightPanel: Pane;
 
-    constructor(public engine: Engine, leftContainer: HTMLElement | null, centerPanel: HTMLElement | null, rightContainer: HTMLElement | null) {
+    constructor(
+        private gameScene: SceneRoot,
+        leftContainer: HTMLElement | null,
+        centerPanel: HTMLElement | null,
+        rightContainer: HTMLElement | null
+    ) {
         if (!centerPanel) {
             throw new Error('Invalid center panel');
         }
@@ -53,19 +60,24 @@ export class EditorUI {
 
     private CreateGameControls() {
         const playPauseButton = this.centerPanel.querySelector(".game-play");
-        if (this.engine.isPaused){
+        if (globalEngine.isPaused){
             playPauseButton?.classList.remove("paused");
         }
         playPauseButton?.addEventListener("click", () => {
-            if (this.engine.isPaused){
-                this.engine.Play();
+            if (globalEngine.isPaused){
+                globalEngine.Play();
                 playPauseButton?.classList.add("paused");
             } else {
-                this.engine.Pause();
+                globalEngine.Pause();
                 playPauseButton?.classList.remove("paused");
             }
         });
 
+        const resetButton = this.centerPanel.querySelector(".game-reset");
+        resetButton?.addEventListener("click", () => {
+            globalEngine.EmptyScene(this.gameScene);
+            CreateGameScene(this.gameScene);
+        });
 
     }
 }

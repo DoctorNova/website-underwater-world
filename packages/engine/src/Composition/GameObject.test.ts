@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Component } from "./Component";
 import { GameObject } from "./GameObject";
-import type {SceneRoot} from "@engine/Composition/SceneObject.ts";
+import type {SceneRoot} from "@engine/Composition/SceneRoot.ts";
 
 describe("GameObject", () => {
   let mockedLoadResourceFunction = vi.fn();
@@ -49,7 +49,7 @@ describe("GameObject", () => {
   });
 
   it("Creates a component and adds it to the list", () => {
-    const gameObject = new GameObject(scene, [[MockComponent1, []]]);
+    const gameObject = new GameObject([[MockComponent1, []]]);
     const component = gameObject.FindComponent(MockComponent1);
     expect(gameObject.Parent).toBe(scene);
     expect(scene.transform.add).toHaveBeenCalledWith(gameObject.transform);
@@ -57,8 +57,9 @@ describe("GameObject", () => {
   });
 
   it("Should save the parent correctly", () => {
-    const parentGameObject = new GameObject(scene, [[MockComponent1, []]]);
-    const gameObject = new GameObject(parentGameObject, [[MockComponent1, []]]);
+    const parentGameObject = new GameObject( [[MockComponent1, []]]);
+    const gameObject = new GameObject([[MockComponent1, []]]);
+    gameObject.SetParent(parentGameObject);
 
     expect(gameObject.Parent).toBe(parentGameObject);
     expect(scene.transform.add).toHaveBeenCalled();
@@ -66,7 +67,7 @@ describe("GameObject", () => {
   });
 
   it("Creates a component with constructor arguments", () => {
-    const gameObject = new GameObject(scene, [[MockComponentWithConstructor, [42]]]);
+    const gameObject = new GameObject( [[MockComponentWithConstructor, [42]]]);
     const component = gameObject.FindComponent(MockComponentWithConstructor);
     expect(component).toBeInstanceOf(MockComponentWithConstructor);
     expect(component?.value).toBe(42);
@@ -82,31 +83,31 @@ describe("GameObject", () => {
       Update = vi.fn();
       GetDependencies = vi.fn().mockReturnValue([MockComponent1]);
     }
-    expect(() => new GameObject(scene, [[DependentComponent, []]])).toThrowError(`Missing dependency: ${MockComponent1.name}`);
+    expect(() => new GameObject( [[DependentComponent, []]])).toThrowError(`Missing dependency: ${MockComponent1.name}`);
   });
 
   it("Finds a component by type", () => {
-    const gameObject = new GameObject(scene, [[MockComponent1, []]]);
+    const gameObject = new GameObject( [[MockComponent1, []]]);
     const component = gameObject.FindComponent(MockComponent1);
     const foundComponent = gameObject.FindComponent(MockComponent1);
     expect(foundComponent).toBe(component);
   });
 
   it("Returns undefined when finding a non-existent component", () => {
-    const gameObject = new GameObject(scene, []);
+    const gameObject = new GameObject( []);
     const foundComponent = gameObject.FindComponent(MockComponent1);
     expect(foundComponent).toBeUndefined();
   });
 
   it("Checks for existence of a component by type", () => {
-    const gameObject1 = new GameObject(scene, []);
+    const gameObject1 = new GameObject( []);
     expect(gameObject1.HasComponent(MockComponent1)).toBe(false);
-    const gameObject2 = new GameObject(scene, [[MockComponent1, []]]);
+    const gameObject2 = new GameObject( [[MockComponent1, []]]);
     expect(gameObject2.HasComponent(MockComponent1)).toBe(true);
   });
 
   it("Removes a component from the list", () => {
-    const gameObject = new GameObject(scene, [[MockComponent1, []]]);
+    const gameObject = new GameObject( [[MockComponent1, []]]);
     const component = gameObject.FindComponent(MockComponent1);
     if (component) {
       gameObject.RemoveComponent(component);
@@ -116,7 +117,7 @@ describe("GameObject", () => {
   });
 
   it("Initializes all components", () => {
-    const gameObject = new GameObject(scene, [[MockComponent1, []], [MockComponent2, []]]);
+    const gameObject = new GameObject( [[MockComponent1, []], [MockComponent2, []]]);
     const component1 = gameObject.FindComponent(MockComponent1);
     const component2 = gameObject.FindComponent(MockComponent2);
     gameObject.Initialize();
@@ -127,7 +128,7 @@ describe("GameObject", () => {
   });
 
   it("should load all component resources", async () => {
-    const gameObject = new GameObject(scene, [[MockComponent1, []], [MockComponent2, []]]);
+    const gameObject = new GameObject( [[MockComponent1, []], [MockComponent2, []]]);
     const component1 = gameObject.FindComponent(MockComponent1);
     const abortController = new AbortController();
     await gameObject.LoadResources(abortController.signal);
@@ -135,7 +136,7 @@ describe("GameObject", () => {
   });
 
   it("should load all component resources", async () => {
-    const gameObject = new GameObject(scene, [[MockComponent1, []], [MockComponent2, []]]);
+    const gameObject = new GameObject( [[MockComponent1, []], [MockComponent2, []]]);
     const component1 = gameObject.FindComponent(MockComponent1);
     const component2 = gameObject.FindComponent(MockComponent2);
     const abortController = new AbortController();
@@ -166,7 +167,7 @@ describe("GameObject", () => {
         }, 10);
       });
     });
-    const gameObject = new GameObject(scene, [[MockComponent1, []], [MockComponent2, []]]);
+    const gameObject = new GameObject( [[MockComponent1, []], [MockComponent2, []]]);
     const component1 = gameObject.FindComponent(MockComponent1);
     const component2 = gameObject.FindComponent(MockComponent2);
     const abortController = new AbortController();
@@ -178,7 +179,7 @@ describe("GameObject", () => {
   });
 
   it("Shuts down all components", () => {
-    const gameObject = new GameObject(scene, [[MockComponent1, []], [MockComponent2, []]]);
+    const gameObject = new GameObject( [[MockComponent1, []], [MockComponent2, []]]);
     const component1 = gameObject.FindComponent(MockComponent1);
     const component2 = gameObject.FindComponent(MockComponent2);
     gameObject.Shutdown();

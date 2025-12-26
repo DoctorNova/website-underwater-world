@@ -1,19 +1,9 @@
-import type { SceneRoot } from "@engine/Composition/SceneObject";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Component } from "./Component";
-import { GameObject, type ComponentsToCreateList } from "./GameObject";
-import { globalGameObjectManager } from "./GameObjectManager";
+import { SceneRoot } from "./SceneRoot.ts";
 
 describe("GameObjectManager", () => {
-
-  class mockGameObject extends GameObject {
-    constructor(componentsToCreate: ComponentsToCreateList = []) {
-      super({ add: vi.fn() } as unknown as SceneRoot, componentsToCreate);
-    }
-
-    Initialize = vi.fn();
-    Shutdown = vi.fn();
-  }
+  const globalGameObjectManager = new SceneRoot();
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -22,30 +12,34 @@ describe("GameObjectManager", () => {
   });
 
   it("Add a gameobject to the manager", async () => {
-    await globalGameObjectManager.Add(new mockGameObject());
+    await globalGameObjectManager.NewGameObject({name: "Test", parent:globalGameObjectManager});
     globalGameObjectManager.Update(0); // process queues
     expect(globalGameObjectManager.length).toBe(1);
   });
 
   it("Remove a gameobject from the manager", async () => {
-    const obj = new mockGameObject();
-    await globalGameObjectManager.Add(obj);
+    const obj = await globalGameObjectManager.NewGameObject({name: "Test", parent:globalGameObjectManager});
+    vi.spyOn(obj, "Initialize");
+    vi.spyOn(obj, "Shutdown");
     globalGameObjectManager.Update(0);
     expect(globalGameObjectManager.length).toBe(1);
-    globalGameObjectManager.Remove(obj);
+    globalGameObjectManager.DestroyGameObject(obj);
     globalGameObjectManager.Update(0); // process queues
     expect(obj.Shutdown).toHaveBeenCalled();
     expect(globalGameObjectManager.length).toBe(0);
   });
 
   it("Remove a gameobject should only shutdown that one gameobject", async () => {
-    const obj1 = new mockGameObject();
-    const obj2 = new mockGameObject();
-    await globalGameObjectManager.Add(obj1);
-    await globalGameObjectManager.Add(obj2);
+    const obj1 = await globalGameObjectManager.NewGameObject({name: "Test", parent:globalGameObjectManager});
+    const obj2 = await globalGameObjectManager.NewGameObject({name: "Test", parent:globalGameObjectManager});
+    vi.spyOn(obj1, "Initialize");
+    vi.spyOn(obj1, "Shutdown");
+    vi.spyOn(obj2, "Initialize");
+    vi.spyOn(obj2, "Shutdown");
+
     globalGameObjectManager.Update(0);
     expect(globalGameObjectManager.length).toBe(2);
-    globalGameObjectManager.Remove(obj1);
+    globalGameObjectManager.DestroyGameObject(obj1);
     globalGameObjectManager.Update(0);
     expect(obj1.Shutdown).toHaveBeenCalled();
     expect(obj2.Shutdown).not.toHaveBeenCalled();
@@ -53,8 +47,8 @@ describe("GameObjectManager", () => {
   });
 
   it("Clears all gameobjects from the manager", async () => {
-    await globalGameObjectManager.Add(new mockGameObject());
-    await globalGameObjectManager.Add(new mockGameObject());
+    await globalGameObjectManager.NewGameObject({name: "Test", parent:globalGameObjectManager});
+    await globalGameObjectManager.NewGameObject({name: "Test", parent:globalGameObjectManager});
     globalGameObjectManager.Update(0);
     expect(globalGameObjectManager.length).toBe(2);
     globalGameObjectManager.Clear();
@@ -62,10 +56,12 @@ describe("GameObjectManager", () => {
   });
 
   it("Initializes all gameobjects in the manager", async () => {
-    const obj1 = new mockGameObject();
-    const obj2 = new mockGameObject();
-    await globalGameObjectManager.Add(obj1);
-    await globalGameObjectManager.Add(obj2);
+    const obj1 = await globalGameObjectManager.NewGameObject({name: "Test", parent:globalGameObjectManager});
+    const obj2 = await globalGameObjectManager.NewGameObject({name: "Test", parent:globalGameObjectManager});
+    vi.spyOn(obj1, "Initialize");
+    vi.spyOn(obj1, "Shutdown");
+    vi.spyOn(obj2, "Initialize");
+    vi.spyOn(obj2, "Shutdown");
     globalGameObjectManager.Update(0);
     globalGameObjectManager.Initialize();
     expect(obj1.Initialize).toHaveBeenCalled();
@@ -73,10 +69,12 @@ describe("GameObjectManager", () => {
   });
 
   it("Shuts down all gameobjects in the manager", async () => {
-    const obj1 = new mockGameObject();
-    const obj2 = new mockGameObject();
-    await globalGameObjectManager.Add(obj1);
-    await globalGameObjectManager.Add(obj2);
+    const obj1 = await globalGameObjectManager.NewGameObject({name: "Test", parent:globalGameObjectManager});
+    const obj2 = await globalGameObjectManager.NewGameObject({name: "Test", parent:globalGameObjectManager});
+    vi.spyOn(obj1, "Initialize");
+    vi.spyOn(obj1, "Shutdown");
+    vi.spyOn(obj2, "Initialize");
+    vi.spyOn(obj2, "Shutdown");
     globalGameObjectManager.Update(0);
     globalGameObjectManager.Shutdown();
     expect(obj1.Shutdown).toHaveBeenCalled();
@@ -100,13 +98,11 @@ describe("GameObjectManager", () => {
       });
     }
 
-    const obj1 = new mockGameObject([[MockComponent, []]]);
-    const obj2 = new mockGameObject([[MockComponent, []]]);
-    const firstPromise = globalGameObjectManager.Add(obj1);
-    const secondPromise = globalGameObjectManager.Add(obj2);
+    const firstPromise = globalGameObjectManager.NewGameObject({name: "Test", parent:globalGameObjectManager, componentsToCreate: [[MockComponent, []]]});
+    const secondPromise = globalGameObjectManager.NewGameObject({name: "Test", parent:globalGameObjectManager, componentsToCreate: [[MockComponent, []]]});
     globalGameObjectManager.Shutdown();
-    await expect(firstPromise).rejects.toThrowError("Aborted");
-    await expect(secondPromise).rejects.toThrowError("Aborted");
+    expect(firstPromise).rejects.toThrowError("Aborted");
+    expect(secondPromise).rejects.toThrowError("Aborted");
   });
 
   it("should abort resource loading for all gameobjects when the manager is cleared", async () => {
@@ -126,12 +122,10 @@ describe("GameObjectManager", () => {
       });
     }
 
-    const obj1 = new mockGameObject([[MockComponent, []]]);
-    const obj2 = new mockGameObject([[MockComponent, []]]);
-    const firstPromise = globalGameObjectManager.Add(obj1);
-    const secondPromise = globalGameObjectManager.Add(obj2);
+    const firstPromise = globalGameObjectManager.NewGameObject({name: "Test", parent:globalGameObjectManager, componentsToCreate: [[MockComponent, []]]});
+    const secondPromise = globalGameObjectManager.NewGameObject({name: "Test", parent:globalGameObjectManager, componentsToCreate: [[MockComponent, []]]});
     globalGameObjectManager.Clear();
-    await expect(firstPromise).rejects.toThrowError("Aborted");
-    await expect(secondPromise).rejects.toThrowError("Aborted");
+    expect(firstPromise).rejects.toThrowError("Aborted");
+    expect(secondPromise).rejects.toThrowError("Aborted");
   });
 });

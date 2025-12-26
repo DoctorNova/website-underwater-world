@@ -2,6 +2,7 @@ import type { SceneObject } from "@engine/Composition/SceneObject";
 import { RemoveItemFromArray } from "@engine/Utility/ArrayUtils";
 import { Object3D, Quaternion, Vector3 } from "three";
 import type { Component, ComponentConstructor } from "./Component";
+import type {SceneRoot} from "@engine/Composition/SceneRoot.ts";
 
 /**
  * @file GameObject.ts
@@ -22,19 +23,15 @@ export type ComponentsToCreateList = [ComponentConstructor<Component, any[]>, an
 export class GameObject implements SceneObject {
   public transform = new Object3D();
   private components = new Array<Component>();
-  private parentGameObject: SceneObject;
+  private parentGameObject?: SceneObject;
   public children: GameObject[] = [];
+  public scene?: SceneRoot;
 
   /**
    * Creates a `GameObject`, sets its parent, and instantiates components.
-   * @param {SceneObject} parent Parent `GameObject` or three.js `Scene`.
    * @param {ComponentsToCreateList} [componentsToCreate=[]] Components with constructor args to create.
    */
-  constructor(parent: SceneObject, componentsToCreate: ComponentsToCreateList = []) {
-    // Setup hierarchy
-    this.parentGameObject = parent; // To tell typescript that parent will be initialized
-    this.SetParent(parent);
-
+  constructor(componentsToCreate: ComponentsToCreateList = []) {
     // Create all the needed components for this GameObject
     componentsToCreate.forEach(([ComponentType, constructorArgs]) => {
       this._NewComponent(ComponentType, ...constructorArgs);
@@ -86,7 +83,7 @@ export class GameObject implements SceneObject {
    * Gets the current parent.
    * @returns {SceneObject} Parent `GameObject` or `Scene`.
    */
-  get Parent(): SceneObject {
+  get Parent(): SceneObject | undefined {
     return this.parentGameObject;
   }
 
@@ -111,6 +108,14 @@ export class GameObject implements SceneObject {
    */
   FindComponent<T extends Component>(ComponentType: ComponentConstructor<T, any[]>): T | undefined {
     return this.components.find(c => c instanceof ComponentType) as T | undefined;
+  }
+
+  RequireComponent<T extends Component>(ComponentType: ComponentConstructor<T, any[]>): T {
+    const result = this.FindComponent(ComponentType);
+    if (!result) {
+      throw new Error(`Component ${ComponentType} is missing in object ${this.transform.name}`);
+    }
+    return result;
   }
 
   /**
@@ -150,12 +155,23 @@ export class GameObject implements SceneObject {
    * Detaches from parent and shuts down all components.
    */
   Shutdown(): void {
-    if (this.parentGameObject instanceof GameObject) {
+    if (this.parentGameObject) {
       RemoveItemFromArray(this.parentGameObject.children, this);
     }
-
     for (const component of this.components) {
       component.Shutdown();
+      component.RemoveFromSystem();
+    }
+  }
+
+  /**
+   * NOTE: DO NOT CALL THIS FUNCTION!! Call scene.DestroyGameObject instead!!
+   */
+  __Destroy() {
+    this.Shutdown();
+
+    for(const child of this.children) {
+      child.__Destroy();
     }
   }
 
