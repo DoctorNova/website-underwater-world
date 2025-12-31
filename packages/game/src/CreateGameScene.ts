@@ -56,18 +56,38 @@ export function CreateGameScene(scene: SceneRoot): void {
   });
 
   // Create game objects
-  const numberOfAngelfish = 10;
-  const spawnRadius = 10;
-  for(let i = 0; i < numberOfAngelfish; ++i) {
+  {
+    const numberOfAngelfish = 10;
+    const spawnRadius = 10;
     const position = new THREE.Vector3().randomDirection().multiplyScalar(spawnRadius);
-    scene.NewGameObject({
-      name: `Angelfish-${i}`,
-      parent: scene,
-      position: position,
-      componentsToCreate: [
-          [AnimationComponent, ["emperorAngelfish" as ResourceName, 0, true]],
-          [BoidMovementComponent, [{ maxSpeed: 2 } as BoidAgentConfig]]
-      ]
-    });
+    for(let i = 0; i < numberOfAngelfish; ++i) {
+      scene.NewGameObject({
+        name: `Angelfish-${i}`,
+        parent: scene,
+        position: position,
+        componentsToCreate: [
+            [AnimationComponent, ["emperorAngelfish" as ResourceName, 0, true]],
+            [BoidMovementComponent, [{ maxSpeed: 2 } as BoidAgentConfig]]
+        ]
+      });
+    }
+  }
+
+  {
+    const numberOfFusiliers = 10;
+    const spawnRadius = 10;
+    const position = new THREE.Vector3().randomDirection().multiplyScalar(spawnRadius);
+    for(let i = 0; i < numberOfFusiliers; ++i) {
+      scene.NewGameObject({
+        name: `Fusilier-${i}`,
+        parent: scene,
+        position: position,
+        scale: 10,
+        componentsToCreate: [
+          [AnimationComponent, ["fusilier" as ResourceName, 0, true]],
+          [BoidMovementComponent, [{ maxSpeed: 3 } as BoidAgentConfig]]
+        ]
+      });
+    }
   }
 }

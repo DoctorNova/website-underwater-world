@@ -1,9 +1,10 @@
 import {Component} from "@engine/Composition/Component.ts";
-import {globalBoidAgentsManager} from "@engine/Boid/BoidAgentsManager.ts";
+import {type BoidAgentsEvents, globalBoidAgentsManager} from "@engine/Boid/BoidAgentsManager.ts";
 import * as THREE from "three";
 import type {BoidAgent, BoidAgentConfig} from "@engine/Boid/BoidAgent.ts";
 import type {GameObject} from "@engine/Composition/GameObject.ts";
 import {BoidAlgorithm} from "@engine/Boid/Algorithm/intex.ts";
+import {RemoveItemFromArray} from "@engine/Utility/ArrayUtils.ts";
 
 export class BoidMovementComponent extends Component implements BoidAgent {
     public desiredDirection = new THREE.Vector3().randomDirection();
@@ -23,22 +24,44 @@ export class BoidMovementComponent extends Component implements BoidAgent {
     constructor(owner: GameObject, config: BoidAgentConfig) {
         super(owner);
         this.agentConfig = config;
+
+        this.AddAgentToOthers = this.AddAgentToOthers.bind(this);
+        this.RemoveAgentFromOthers = this.RemoveAgentFromOthers.bind(this);
     }
 
     Initialize(): void {
         this.desiredDirection = new THREE.Vector3().randomDirection();
         this.currentDirection = this.desiredDirection.clone();
 
-        this.others = [];
-        for(const agent of globalBoidAgentsManager.agents) {
-            if (agent != this){
-                this.others.push(agent);
+        globalBoidAgentsManager.addEventListener("AddedAgent",this.AddAgentToOthers);
+        globalBoidAgentsManager.addEventListener("RemovedAgent",this.RemoveAgentFromOthers);
+    }
+
+    AddAgentToOthers(event: BoidAgentsEvents["RemovedAgent"]): void {
+        if (event.agent == this){
+            return;
+        }
+
+        for(const agent of this.others) {
+            if (agent == event.agent){
+                return;
             }
         }
+
+        this.others.push(event.agent);
+    }
+
+    RemoveAgentFromOthers(event: BoidAgentsEvents["RemovedAgent"]): void {
+        if (event.agent == this){
+            return;
+        }
+
+        RemoveItemFromArray(this.others, event.agent);
     }
 
     Shutdown(): void {
-
+        globalBoidAgentsManager.removeEventListener("AddedAgent",this.AddAgentToOthers);
+        globalBoidAgentsManager.removeEventListener("RemovedAgent",this.RemoveAgentFromOthers);
     }
 
     Update(deltaTime: number): void {
