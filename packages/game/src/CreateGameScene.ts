@@ -5,6 +5,8 @@ import {AnimationComponent} from "@engine/Graphics/AnimationComponent.ts";
 import {BoidMovementComponent} from "@engine/Boid/BoidMovement.ts";
 import type {BoidAgentConfig} from "@engine/Boid/BoidAgent.ts";
 import type {ResourceName} from "@engine/Resources";
+import {CameraComponent} from "@engine/Graphics/CameraComponent.ts";
+import {PlayerControlComponent} from "@game/Components/PlayerControlComponent.ts";
 
 function CreateDirectionalLight(scene: SceneRoot) {
   const light = new THREE.DirectionalLight(0xFFFFFF, 0.6);
@@ -39,6 +41,19 @@ export function CreateGameScene(scene: SceneRoot): void {
   // Set up skybox
   const skybox = new OceanSkyBox();
   scene.transform.add(skybox);
+
+  // Create player object
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+  scene.NewGameObject({
+    name: "Player",
+    parent: scene,
+    position: new THREE.Vector3(0, 0, 0),
+    componentsToCreate: [
+      [CameraComponent, [camera, false, [scene]]],
+      [PlayerControlComponent, [camera]],
+    ]
+  });
 
   // Create game objects
   const numberOfAngelfish = 10;

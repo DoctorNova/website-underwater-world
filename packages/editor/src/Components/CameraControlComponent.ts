@@ -39,8 +39,6 @@ export class CameraControlComponent extends Component {
     globalEngine.addEventListener("SceneInitialized", this.AddSceneToCamera);
 
     this.cameraComp = this.owner.RequireComponent(CameraComponent);
-
-    this.owner.transform.add(this.cameraComp?.camera);
   }
 
   Update(deltaTime: number): void {

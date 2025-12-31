@@ -11,7 +11,7 @@ export class CameraComponent extends Component {
     }
 
     Initialize(): void {
-
+        this.owner.transform.add(this.camera);
     }
     Shutdown(): void {
         // Clear scene references to allow garbage collection
