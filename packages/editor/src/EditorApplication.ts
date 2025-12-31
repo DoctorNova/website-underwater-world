@@ -2,13 +2,16 @@ import {CreateEditorScene} from "packages/editor/src/CreateEditorScene";
 import {globalEngine} from "@engine/index.ts";
 import {EditorUI} from "./EditorUI.ts";
 import {globalEditorComponentManager} from "./Components/EditorComponentSystem.ts";
-import {CreateGameScene} from "@game/CreateGameScene.ts";
+import {type Demo, demos} from "./Demos";
 
 export class EditorApplication {
     private loadingBarElement = document.querySelector<HTMLElement>('#loading');
     private progressBarElement = document.querySelector<HTMLElement>('#progressbar');
     private progressInfoElement = document.querySelector<HTMLElement>('.info > p');
     private canvasElement = document.getElementById("display");
+
+    private initialDemoIndex = 0;
+    private demo: Demo = { ...demos[this.initialDemoIndex] };
 
     /**
      * Called when all required resources are loaded
@@ -63,14 +66,14 @@ export class EditorApplication {
         const editorScene = globalEngine.AddScene("editorScene");
         const gameScene = globalEngine.AddScene("gameScene");
         CreateEditorScene(editorScene, gameScene);
-        CreateGameScene(gameScene);
+        this.demo.Create(gameScene);
 
-        new EditorUI(gameScene, document.querySelector('.panel-left'), document.querySelector('.panel-top'), document.querySelector('.panel-right'));
+        new EditorUI(gameScene, document.querySelector('.panel-left'), document.querySelector('.panel-top'), document.querySelector('.panel-right'), this.demo, this.initialDemoIndex);
     }
 
     public GameLoop() {
         globalEngine.GameLoop({
-            beforeRender: (deltaTime) => {globalEditorComponentManager.Update(deltaTime);},
+            beforeRender: (deltaTime) => {globalEditorComponentManager.Update(deltaTime); this.demo.Update(); },
         });
     }
 

@@ -41,11 +41,13 @@ export class CameraControlComponent extends Component {
     this.cameraComp = this.owner.RequireComponent(CameraComponent);
 
     this.owner.transform.add(this.cameraComp?.camera);
-    this.cameraComp.camera.lookAt(this.owner.transform.position.clone().add(new THREE.Vector3(0, 0, 1)));
   }
 
   Update(deltaTime: number): void {
     if (!this.cameraComp) {
+      return;
+    }
+    if (!(globalInputManager.IsWindowFocused() && globalInputManager.IsCanvasHovered())){
       return;
     }
 
@@ -86,7 +88,7 @@ export class CameraControlComponent extends Component {
     const targetMovement = new THREE.Vector3();
 
     const mouseMovement = globalInputManager.GetMousePositionChange();
-    if (globalInputManager.IsWindowFocused() && globalInputManager.IsCanvasHovered() && mouseMovement.lengthSq() == 0) {
+    if (mouseMovement.lengthSq() == 0) {
       // rotate based on mouse movement
       // Edge-rotation: keep rotating when near canvas edges
       const ndc = globalInputManager.GetMousePositionInNDC();

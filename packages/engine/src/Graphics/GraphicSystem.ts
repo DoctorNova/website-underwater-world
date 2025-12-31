@@ -11,8 +11,11 @@ class GraphicSystem {
   private mainCamera: CameraComponent | undefined;
 
   public Initialize(canvas: HTMLCanvasElement): void {
-    this.renderer = new THREE.WebGLRenderer({ canvas });
+    this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     this.renderer.setClearColor(0x000000, 1);
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = THREE.PCFShadowMap; // to blur shadow edges.
+
     // Respect CSS sizing; use device pixel ratio for crisp rendering
     this.ResizeCanvasToDisplaySize();
     this.OnResize(() => this.ResizeCanvasToDisplaySize());

@@ -1,7 +1,7 @@
 import type { SceneRoot } from "@engine/Composition/SceneRoot.ts";
 import { globalEngine } from "@engine/index.ts";
-import { CreateGameScene } from "@game/CreateGameScene.ts";
-import { Pane } from "tweakpane";
+import {ListBladeApi, Pane} from "tweakpane";
+import {type Demo, demos} from "./Demos";
 
 export class EditorUI {
     private leftPanel: Pane;
@@ -12,7 +12,9 @@ export class EditorUI {
         private gameScene: SceneRoot,
         leftContainer: HTMLElement | null,
         centerPanel: HTMLElement | null,
-        rightContainer: HTMLElement | null
+        rightContainer: HTMLElement | null,
+        private demo: Demo,
+        initialDemoIndex: number
     ) {
         if (!centerPanel) {
             throw new Error('Invalid center panel');
@@ -42,19 +44,24 @@ export class EditorUI {
             }
         });
 
+        const demoList = this.leftPanel.addBlade({
+            view: 'list',
+            label: 'Demo',
+            options: demos.map((aDemo, index) => ({
+                text: aDemo.Create.name.replace(/Create|Update|Scene/ig, ""),
+                value: index,
+            })),
+            value: initialDemoIndex,
+        }) as ListBladeApi<number>;
 
-        const PARAMS = {
-            factor: 123,
-            title: 'hello',
-            color: '#ff0055',
-        };
+        demoList.on('change', (event) => {
+            const index = event.value;
 
-        this.leftPanel.addBinding(PARAMS, 'factor');
-        this.leftPanel.addBinding(PARAMS, 'title');
-        this.leftPanel.addBinding(PARAMS, 'color');
+            demo.Create = demos[index].Create;
+            demo.Update = demos[index].Update;
 
-        this.leftPanel.on('change', (ev) => {
-            console.log('changed: ' + JSON.stringify(ev.value));
+            globalEngine.EmptyScene(this.gameScene);
+            demo.Create(this.gameScene);
         });
     }
 
@@ -76,7 +83,7 @@ export class EditorUI {
         const resetButton = this.centerPanel.querySelector(".game-reset");
         resetButton?.addEventListener("click", () => {
             globalEngine.EmptyScene(this.gameScene);
-            CreateGameScene(this.gameScene);
+            this.demo.Create(this.gameScene);
         });
 
     }
