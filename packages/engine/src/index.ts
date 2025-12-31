@@ -6,6 +6,7 @@ import {type LoadOptions, ResourceManager} from "@engine/Resources/ResourceManag
 import {globalFrameTime} from "@engine/Utility/FrameTime";
 import {SceneRoot} from "@engine/Composition/SceneRoot.ts";
 import {EventDispatcher} from "three";
+import {globalBoidAgentsManager} from "@engine/Boid/BoidAgentsManager.ts";
 
 export interface EngineOptions {
     paused?: boolean;
@@ -87,9 +88,10 @@ class Engine extends EventDispatcher<EngineEvents> {
         // -------------------------------------------------------------
         // Initialize all the global systems used in the application
         // -------------------------------------------------------------
-        globalBaseComponentManager.Initialize();
         globalGraphicSystem.Initialize(canvasElement);
         globalInputManager.Initialize();
+        globalBaseComponentManager.Initialize();
+        globalBoidAgentsManager.Initialize();
 
         // -------------------------------------------------------------
         // Load all the resources needed before we can play the game
@@ -113,6 +115,7 @@ class Engine extends EventDispatcher<EngineEvents> {
             // ---------------------------------------------
             if (!this.paused) {
                 globalBaseComponentManager.Update(globalFrameTime.DeltaTime);
+                globalBoidAgentsManager.Update(globalFrameTime.DeltaTime);
                 for (const scene of this.scenes) {
                     scene.Update(globalFrameTime.DeltaTime);
                 }
@@ -130,8 +133,9 @@ class Engine extends EventDispatcher<EngineEvents> {
     }
 
     public Shutdown() {
-        globalGraphicSystem.Shutdown();
+        globalBoidAgentsManager.Shutdown();
         globalBaseComponentManager.Shutdown();
+        globalGraphicSystem.Shutdown();
         globalInputManager.Shutdown();
     }
 }

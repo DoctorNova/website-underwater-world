@@ -27,4 +27,9 @@ export abstract class Component {
   public isEnabled: boolean = true;
 }
 
-export type ComponentConstructor<T extends Component, A extends any[]> = new (owner: GameObject, ...args: A) => T; 
+export type ComponentConstructor<T extends Component = Component> = new (owner: GameObject, ...args: any[]) => T;
+
+type Tail<T extends any[]> =
+    T extends [any, ...infer R] ? R : never;
+
+export type ComponentArguments<C extends ComponentConstructor> = Tail<ConstructorParameters<C>>;

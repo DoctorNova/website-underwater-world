@@ -67,10 +67,7 @@ export class EditorUI {
 
     private CreateGameControls() {
         const playPauseButton = this.centerPanel.querySelector(".game-play");
-        if (globalEngine.isPaused){
-            playPauseButton?.classList.remove("paused");
-        }
-        playPauseButton?.addEventListener("click", () => {
+        const onPlayPauseButton = () => {
             if (globalEngine.isPaused){
                 globalEngine.Play();
                 playPauseButton?.classList.add("paused");
@@ -78,7 +75,14 @@ export class EditorUI {
                 globalEngine.Pause();
                 playPauseButton?.classList.remove("paused");
             }
-        });
+        };
+
+        playPauseButton?.addEventListener("click", onPlayPauseButton);
+        if (globalEngine.isPaused){
+            playPauseButton?.classList.remove("paused");
+        } else {
+            playPauseButton?.classList.add("paused");
+        }
 
         const resetButton = this.centerPanel.querySelector(".game-reset");
         resetButton?.addEventListener("click", () => {

@@ -13,7 +13,7 @@ export interface GameObjectConfig {
   position?: THREE.Vector3,
   rotation?: THREE.Euler,
   scale?: THREE.Vector3 | number,
-  componentsToCreate?: ComponentsToCreateList
+  componentsToCreate?: ComponentsToCreateList[]
 }
 
 export class SceneRoot implements SceneObject {

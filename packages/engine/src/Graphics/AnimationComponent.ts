@@ -11,7 +11,7 @@ export class AnimationComponent extends Component {
   private actions: { [animName: string]: THREE.AnimationAction } = {};
   private worldForward = new THREE.Vector3(0, 0, 1);
 
-  constructor(gameObject: GameObject, resourceName: ResourceName, protected initialAnimationClipName?: string | number) {
+  constructor(gameObject: GameObject, resourceName: ResourceName, protected initialAnimationClipName?: string | number, protected startAnimationAtRandomTime = false) {
     super(gameObject);
     this.resourceName = resourceName;
   }
@@ -59,6 +59,10 @@ export class AnimationComponent extends Component {
     const action = this.animationMixer!.clipAction(clip);
     action.enabled = true;
     action.reset();
+
+    if (this.startAnimationAtRandomTime) {
+      action.startAt(Math.random() * action.getEffectiveTimeScale());
+    }
     action.play();
     this.actions[clipName] = action;
   }

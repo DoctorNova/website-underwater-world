@@ -25,6 +25,10 @@ export class CustomGLTFLoader implements CustomResourceLoader {
     gltf.scene.traverse((o) => {
       const child = o as unknown as THREE.Mesh;
       if (child.isMesh) {
+        // Let this mesh cast and receive a shadow
+        child.castShadow = true;
+        child.receiveShadow = true;
+
         const cb = (m: THREE.Material) => {
           m.depthTest = true;
           m.depthWrite = true;

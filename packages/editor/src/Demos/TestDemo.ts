@@ -1,5 +1,5 @@
 import type {SceneRoot} from "@engine/Composition/SceneRoot.ts";
-import {AnimationComponent} from "@engine/Graphics/SkinComponent.ts";
+import {AnimationComponent} from "@engine/Graphics/AnimationComponent.ts";
 import * as THREE from "three";
 
 function CreateDirectionLight(scene: THREE.Scene){

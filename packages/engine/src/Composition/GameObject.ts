@@ -1,7 +1,7 @@
 import type { SceneObject } from "@engine/Composition/SceneObject";
 import { RemoveItemFromArray } from "@engine/Utility/ArrayUtils";
 import { Object3D, Quaternion, Vector3 } from "three";
-import type { Component, ComponentConstructor } from "./Component";
+import type {Component, ComponentArguments, ComponentConstructor} from "./Component";
 import type {SceneRoot} from "@engine/Composition/SceneRoot.ts";
 
 /**
@@ -14,10 +14,10 @@ import type {SceneRoot} from "@engine/Composition/SceneRoot.ts";
  * List of component constructors with their constructor arguments used
  * to initialize a `GameObject`.
  */
-export type ComponentsToCreateList = [ComponentConstructor<Component, any[]>, any[]][];
+export type ComponentsToCreateList<T extends ComponentConstructor = ComponentConstructor> = [T, ComponentArguments<T>];
 
 /**
- * A scene entity that owns a `transform` and a set of `Component`s.
+ * A scene entity that owns a `transform` and a set of Component's.
  * Supports hierarchical parenting and component lifecycle management.
  */
 export class GameObject implements SceneObject {
@@ -26,15 +26,15 @@ export class GameObject implements SceneObject {
   private parentGameObject?: SceneObject;
   public children: GameObject[] = [];
   public scene?: SceneRoot;
-
+  
   /**
    * Creates a `GameObject`, sets its parent, and instantiates components.
    * @param {ComponentsToCreateList} [componentsToCreate=[]] Components with constructor args to create.
    */
-  constructor(componentsToCreate: ComponentsToCreateList = []) {
+  constructor(componentsToCreate: ComponentsToCreateList[] = []) {
     // Create all the needed components for this GameObject
     componentsToCreate.forEach(([ComponentType, constructorArgs]) => {
-      this._NewComponent(ComponentType, ...constructorArgs);
+      this._NewComponent(ComponentType, constructorArgs);
     });
   }
 
@@ -48,10 +48,10 @@ export class GameObject implements SceneObject {
    * @throws {Error} If a required dependency is missing.
    * @private
    */
-  private _NewComponent<T extends Component, A extends any[]>(
-    ComponentType: ComponentConstructor<T, A>,
-    ...args: A
-  ): T {
+  private _NewComponent<T extends ComponentConstructor>(
+    ComponentType: T,
+    args: any[]
+  ): Component {
     const component = new ComponentType(this, ...args);
     component.GetDependencies().forEach(dep => {
       if (!this.HasComponent(dep)) {
@@ -106,11 +106,11 @@ export class GameObject implements SceneObject {
    * @param ComponentType Constructor function to match.
    * @returns {T | undefined} Component instance if found.
    */
-  FindComponent<T extends Component>(ComponentType: ComponentConstructor<T, any[]>): T | undefined {
+  FindComponent<T extends Component>(ComponentType: ComponentConstructor<T>): T | undefined {
     return this.components.find(c => c instanceof ComponentType) as T | undefined;
   }
 
-  RequireComponent<T extends Component>(ComponentType: ComponentConstructor<T, any[]>): T {
+  RequireComponent<T extends Component>(ComponentType: ComponentConstructor<T>): T {
     const result = this.FindComponent(ComponentType);
     if (!result) {
       throw new Error(`Component ${ComponentType} is missing in object ${this.transform.name}`);
@@ -124,7 +124,7 @@ export class GameObject implements SceneObject {
    * @param ComponentType Constructor function to check.
    * @returns {boolean} True if present.
    */
-  HasComponent<T extends Component>(ComponentType: ComponentConstructor<T, any[]>): boolean {
+  HasComponent<T extends Component>(ComponentType: ComponentConstructor<T>): boolean {
     return this.components.some(c => c instanceof ComponentType);
   }
 

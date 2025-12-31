@@ -47,7 +47,7 @@ export class EditorApplication {
         }
         
         globalEngine.SetConfig({
-            paused: true,
+            paused: false,
             requiredResourcesConfig: {
                 resources: [],
                 options: {

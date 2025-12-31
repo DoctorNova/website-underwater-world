@@ -50,6 +50,7 @@ function CreateBalls(_: THREE.TextureLoader, scene: THREE.Scene){
         const sphereMat = new THREE.MeshPhongMaterial();
         sphereMat.color.setHSL(u, 1, .75);
         const sphereMesh = new THREE.Mesh(sphereGeo, sphereMat);
+        // TODO: MAKE MESH receive and cast A SHADOW
         sphereMesh.castShadow = true;
         sphereMesh.receiveShadow = true;
         sphereMesh.position.set(0, sphereRadius * 2, 0);
