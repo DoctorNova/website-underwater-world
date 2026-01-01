@@ -1,0 +1,8 @@
+- deferred shader: water blur effect for objects in the distance
+- deferred shader: move light rays to a deferred shader
+- compute shader: run boid movement on the graphics card
+- fish movement: add ORCA for collision avoidance
+- fish movement: prevent the fish from getting to close to the player
+- terrain: use procedural algorithms to generate ocean floor, cliffs and corals
+- shadow map: generate shadows only for objects in from of the camera and blur the shadows strongly
+- create start page that shows before the underwater world is loaded
