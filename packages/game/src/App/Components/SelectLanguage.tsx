@@ -44,7 +44,7 @@ export function SelectLanguage(){
                             onClick={() => handleLanguageSelect(lang)}
                             className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors cursor-pointer ${
                                 language === lang
-                                    ? 'bg-[#ff6b35] text-white'
+                                    ? 'bg-primary text-primary-foreground'
                                     : 'text-blue-100 hover:bg-white/10'
                             }`}
                         >
