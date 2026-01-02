@@ -1,11 +1,18 @@
 import {CreateGameScene} from "./CreateGameScene";
 import {globalEngine} from "@engine/index.ts";
+import {
+    globalTranslations,
+    type LanguageKeys,
+    type TranslationSystemEvents
+} from "@engine/Translations/TranslationSystem.ts";
+
+const LANGUAGE_KEY_ATTRIBUTE = "data-language-key";
 
 export class GameApplication {
     private loadingBarElement = document.querySelector<HTMLElement>('#loading');
     private progressBarElement = document.querySelector<HTMLElement>('#progressbar');
-    private progressInfoElement = document.querySelector<HTMLElement>('.info > p');
     private canvasElement = document.getElementById("display");
+    private languageButton = document.getElementById("language");
 
     /**
      * Called when all required resources are loaded
@@ -13,24 +20,65 @@ export class GameApplication {
     private OnRequiredResourcesLoaded() {
         // hide the loading bar
         if (this.loadingBarElement) {
-            this.loadingBarElement.style.display = 'none';
+            // TODO reenable
+            //this.loadingBarElement.style.display = 'none';
         }
     }
 
     /**
      * Update the loading progress bar when a new resource is loaded
-     * @param url url of resource that got loaded
+     * @param _url url of resource that got loaded
      * @param itemsLoaded number of items loaded
      * @param itemsTotal number of items to be loaded
      */
-    private OnRequiredResourcesProgress(url: string, itemsLoaded: number, itemsTotal: number) {
+    private OnRequiredResourcesProgress(_url: string, itemsLoaded: number, itemsTotal: number) {
         if (this.progressBarElement) {
             this.progressBarElement.style.width = `${Math.max(itemsLoaded / itemsTotal * 100 | 0, 5)}%`;
         }
-        if (this.progressInfoElement) {
-            this.progressInfoElement.textContent = `loading: ${url}`;
-        }
     };
+
+    private InitializeLanguageManagement() {
+        if (!this.languageButton) {
+            throw new Error("Missing button to change language");
+        }
+
+        // Make the correct icon show depending on what the current language is
+        const languageIcon = this.languageButton.querySelector(`[${LANGUAGE_KEY_ATTRIBUTE}="${globalTranslations.GetCurrentLanguage()}"]`);
+        if (!languageIcon) {
+            throw new Error("Failed to find language icon");
+        }
+        languageIcon.parentElement?.prepend(languageIcon);
+
+        // Attach event listeners
+        this.languageButton.querySelectorAll("img").forEach(img => {
+            img.addEventListener("click", this.OnLanguageChangeClick.bind(this));
+        });
+
+        globalTranslations.addEventListener("LanguageChanged", this.OnLanguageChange.bind(this));
+    }
+
+    private OnLanguageChangeClick(event: PointerEvent) {
+        const icon = event.target as HTMLElement;
+        const lang = icon.getAttribute(LANGUAGE_KEY_ATTRIBUTE);
+
+        if (!lang){
+            throw new Error("Icon is missing attribute with language key");
+        }
+
+        globalTranslations.ChangeLanguage(lang as LanguageKeys);
+    }
+
+    private OnLanguageChange(_event: TranslationSystemEvents["LanguageChanged"]) {
+        if (!this.languageButton) {
+            throw new Error("Missing button to change language");
+        }
+
+        const languageIcon = this.languageButton.querySelector(`[${LANGUAGE_KEY_ATTRIBUTE}="${globalTranslations.GetCurrentLanguage()}"]`);
+        if (!languageIcon) {
+            throw new Error("Failed to find language icon");
+        }
+        languageIcon.parentElement?.prepend(languageIcon);
+    }
 
     /**
      * Initialize the application
@@ -39,6 +87,7 @@ export class GameApplication {
         if (!(this.canvasElement instanceof HTMLCanvasElement)) {
             throw new Error("Canvas element with id 'display' not found or is not a canvas.");
         }
+        this.InitializeLanguageManagement();
 
         globalEngine.SetConfig({
             requiredResourcesConfig: {

@@ -25,7 +25,8 @@
     "baseUrl": ".",
     "paths": {
       "@engine/*": ["packages/engine/src/*"],
-      "@game/*": ["packages/game/src/*"]
+      "@game/*": ["packages/game/src/*"],
+      "@assets/*": ["packages/assets/*"]
     },
     "types": ["vite/client", "vitest"]
   },

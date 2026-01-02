@@ -1,12 +1,14 @@
-import {globalBaseComponentManager} from "@engine/Composition/BaseComponentManager";
-import {globalGraphicSystem} from "@engine/Graphics/GraphicSystem";
-import {globalInputManager} from "@engine/Input/InputManager";
-import type {ResourceName} from "@engine/Resources";
-import {type LoadOptions, ResourceManager} from "@engine/Resources/ResourceManager";
-import {globalFrameTime} from "@engine/Utility/FrameTime";
-import {SceneRoot} from "@engine/Composition/SceneRoot.ts";
-import {EventDispatcher} from "three";
-import {globalBoidAgentsManager} from "@engine/Boid/BoidAgentsManager.ts";
+import '@assets/css/main.css';
+import { globalBoidAgentsManager } from "@engine/Boid/BoidAgentsManager.ts";
+import { globalBaseComponentManager } from "@engine/Composition/BaseComponentManager";
+import { SceneRoot } from "@engine/Composition/SceneRoot.ts";
+import { globalGraphicSystem } from "@engine/Graphics/GraphicSystem";
+import { globalInputManager } from "@engine/Input/InputManager";
+import type { ResourceName } from "@engine/Resources";
+import { type LoadOptions, ResourceManager } from "@engine/Resources/ResourceManager";
+import { globalFrameTime } from "@engine/Utility/FrameTime";
+import { EventDispatcher } from "three";
+import {globalTranslations} from "@engine/Translations/TranslationSystem.ts";
 
 export interface EngineOptions {
     paused?: boolean;
@@ -85,6 +87,7 @@ class Engine extends EventDispatcher<EngineEvents> {
      * Initialize the application
      */
     public Initialize(canvasElement: HTMLCanvasElement) {
+        globalTranslations.TranslateHTML(document);
         // -------------------------------------------------------------
         // Initialize all the global systems used in the application
         // -------------------------------------------------------------

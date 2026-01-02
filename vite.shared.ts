@@ -1,5 +1,6 @@
 /// <reference types="vitest/config" />
 
+import tailwindcss from '@tailwindcss/vite';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { UserConfig } from 'vite';
@@ -21,7 +22,7 @@ export function getRepositoryName(): string | undefined {
   }
 
   return repoName;
-};
+}
 
 export function getConfig(projectConfig: {root: string, base: string | undefined, port: number}): UserConfig {
   return {
@@ -30,12 +31,13 @@ export function getConfig(projectConfig: {root: string, base: string | undefined
       alias: {
         '@engine': resolve(__dirname, 'packages/engine/src'),
         '@game': resolve(__dirname, 'packages/game/src'),
+        '@assets': resolve(__dirname, 'packages/assets'),
       },
     },
     // Include shader files as assets that are used directly in the code as strings
     assetsInclude: [resolve(projectConfig.root, "src/**/*.vert"), resolve(projectConfig.root, "src/**/*.frag")],
     base: projectConfig.base ? `/${projectConfig.base}/` : '/',
-    plugins: [tsconfigPaths()],
+    plugins: [tsconfigPaths(), tailwindcss()],
     server: {
       port: projectConfig.port,
       watch: {
