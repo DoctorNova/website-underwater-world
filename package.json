@@ -23,6 +23,7 @@
     "test": "npm run test -ws"
   },
   "devDependencies": {
+    "@preact/preset-vite": "^2.10.2",
     "@tailwindcss/vite": "^4.1.18",
     "@types/node": "^25.0.3",
     "@types/three": "^0.182.0",

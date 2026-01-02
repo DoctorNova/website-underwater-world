@@ -1,7 +1,7 @@
 import type {SceneRoot} from "@engine/Composition/SceneRoot.ts";
 import {CreateShadowDemoScene, UpdateShadowDemoScene} from "./ShadowDemo.ts";
 import {CreateTestDemo, UpdateTestDemoScene} from "./TestDemo.ts";
-import {CreateGameScene} from "@game/CreateGameScene.ts";
+import {CreateGameScene} from "@game/Three/CreateGameScene.ts";
 
 export interface Demo {
     Create: (scene: SceneRoot) => void;

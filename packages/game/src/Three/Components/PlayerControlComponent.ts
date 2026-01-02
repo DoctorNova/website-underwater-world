@@ -1,4 +1,4 @@
-import {Component} from "@engine/Composition/Component";
+import {Component} from "@engine/Composition/Component.ts";
 import {CameraComponent} from "@engine/Graphics/CameraComponent.ts";
 import {globalInputManager} from "@engine/Input/InputManager.ts";
 import * as THREE from "three";

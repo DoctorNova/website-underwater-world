@@ -1,4 +1,4 @@
-import { OceanSkyBox } from '@game/SkyBox/OceanSkyBox';
+import { OceanSkyBox } from '@game/Three/SkyBox/OceanSkyBox.ts';
 import * as THREE from 'three';
 import type {SceneRoot} from "@engine/Composition/SceneRoot.ts";
 import {AnimationComponent} from "@engine/Graphics/AnimationComponent.ts";
@@ -6,7 +6,7 @@ import {BoidMovementComponent} from "@engine/Boid/BoidMovement.ts";
 import type {BoidAgentConfig} from "@engine/Boid/BoidAgent.ts";
 import type {ResourceName} from "@engine/Resources";
 import {CameraComponent} from "@engine/Graphics/CameraComponent.ts";
-import {PlayerControlComponent} from "@game/Components/PlayerControlComponent.ts";
+import {PlayerControlComponent} from "@game/Three/Components/PlayerControlComponent.ts";
 
 function CreateDirectionalLight(scene: SceneRoot) {
   const light = new THREE.DirectionalLight(0xFFFFFF, 0.6);

@@ -18,7 +18,6 @@ class GraphicSystem {
 
     // Respect CSS sizing; use device pixel ratio for crisp rendering
     this.ResizeCanvasToDisplaySize();
-    this.OnResize(() => this.ResizeCanvasToDisplaySize());
   }
 
   public Render(_deltaTime: number): void {
@@ -57,7 +56,7 @@ class GraphicSystem {
     window.removeEventListener('resize', callback);
   }
 
-  private ResizeCanvasToDisplaySize(): void {
+  public ResizeCanvasToDisplaySize(): void {
     if (!this.renderer) {
       return;
     }

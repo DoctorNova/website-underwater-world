@@ -11,10 +11,12 @@ privacy-policy-2,No data is shared with third parties.,Es werden keine Daten an 
 privacy-policy-3,"You have the right to access, correct, or delete your personal data. ","Sie haben das Recht, auf Ihre personenbezogenen Daten zuzugreifen, diese zu korrigieren oder zu löschen. ","Tienes derecho a acceder, corregir o eliminar tus datos personales. "
 myStreet,Am Sonnenberg 2,,
 myCity,56766 Ulmen,,
-myCountry,Germany,,
+myCountry,Germany,Deutschland,Alemania
 email,Email,E-Mail,E-Mail
 phone,Phone,Telefon,Teléfono
 contact,Contact,Kontakt,Contactar
 en,English,,
 de,Deutsch,,
 es,Español,,
+loading,Loading,Lädt,Cargando
+download-cv,Download CV,Lebenslauf,Descargar CV

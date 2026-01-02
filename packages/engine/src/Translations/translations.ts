@@ -1,6 +1,8 @@
-import type {LanguageKeys} from "@engine/Translations/TranslationSystem.ts";
+import CSV from "@assets/translations.csv?raw";
 
-export function ReadTranslationsCSV(csvFileContent: string, translations: Map<LanguageKeys, Map<string, string>>): any {
+export type LanguageKeys = "en" | "de" | "es";
+
+function ReadCSV(csvFileContent: string, translations: Map<LanguageKeys, Map<string, string>>): any {
     const languages = new Array<LanguageKeys>();
     let startedString = false;
     let word = "";
@@ -11,16 +13,19 @@ export function ReadTranslationsCSV(csvFileContent: string, translations: Map<La
 
     for(const char of csvFileContent) {
         index++;
+        const isLastChar = index === csvFileContent.length - 1;
 
         // ignore commas in entries that start with " and end with "
         if (char === '"'){
             startedString = !startedString;
 
-            if (index !== csvFileContent.length - 1) {
+            if (!isLastChar) {
                 continue;
             }
+        } else if (isLastChar) {
+            word += char;
         }
-        const isEndOfRow = char === '\n' || char === '\r' || index === csvFileContent.length - 1;
+        const isEndOfRow = char === '\n' || char === '\r' || isLastChar;
         if (!startedString && (char === ',' || isEndOfRow)) {
             if (isFirstRow && column >= 0) {
                 languages.push(word as LanguageKeys);
@@ -51,4 +56,12 @@ export function ReadTranslationsCSV(csvFileContent: string, translations: Map<La
             word += char;
         }
     }
+}
+
+export const translations = new Map<LanguageKeys, Map<string, string>>();
+ReadCSV(CSV, translations);
+
+export const languages = new Array<LanguageKeys>();
+for (const key of translations.keys()) {
+    languages.push(key);
 }
