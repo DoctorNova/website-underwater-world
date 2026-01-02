@@ -10,10 +10,7 @@
   "dependencies": {
     "@underwater-world/engine": "*",
     "@underwater-world/game": "*",
-    "three": "^0.182.0",
-    "tweakpane": "^4.0.5"
-  },
-  "devDependencies": {
-    "@tweakpane/core": "^2.0.5"
+    "tailwindcss": "^4.1.18",
+    "three": "^0.182.0"
   }
 }

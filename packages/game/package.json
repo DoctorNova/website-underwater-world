@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@underwater-world/engine": "*",
+    "tailwindcss": "^4.1.18",
     "three": "^0.182.0"
   }
 }
