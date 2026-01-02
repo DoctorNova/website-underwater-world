@@ -2,6 +2,8 @@ import CSV from "@assets/translations.csv?raw";
 import {ReadTranslationsCSV} from "@engine/Translations/ReadTranslationsCSV.ts";
 import * as THREE from "three";
 
+export const AvailableLanguages = ["en", "de", "es"];
+
 export type LanguageKeys = "en" | "de" | "es";
 
 export type TranslationSystemEvents = {

@@ -5,25 +5,18 @@
     <title>Sebastian Paas</title>
     <link rel="stylesheet" href="/css/main.css"/>
     <script type="module" src="/src/main.js"></script>
-
+    <script defer src="https://kit.fontawesome.com/89e0a2caf1.js" crossorigin="anonymous"></script>
 </head>
 <body class="m-0 p-0 box-border">
-<header class="fixed top-0 right-0 p-3 z-50">
-    <div id="language" class="flex flex-col h-10 hover:h-30 overflow-hidden transition-all">
-        <img class="max-h-10 h-auto w-auto object-contain py-1 cursor-pointer" src="/flags/en.png"
-             data-language-key="en" alt="English"
-             title="English"/>
-        <img class="max-h-10 h-auto w-auto object-contain py-1 cursor-pointer" src="/flags/es.png"
-             data-language-key="es" alt="Español"
-             title="Español"/>
-        <img class="max-h-10 h-auto w-auto object-contain py-1 cursor-pointer" src="/flags/de.png"
-             data-language-key="de" alt="Deutsch"
-             title="Deutsch"/>
-    </div>
+<header class="fixed top-4 right-4 sm:top-6 sm:right-6 z-50">
+    <button id="language" class="gap-2 bg-white/10 backdrop-blur-md border-white/30 text-white hover:bg-[#ff6b35] hover:border-[#ff6b35] transition-all shadow-lg p-2 rounded-md cursor-pointer">
+        <i class="fa-solid fa-language"></i>
+        <span></span>
+    </button>
 </header>
 <canvas id="display" class="w-full h-screen"></canvas>
 <!-- Blurred ocean blue background with gradient effect -->
-<div class="absolute inset-0 bg-gradient-to-br from-[#0a1929] via-[#0d2438ec] to-[#132f4cf3]">
+<div class="absolute inset-0 bg-linear-to-br from-[#0a1929] via-[#0d2438ec] to-[#132f4cf3]">
     <div class="absolute top-0 left-0 w-full h-full">
         <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
         <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl"></div>
@@ -49,7 +42,7 @@
             <!-- About Section -->
             <div class="space-y-6 justify-start">
                 <div>
-                    <h1 class="mb-4 text-white" data-i18n="myName">Sebastian Paas</h1>
+                    <h1 class="mb-4 text-white" data-i18n="myName">Sebastian</h1>
                     <p class="text-blue-100 leading-relaxed" data-i18n="aboutMeJs"></p>
                     <p class="text-blue-100 leading-relaxed" data-i18n="aboutMeC"></p>
                 </div>
@@ -123,16 +116,21 @@
                     <span data-i18n="myCity"></span>
                     <span data-i18n="myCountry"></span>
                 </p>
-                <p class="m-2">
-                    <span data-i18n="email"></span>: <a href="mailto:max@example.com" data-i18n="myEmail">max@example.com</a><br>
-                    <span data-i18n="phone"></span>: <span data-i18n="myPhone">phone number</span>
-                </p>
+                <div class="flex flex-col m-2">
+                    <div>
+                        <span data-i18n="email"></span>: <a href="mailto:max@example.com" data-i18n="myEmail">max@example.com</a>
+                    </div>
+                    <div>
+                        <span data-i18n="phone"></span>: <span data-i18n="myPhone">phone number</span>
+                    </div>
+                </div>
             </div>
             <div>
                 <h1 class="mb-4 text-white" data-i18n="privacy-policy"></h1>
                 <p class="m-2" data-i18n="privacy-policy-1"></p>
                 <p class="m-2" data-i18n="privacy-policy-2"></p>
-                <p class="m-2"><span data-i18n="privacy-policy-3"></span> <span data-i18n="contact"></span>: <a
+                <p class="m-2">
+                    <span data-i18n="privacy-policy-3"></span> <span data-i18n="contact"></span>: <a
                         href="mailto:max@example.com" data-i18n="myEmail">max@example.com</a>
                 </p>
             </div>
@@ -142,6 +140,6 @@
         &copy; <span data-i18n="myName"></span>
     </p>
 </footer>
-<script src="https://kit.fontawesome.com/89e0a2caf1.js" crossorigin="anonymous"></script>
+
 </body>
 </html>

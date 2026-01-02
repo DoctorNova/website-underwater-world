@@ -1,12 +1,11 @@
 import {CreateGameScene} from "./CreateGameScene";
 import {globalEngine} from "@engine/index.ts";
 import {
+    AvailableLanguages,
     globalTranslations,
     type LanguageKeys,
     type TranslationSystemEvents
 } from "@engine/Translations/TranslationSystem.ts";
-
-const LANGUAGE_KEY_ATTRIBUTE = "data-language-key";
 
 export class GameApplication {
     private loadingBarElement = document.querySelector<HTMLElement>('#loading');
@@ -43,28 +42,22 @@ export class GameApplication {
         }
 
         // Make the correct icon show depending on what the current language is
-        const languageIcon = this.languageButton.querySelector(`[${LANGUAGE_KEY_ATTRIBUTE}="${globalTranslations.GetCurrentLanguage()}"]`);
+        const languageIcon = this.languageButton.querySelector("span");
         if (!languageIcon) {
             throw new Error("Failed to find language icon");
         }
-        languageIcon.parentElement?.prepend(languageIcon);
+        languageIcon.textContent = globalTranslations.GetCurrentLanguage().toUpperCase();
 
         // Attach event listeners
-        this.languageButton.querySelectorAll("img").forEach(img => {
-            img.addEventListener("click", this.OnLanguageChangeClick.bind(this));
-        });
+        this.languageButton.addEventListener("click", this.OnLanguageChangeClick.bind(this));
 
         globalTranslations.addEventListener("LanguageChanged", this.OnLanguageChange.bind(this));
     }
 
-    private OnLanguageChangeClick(event: PointerEvent) {
-        const icon = event.target as HTMLElement;
-        const lang = icon.getAttribute(LANGUAGE_KEY_ATTRIBUTE);
-
-        if (!lang){
-            throw new Error("Icon is missing attribute with language key");
-        }
-
+    private OnLanguageChangeClick(_event: PointerEvent) {
+        const index = AvailableLanguages.indexOf(globalTranslations.GetCurrentLanguage()) + 1;
+        const nextLanguageIndex = (index >= AvailableLanguages.length) ? 0 : index;
+        const lang = AvailableLanguages[nextLanguageIndex];
         globalTranslations.ChangeLanguage(lang as LanguageKeys);
     }
 
@@ -73,11 +66,11 @@ export class GameApplication {
             throw new Error("Missing button to change language");
         }
 
-        const languageIcon = this.languageButton.querySelector(`[${LANGUAGE_KEY_ATTRIBUTE}="${globalTranslations.GetCurrentLanguage()}"]`);
+        const languageIcon = this.languageButton.querySelector("span");
         if (!languageIcon) {
             throw new Error("Failed to find language icon");
         }
-        languageIcon.parentElement?.prepend(languageIcon);
+        languageIcon.textContent = globalTranslations.GetCurrentLanguage().toUpperCase();
     }
 
     /**
