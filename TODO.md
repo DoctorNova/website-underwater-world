@@ -1,3 +1,6 @@
+- remove font-awesome and replace with new framework
+- Add preview of the portfolio about the dive in button
+- 
 - deferred shader: water blur effect for objects in the distance
 - deferred shader: move light rays to a deferred shader
 - compute shader: run boid movement on the graphics card

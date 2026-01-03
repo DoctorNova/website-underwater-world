@@ -3,10 +3,11 @@ import {I18nText} from "@game/App/Components/I18nText.tsx";
 import {MyTechStack} from "@game/App/Components/MyTechStack.tsx";
 import {MyContactInfo} from "@game/App/Components/MyContactInfo.tsx";
 import {Button} from "@game/App/Components/Button.tsx";
+import {ContentSection} from "@game/App/Layout/Content/ContentSection.tsx";
 
 export function HeroSection() {
     return (
-        <section className="relative z-5 w-full max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12 md:py-16">
+        <ContentSection>
             <div className="flex flex-col md:grid md:grid-cols-2 gap-8 md:gap-12 items-center">
                 <ProfileImage/>
 
@@ -31,6 +32,6 @@ export function HeroSection() {
                     </a>
                 </div>
             </div>
-        </section>
+        </ContentSection>
     );
 }

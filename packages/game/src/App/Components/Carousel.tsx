@@ -1,0 +1,90 @@
+import {cn} from "@game/App/utils.ts";
+import type {ComponentChildren} from "preact";
+import {useEffect, useRef, useState} from "preact/hooks";
+import {ChevronLeft, ChevronRight, Circle} from "lucide-react";
+
+interface CarouselProps {
+    children: ComponentChildren[];
+    interval?: number; // ms
+    className?: string;
+}
+
+function IndexIndicator({currentIndex, index, onClick}: {
+    currentIndex: number,
+    index: number,
+    onClick: (index: number) => void
+}) {
+    const fill = index === currentIndex ? "#f59e0b" : "transparent";
+    const stroke = index === currentIndex ? "#f59e0b" : "white";
+
+    return (
+        <button onClick={() => onClick(index)} className="cursor-pointer">
+            <Circle className="w-4 h-4" fill={fill} stroke={stroke}/>
+        </button>
+    )
+}
+
+export function Carousel({children, interval = 3000, className}: CarouselProps) {
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const [index, setIndex] = useState(0);
+    const [loop, setLoop] = useState(true);
+    const [dimensions, setDimensions] = useState<{ width: number; height: number }>({width: 400, height: 260});
+    const total = children.length;
+
+    useEffect(() => {
+        if (loop) {
+            const timer = setTimeout(() => {
+                setIndex(prev => (prev + 1) % total);
+            }, interval);
+            return () => clearTimeout(timer);
+        }
+    }, [total, interval, index, loop]);
+
+    useEffect(() => {
+        const el = containerRef.current?.firstElementChild as HTMLElement;
+        if (!el) return;
+
+        const observer = new ResizeObserver(([entry]) => {
+            setDimensions(entry.contentRect);
+        });
+
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, []);
+
+    const prev = () => setIndex((index - 1 + total) % total);
+    const next = () => setIndex((index + 1) % total);
+
+    const childrenWithDuplicates = [...children, ...children.slice(0, 3)];
+
+    return (
+        <div
+            className={cn("relative overflow-hidden w-full carousel-mask", className)}
+            onPointerEnter={() => setLoop(false)}
+            onPointerLeave={() => setLoop(true)}
+        >
+            <div
+                ref={containerRef}
+                className="flex transition-transform duration-500"
+                style={{transform: `translateX(-${index * dimensions.width}px)`}}
+            >
+                {childrenWithDuplicates.map((child, i) => (
+                    <div className="flex-shrink-0" key={i}>
+                        {child}
+                    </div>
+                ))}
+            </div>
+            <div className="flex w-full flex-row justify-center pt-5 gap-2">
+                <button onClick={prev} className="cursor-pointer">
+                    <ChevronLeft/>
+                </button>
+                {children.map((_child, i) => (
+                    <IndexIndicator currentIndex={index} index={i} key={i} onClick={(i) => setIndex(i)}/>
+                ))}
+                <button onClick={next} className="cursor-pointer">
+                    <ChevronRight/>
+                </button>
+            </div>
+        </div>
+    );
+}
