@@ -29,7 +29,6 @@ export function SelectLanguage(){
             <Button
                 onClick={() => setIsOpen(!isOpen)}
                 variant="secondary"
-                className="flex cursor-pointer items-center gap-2 px-3 sm:px-4 py-2"
             >
                 <i className="fa-solid fa-language"></i>
                 <Flag className="max-h-4" lang={language}/> <span>{language.toUpperCase()}</span>

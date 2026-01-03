@@ -1,2 +1,37 @@
 @import "tailwindcss";
 @import './theme.css';
+
+@layer utilities {
+    .btn-shine {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-shine::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+                120deg,
+                transparent 20%,
+                rgba(255, 255, 255, 0.35) 45%,
+                rgba(255, 255, 255, 0.15) 55%,
+                transparent 80%
+        );
+        transform: translateX(-120%);
+        animation: shine 3s ease-in-out infinite;
+        pointer-events: none;
+    }
+
+    @keyframes shine {
+        0%, 70% {
+            transform: translateX(-120%);
+        }
+        85% {
+            transform: translateX(120%);
+        }
+        100% {
+            transform: translateX(120%);
+        }
+    }
+}

@@ -12,7 +12,8 @@ export function HeroSection() {
 
                 <div className="w-full space-y-4 sm:space-y-6">
                     <div>
-                        <h1 className="mb-3 sm:mb-4 text-white"><I18nText id={"myName"}/></h1>
+                        <h1 className="mb-0.5 text-white"><I18nText id="myName"/></h1>
+                        <h2 className="mb-2 sm:mb-3 text-sm"><I18nText id="myDegree"></I18nText></h2>
                         <p className="text-blue-100 leading-relaxed text-sm sm:text-base"><I18nText id={"aboutMeJs"}/></p>
                         <p className="text-blue-100 leading-relaxed text-sm sm:text-base"><I18nText id={"aboutMeC"}/></p>
                     </div>

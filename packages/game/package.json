@@ -12,6 +12,7 @@
   "dependencies": {
     "@underwater-world/engine": "*",
     "preact": "^10.28.1",
+    "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.18",
     "three": "^0.182.0"
   }

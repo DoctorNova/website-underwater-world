@@ -1,6 +1,9 @@
+import {ContentSection} from "@game/App/Layout/Content/ContentSection.tsx";
 
 export function Recommendations() {
     return (
-        <div className="relative z-5">TODO Recomendations</div>
+        <ContentSection title="recommendations">
+            Hello
+        </ContentSection>
     )
 }
