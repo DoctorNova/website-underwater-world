@@ -2,6 +2,7 @@ import {useEffect, useRef, useState} from "preact/hooks";
 import {useI18n} from "@game/App/Hooks/useI18n.ts";
 import {Flag} from "@game/App/Components/Flag.tsx";
 import {Button} from "@game/App/Components/Button.tsx";
+import {Check, ChevronDown, Languages} from "lucide-react";
 
 export function SelectLanguage({className}:{className?:string}) {
     const { language, languages, setLanguage } = useI18n();
@@ -30,9 +31,9 @@ export function SelectLanguage({className}:{className?:string}) {
                 onClick={() => setIsOpen(!isOpen)}
                 variant="secondary"
             >
-                <i className="fa-solid fa-language"></i>
+                <Languages />
                 <Flag className="max-h-4" lang={language}/> <span>{language.toUpperCase()}</span>
-                <i className={`fa-solid fa-chevron-down w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}></i>
+                <ChevronDown className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}/>
             </Button>
 
             {isOpen && (
@@ -50,7 +51,7 @@ export function SelectLanguage({className}:{className?:string}) {
                             <Flag className="max-h-4" lang={lang}/>
                             <span>{lang.toUpperCase()}</span>
                             {language === lang && (
-                                <span className="ml-auto text-sm">✓</span>
+                                <Check className="ml-auto w-4 h-4"/>
                             )}
                         </button>
                     ))}

@@ -1,18 +1,19 @@
 import {MyEmail} from "@game/App/Components/MyEmail.tsx";
 import {I18nText} from "@game/App/Components/I18nText.tsx";
+import {Mail, Phone} from "lucide-react";
 
 export function MyContactInfo() {
     return (
         <div className="space-y-1 sm:space-y-1.5">
             <div className="flex items-center gap-3 text-blue-200 text-sm sm:text-base">
                 <span className="inline-flex align-middle justify-center">
-                    <i className="fa-solid fa-phone"></i>
+                    <Phone className="w-5 h-5"/>
                 </span>
                 <span className="break-all"><I18nText id={"myPhone"}/></span>
             </div>
             <div className="flex items-center gap-3 text-blue-200 text-sm sm:text-base">
                 <span className="inline-flex align-middle justify-center">
-                    <i className="fa-solid fa-envelope"></i>
+                    <Mail className="w-5 h-5"/>
                 </span>
                 <MyEmail/>
             </div>

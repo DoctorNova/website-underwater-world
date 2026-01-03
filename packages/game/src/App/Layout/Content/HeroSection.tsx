@@ -4,6 +4,7 @@ import {MyTechStack} from "@game/App/Components/MyTechStack.tsx";
 import {MyContactInfo} from "@game/App/Components/MyContactInfo.tsx";
 import {Button} from "@game/App/Components/Button.tsx";
 import {ContentSection} from "@game/App/Layout/Content/ContentSection.tsx";
+import {Download} from "lucide-react";
 
 export function HeroSection() {
     return (
@@ -23,10 +24,9 @@ export function HeroSection() {
                     <MyContactInfo/>
 
                     {/* Download CV Button */}
-                    {/* TODO: change url to correct CV path when I upload an updated CV */}
                     <a href="/cv.pdf" target="_blank" rel="noopener noreferrer">
                         <Button size="lg">
-                            <i className="fa-solid fa-download"></i>
+                            <Download />
                             <I18nText id={"download-cv"}/>
                         </Button>
                     </a>

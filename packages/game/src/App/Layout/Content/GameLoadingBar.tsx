@@ -2,7 +2,7 @@ import {I18nText} from "@game/App/Components/I18nText.tsx";
 import {buttonStyles} from "@game/App/Components/Button.tsx";
 import {cn} from "@game/App/utils.ts";
 import {ContentSection} from "@game/App/Layout/Content/ContentSection.tsx";
-import {Spark} from "@game/App/Components/Spark.tsx";
+import {Sparkles} from "lucide-react";
 
 type GameLoadingBarProps = {
     progress: number;
@@ -27,7 +27,7 @@ export function GameLoadingBar({progress, isComplete, onClick}: GameLoadingBarPr
                         onClick={onClick}
                         className={cn(buttonStyles.always, buttonStyles.variant.default, "block text-center btn-shine", isComplete ? " py-3 px-3 h-xs w-40" : "py-0 px-0 h-2 w-full hover:bg-primary hover:border-primary")}>
                         <span className="inline-flex justify-center items-center">
-                            <Spark className="h-6 w-6"/>
+                            <Sparkles className="h-6 w-6"/>
                             <span className={`pl-2 text-lg opacity-${isComplete ? "100" : "0"}`}><I18nText id="dive-in"/></span>
                         </span>
                     </div>
