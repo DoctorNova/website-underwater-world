@@ -3,7 +3,7 @@ import {useI18n} from "@game/App/Hooks/useI18n.ts";
 import {Flag} from "@game/App/Components/Flag.tsx";
 import {Button} from "@game/App/Components/Button.tsx";
 
-export function SelectLanguage(){
+export function SelectLanguage({className}:{className?:string}) {
     const { language, languages, setLanguage } = useI18n();
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -25,7 +25,7 @@ export function SelectLanguage(){
     };
 
     return (
-        <div className="fixed top-4 right-4 sm:top-6 sm:right-6 z-50" ref={dropdownRef}>
+        <div className={className} ref={dropdownRef}>
             <Button
                 onClick={() => setIsOpen(!isOpen)}
                 variant="secondary"

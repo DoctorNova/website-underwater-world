@@ -5,29 +5,13 @@ import {HeroSection} from "@game/App/Layout/Content/HeroSection.tsx";
 import {GameLoadingBar} from "@game/App/Layout/Content/GameLoadingBar.tsx";
 import {Background} from "@game/App/Layout/Background.tsx";
 import {cn} from "@game/App/utils.ts";
-import {I18nText} from "@game/App/Components/I18nText.tsx";
-import {Button} from "@game/App/Components/Button.tsx";
-import {useHistoryState} from "@game/App/Hooks/useHistoryState.ts";
 
-export function Content() {
+export function Content({ runGame, onRunGame }: { runGame: boolean, onRunGame: (enable: boolean) => void}) {
     const [progress, setProgress] = useState(0);
     const [loading, setLoading] = useState(true);
-    const [runGame, setRunGame] = useHistoryState("run-game", () => {
-        const runGameInitially = new URLSearchParams(window.location.search).get("runGame") === "true";
-        if (runGameInitially) {
-            window.scrollTo({top: 0, behavior: 'smooth'});
-        }
-        return runGameInitially;
-    });
 
     return (
         <div className="relative z-10">
-            <Button
-                variant="default"
-                onClick={() => {setRunGame(false)}}
-                className={cn("fixed top-4 left-1/2 sm:top-6 z-50 transition-all duration-200 delay-200 -translate-x-1/2 -translate-y-32", runGame && "translate-y-0")}>
-                <I18nText id="go-to-startpage"/>
-            </Button>
             <Canvas3D
                 className={cn(
                     "absolute top-0 left-0 w-full h-full z-1", // Default styling and styling to apply when the hero section is showing
@@ -47,8 +31,7 @@ export function Content() {
             </div>
             <div className={cn("transition-all duration-200 relative z-10 opacity-100", runGame && !loading && "opacity-0 pointer-events-none max-h-[12rem] overflow-hidden")}>
                 <GameLoadingBar progress={progress} isComplete={!loading} onClick={() => {
-                    setRunGame(true);
-                    window.scrollTo({top: 0, behavior: 'smooth'});
+                    onRunGame(true);
                 }} />
             </div>
         </div>
