@@ -1,5 +1,6 @@
 - Add preview of the portfolio about the dive in button
 - change url to correct CV path when I upload an updated CV
+- fix hover delay on back to startpage button
 - 
 - deferred shader: water blur effect for objects in the distance
 - deferred shader: move light rays to a deferred shader
