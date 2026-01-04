@@ -27,73 +27,79 @@ function IndexIndicator({currentIndex, index, onClick}: {
 }
 
 export function Carousel({children, interval = 3000, className}: CarouselProps) {
-    const containerRef = useRef<HTMLDivElement | null>(null);
+    const contentContainerRef = useRef<HTMLDivElement | null>(null);
     const [index, setIndex] = useState(0);
-    const [loop, setLoop] = useState(true);
-    const [dimensions, setDimensions] = useState<{ width: number; height: number }>({width: 400, height: 260});
-    const [windows, setWindows] = useState(children.length); // Is the number of "windows" (that show multiple children) that the carousel can iterate through
+    const [autoRotate, setAutoRotate] = useState(true);
+    const [itemWidth, setItemWidth] = useState(400);
     const [pointerPosition, setPointerPosition] = useState({x: 0, y: 0});
 
+    const itemsPerPage = Math.max(1, Math.floor((contentContainerRef.current?.clientWidth ?? 0) / itemWidth));
+    const pages = Math.ceil(children.length / itemsPerPage);
+    const childToScrollTo = index * itemsPerPage;
+
+    const itemsDisplayed = Math.min(children.length - childToScrollTo, itemsPerPage);
+    const pageInterval = interval * itemsDisplayed;
+
+    // auto rotate through the different pages
     useEffect(() => {
-        if (loop) {
+        if (autoRotate) {
             const timer = setTimeout(() => {
-                setIndex(prev => (prev + 1) % windows);
-            }, interval);
+                setIndex(prev => (prev + 1) % pages);
+            }, pageInterval);
             return () => clearTimeout(timer);
         }
-    }, [windows, interval, index, loop]);
+    }, [pages, index, autoRotate, pageInterval]);
+
+    // Recalculate which page is showing on resize
+    useEffect(() => {
+        setIndex(i => Math.min(i, pages - 1));
+    }, [pages]);
+
 
     useEffect(() => {
-        const el = containerRef.current?.firstElementChild as HTMLElement;
-        if (!el) return;
+        if (!contentContainerRef.current) return;
 
-        const observer = new ResizeObserver(([entry]) => {
-            setDimensions(entry.contentRect);
+        const container = contentContainerRef.current;
+        const firstItem = container.firstElementChild as HTMLElement;
+
+        if (!firstItem) return;
+
+        const observer = new ResizeObserver(() => {
+            const measuredItemWidth = firstItem.clientWidth;
+
+            setItemWidth(measuredItemWidth);
         });
 
-        observer.observe(el);
+        observer.observe(container);
+
         return () => observer.disconnect();
-    }, []);
+    }, [children.length]);
 
-    useEffect(() => {
-        const itemWidth = dimensions.width;
-        const containerWidth = containerRef.current?.clientWidth;
-
-        if (!containerWidth) return;
-
-        const itemsPerView = Math.floor(containerWidth / itemWidth);
-        const numberOfWindows = Math.ceil(children.length / itemsPerView);
-        setWindows(numberOfWindows);
-    }, [dimensions]);
-
-    const prev = () => setIndex((index - 1 + windows) % windows);
-    const next = () => setIndex((index + 1) % windows);
+    const prev = () => setIndex((index - 1 + pages) % pages);
+    const next = () => setIndex((index + 1) % pages);
+    const onPointerMove = (event: PointerEvent) => setPointerPosition(event);
 
     const indexIndicators = new Array<ComponentChildren>();
-    for(let i = 0; i < windows; i++) {
+    for(let i = 0; i < pages; i++) {
         indexIndicators.push((
             <IndexIndicator currentIndex={index} index={i} key={i} onClick={(i) => setIndex(i)}/>
         ));
     }
 
-    const onPointerMove = (event: PointerEvent) => {
-        setPointerPosition(event);
-    }
-
     return (
         <div
             className={cn("relative overflow-hidden w-full carousel-mask", className)}
-            onPointerEnter={() => setLoop(false)}
-            onPointerLeave={() => setLoop(true)}
+            onPointerEnter={() => setAutoRotate(false)}
+            onPointerLeave={() => setAutoRotate(true)}
             onPointerMove={onPointerMove}
         >
-            <CursorTooltip cursorPosition={pointerPosition} active={!loop} >
+            <CursorTooltip cursorPosition={pointerPosition} active={!autoRotate} >
                 <Pause className="w-5 h-5 pr-1" /><span className="text-nowrap"><I18nText id="carousel-paused"/></span>
             </CursorTooltip>
             <div
-                ref={containerRef}
+                ref={contentContainerRef}
                 className="flex transition-transform duration-500"
-                style={{transform: `translateX(-${index * dimensions.width}px)`}}
+                style={{transform: `translateX(-${childToScrollTo * itemWidth}px)`}}
             >
                 {children.map((child, i) => (
                     <div className="shrink-0" key={i}>

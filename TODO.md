@@ -1,4 +1,4 @@
-- Add preview of the portfolio about the dive in button
+- Add preview of the game above the dive in button
 - change url to correct CV path when I upload an updated CV
 - fix hover delay on back to startpage button
 - 
