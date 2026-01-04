@@ -29,16 +29,16 @@ export function Carousel({children, interval = 3000, className}: CarouselProps) 
     const [index, setIndex] = useState(0);
     const [loop, setLoop] = useState(true);
     const [dimensions, setDimensions] = useState<{ width: number; height: number }>({width: 400, height: 260});
-    const total = children.length;
+    const [windows, setWindows] = useState(children.length); // Is the number of "windows" (that show multiple children) that the carousel can iterate through
 
     useEffect(() => {
         if (loop) {
             const timer = setTimeout(() => {
-                setIndex(prev => (prev + 1) % total);
+                setIndex(prev => (prev + 1) % windows);
             }, interval);
             return () => clearTimeout(timer);
         }
-    }, [total, interval, index, loop]);
+    }, [windows, interval, index, loop]);
 
     useEffect(() => {
         const el = containerRef.current?.firstElementChild as HTMLElement;
@@ -52,10 +52,26 @@ export function Carousel({children, interval = 3000, className}: CarouselProps) 
         return () => observer.disconnect();
     }, []);
 
-    const prev = () => setIndex((index - 1 + total) % total);
-    const next = () => setIndex((index + 1) % total);
+    useEffect(() => {
+        const itemWidth = dimensions.width;
+        const containerWidth = containerRef.current?.clientWidth;
 
-    const childrenWithDuplicates = [...children, ...children.slice(0, 3)];
+        if (!containerWidth) return;
+
+        const itemsPerView = Math.floor(containerWidth / itemWidth);
+        const numberOfWindows = Math.ceil(children.length / itemsPerView);
+        setWindows(numberOfWindows);
+    }, [dimensions]);
+
+    const prev = () => setIndex((index - 1 + windows) % windows);
+    const next = () => setIndex((index + 1) % windows);
+
+    const indexIndicators = new Array<ComponentChildren>();
+    for(let i = 0; i < windows; i++) {
+        indexIndicators.push((
+            <IndexIndicator currentIndex={index} index={i} key={i} onClick={(i) => setIndex(i)}/>
+        ));
+    }
 
     return (
         <div
@@ -68,8 +84,8 @@ export function Carousel({children, interval = 3000, className}: CarouselProps) 
                 className="flex transition-transform duration-500"
                 style={{transform: `translateX(-${index * dimensions.width}px)`}}
             >
-                {childrenWithDuplicates.map((child, i) => (
-                    <div className="flex-shrink-0" key={i}>
+                {children.map((child, i) => (
+                    <div className="shrink-0" key={i}>
                         {child}
                     </div>
                 ))}
@@ -78,9 +94,7 @@ export function Carousel({children, interval = 3000, className}: CarouselProps) 
                 <button onClick={prev} className="cursor-pointer">
                     <ChevronLeft/>
                 </button>
-                {children.map((_child, i) => (
-                    <IndexIndicator currentIndex={index} index={i} key={i} onClick={(i) => setIndex(i)}/>
-                ))}
+                {indexIndicators}
                 <button onClick={next} className="cursor-pointer">
                     <ChevronRight/>
                 </button>
