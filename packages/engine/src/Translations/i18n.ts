@@ -8,6 +8,9 @@ let translations = allTranslations.get(currentLanguage);
 const defaultTranslations = allTranslations.get("en");
 const listeners = new Set<Listener>();
 
+// Set html lang attribute
+document.documentElement.lang = currentLanguage;
+
 function t(key: string): string {
     const translation = translations?.get(key) || defaultTranslations?.get(key);
     return translation || `[${key}]`;
@@ -27,6 +30,7 @@ function setLanguage(lang: LanguageKeys) {
     if (lang === currentLanguage) return;
     currentLanguage = lang;
     translations = allTranslations.get(currentLanguage);
+    document.documentElement.lang = lang;
     listeners.forEach(l => l(lang));
 }
 
