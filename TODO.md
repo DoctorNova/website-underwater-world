@@ -1,5 +1,3 @@
-- Add preview of the game above the dive in button
-- 
 - change url to correct CV path when I upload an updated CV
 - upload a picture of myself
 - 

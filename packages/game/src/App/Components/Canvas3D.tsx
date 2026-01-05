@@ -1,4 +1,6 @@
 import { useEffect, useRef } from "preact/hooks";
+import {forwardRef} from "preact/compat";
+import type {Ref} from "preact";
 
 type Canvas3DProps = {
     onProgress: (progress: number) => void;
@@ -6,10 +8,20 @@ type Canvas3DProps = {
     className?: string;
 };
 
-export function Canvas3D({ onProgress, onComplete, className }: Canvas3DProps ) {
+function Canvas3DComp({ onProgress, onComplete, className }: Canvas3DProps, ref: Ref<HTMLCanvasElement> ) {
     const containerRef = useRef<HTMLCanvasElement>(null);
     const appRef = useRef<any>(null);
     const resizeObserverRef = useRef<ResizeObserver | null>(null);
+
+    useEffect(() => {
+        if (!ref) return;
+
+        if (typeof ref === "function") {
+            ref(containerRef.current);
+        } else {
+            ref.current = containerRef.current;
+        }
+    }, []);
 
     useEffect(() => {
         let cancelled = false;
@@ -55,3 +67,5 @@ export function Canvas3D({ onProgress, onComplete, className }: Canvas3DProps ) 
         <canvas ref={containerRef} className={className}></canvas>
     );
 }
+
+export const Canvas3D = forwardRef<HTMLCanvasElement, Canvas3DProps>(Canvas3DComp);

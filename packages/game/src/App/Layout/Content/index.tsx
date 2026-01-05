@@ -1,5 +1,5 @@
 import {Canvas3D} from "@game/App/Components/Canvas3D.tsx";
-import {useState} from "preact/hooks";
+import {useRef, useState} from "preact/hooks";
 import {Recommendations} from "@game/App/Layout/Content/Recommendations.tsx";
 import {HeroSection} from "@game/App/Layout/Content/HeroSection.tsx";
 import {GameLoadingBar} from "@game/App/Layout/Content/GameLoadingBar.tsx";
@@ -9,10 +9,12 @@ import {cn} from "@game/App/utils.ts";
 export function Content({ runGame, onRunGame }: { runGame: boolean, onRunGame: (enable: boolean) => void}) {
     const [progress, setProgress] = useState(0);
     const [loading, setLoading] = useState(true);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
 
     return (
         <div className="relative z-10">
             <Canvas3D
+                ref={canvasRef}
                 className={cn(
                     "absolute top-0 left-0 w-full h-full z-1", // Default styling and styling to apply when the hero section is showing
                     runGame && "w-screen h-screen", // styling to show the game
@@ -29,8 +31,8 @@ export function Content({ runGame, onRunGame }: { runGame: boolean, onRunGame: (
                 <HeroSection />
                 <Recommendations />
             </div>
-            <div className={cn("transition-all duration-200 relative z-10 opacity-100", runGame && !loading && "opacity-0 pointer-events-none max-h-[12rem] overflow-hidden")}>
-                <GameLoadingBar progress={progress} isComplete={!loading} onClick={() => {
+            <div className={cn("transition-all duration-200 relative z-10 opacity-100", runGame && !loading && "opacity-0 pointer-events-none max-h-48 overflow-hidden")}>
+                <GameLoadingBar isShowingGame={runGame} gameCanvas={canvasRef.current} progress={progress} isComplete={!loading} onClick={() => {
                     onRunGame(true);
                 }} />
             </div>
