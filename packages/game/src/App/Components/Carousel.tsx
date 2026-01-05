@@ -99,7 +99,9 @@ export function Carousel({children, interval = 3000, className}: CarouselProps) 
                 setAutoRotate(true)
                 clearTimeout(timeoutId);
                 timeoutId = setTimeout(() => {
-                    next();
+                    if (autoRotate) {
+                        next();
+                    }
                     timeoutId = undefined;
                 }, interval);
             }}

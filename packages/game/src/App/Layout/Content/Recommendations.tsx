@@ -92,7 +92,7 @@ export function Recommendations() {
                 {recommendations.map((rec) => (
                     <div key={rec.name} className="px-3">
                         <Card
-                            className="relative hover:shadow-lg transition-shadow bg-white/10 backdrop-blur-sm border-white/20 w-xs">
+                            className="relative hover:shadow-lg transition-shadow bg-white/10 backdrop-blur-sm border-white/20 hover:border-primary w-xs">
                             <CardContent className="p-4 sm:p-4 min-w-2xs">
                                 <Quote className="w-6 h-6 sm:w-8 sm:h-8 text-orange-300 mb-3 sm:mb-4"/>
                                 <p className="text-blue-100 mb-4 sm:mb-6 italic text-sm sm:text-base line-clamp-9 h-55">
