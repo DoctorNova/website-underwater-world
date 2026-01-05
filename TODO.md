@@ -1,7 +1,4 @@
 - Add preview of the game above the dive in button
-- carousel go next page after rotation is enabled again
-- set a fixed height to the loading... text to that transition hopefully works
-- move include of main.css out of engine.ts into the main.tsx
 - 
 - change url to correct CV path when I upload an updated CV
 - upload a picture of myself

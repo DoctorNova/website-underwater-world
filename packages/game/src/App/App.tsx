@@ -2,6 +2,8 @@ import {Header} from "@game/App/Layout/Header";
 import {Footer} from "@game/App/Layout/Footer";
 import {Content} from "@game/App/Layout/Content";
 import {useHistoryState} from "@game/App/Hooks/useHistoryState.ts";
+// include main.css for hot reloading and easy sharing between editor and game
+import '@assets/css/main.css';
 
 export function App() {
     const [runGame, setRunGame] = useHistoryState("run-game", () => {

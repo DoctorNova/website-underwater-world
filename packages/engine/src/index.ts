@@ -1,5 +1,3 @@
-// include main.css for hot reloading and easy sharing between editor and game
-import '@assets/css/main.css';
 import { globalBoidAgentsManager } from "@engine/Boid/BoidAgentsManager.ts";
 import { globalBaseComponentManager } from "@engine/Composition/BaseComponentManager";
 import { SceneRoot } from "@engine/Composition/SceneRoot.ts";
