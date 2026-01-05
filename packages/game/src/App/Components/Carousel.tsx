@@ -90,7 +90,10 @@ export function Carousel({children, interval = 3000, className}: CarouselProps) 
         <div
             className={cn("relative overflow-hidden w-full carousel-mask", className)}
             onPointerEnter={() => setAutoRotate(false)}
-            onPointerLeave={() => setAutoRotate(true)}
+            onPointerLeave={() => {
+                setAutoRotate(true)
+                next();
+            }}
             onPointerMove={onPointerMove}
         >
             <CursorTooltip cursorPosition={pointerPosition} active={!autoRotate} >
