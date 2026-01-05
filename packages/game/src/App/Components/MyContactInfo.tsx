@@ -22,7 +22,7 @@ export function MyContactInfo() {
                     <img className="w-5 h-5" src="images/github.svg" alt="GitHub Profile" title="GitHub profile"/>
                 </span>
                 <a href="https://github.com/DoctorNova" target="_blank" rel="noopener noreferrer">
-                    <span className="break-all">github.com/DoctorNova</span>
+                    <span className="break-all hover:text-cyan-300">github.com/DoctorNova</span>
                 </a>
             </div>
             <div className="flex items-center gap-3 text-blue-200 text-sm sm:text-base">
@@ -30,7 +30,7 @@ export function MyContactInfo() {
                     <img className="w-5 h-5" src="images/linkedin.svg" alt="Linkedin Profile" title="Linkedin Profile"/>
                 </span>
                 <a href="https://linkedin.com/in/sebastian-paas" target="_blank" rel="noopener noreferrer">
-                    <span className="break-all">linkedin.com/in/sebastian-paas</span>
+                    <span className="break-all hover:text-cyan-300">linkedin.com/in/sebastian-paas</span>
                 </a>
             </div>
         </div>

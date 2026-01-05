@@ -5,6 +5,6 @@ export function MyEmail() {
     const myEmail = t("myEmail");
 
     return (
-        <a href={`mailto:${myEmail}`}>{myEmail}</a>
+        <a className="hover:text-cyan-300" href={`mailto:${myEmail}`}>{myEmail}</a>
     );
 }
