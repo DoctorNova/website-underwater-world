@@ -3,16 +3,11 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- indicate that my side supports these languages -->
-    <meta name="available-languages" content="en,de,es">
-    <!-- show language support for SEO -->
-    <link rel="alternate" hreflang="en" href="/en" />
-    <link rel="alternate" hreflang="de" href="/de" />
-    <link rel="alternate" hreflang="es" href="/es" />
-    <link rel="alternate" hreflang="x-default" href="/" />
-
+    
+    <!-- A canonical URL tells search engines which version of a page is the "main" or "preferred" one when you have duplicate or very similar content. -->
+    <!-- Helpful if the page is opened with a trailing / or query parameter  -->
+    <link rel="canonical" href="%BASE_URL%" />
     <title>Sebastian Paas</title>
-    <link rel="stylesheet" href="/css/main.css"/>
     <script type="module" src="/src/main.tsx"></script>
 </head>
 <body class="m-0 p-0 box-border">

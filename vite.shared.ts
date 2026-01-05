@@ -1,11 +1,11 @@
 /// <reference types="vitest/config" />
 
+import preact from "@preact/preset-vite";
 import tailwindcss from '@tailwindcss/vite';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { UserConfig } from 'vite';
 import tsconfigPaths from "vite-tsconfig-paths";
-import preact from "@preact/preset-vite";
 
 export function getRepositoryName(): string | undefined {
   const rootPackageJsonPath = resolve(__dirname, 'package.json');
@@ -38,7 +38,7 @@ export function getConfig(projectConfig: {root: string, base: string | undefined
     // Include shader files as assets that are used directly in the code as strings
     assetsInclude: [resolve(projectConfig.root, "src/**/*.vert"), resolve(projectConfig.root, "src/**/*.frag")],
     base: projectConfig.base ? `/${projectConfig.base}/` : '/',
-    plugins: [tsconfigPaths(), tailwindcss(), preact({ compat: true })],
+    plugins: [tsconfigPaths(), tailwindcss(), preact()],
     optimizeDeps: {
       include: ["preact", "preact/hooks", "preact/compat"]
     },
