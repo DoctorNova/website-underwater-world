@@ -17,12 +17,9 @@ function IndexIndicator({currentIndex, index, onClick}: {
     index: number,
     onClick: (index: number) => void
 }) {
-    const fill = index === currentIndex ? "#f59e0b" : "transparent";
-    const stroke = index === currentIndex ? "#f59e0b" : "white";
-
     return (
         <button onClick={() => onClick(index)} className="cursor-pointer">
-            <Circle className="w-4 h-4" fill={fill} stroke={stroke}/>
+            <Circle className={cn("w-4 h-4 stroke-white fill-transparent hover:stroke-primary hover:fill-primary", index === currentIndex && "stroke-primary fill-primary")} />
         </button>
     )
 }
