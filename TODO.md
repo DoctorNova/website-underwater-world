@@ -1,3 +1,7 @@
+- Add hover effect to 3D portfolio preview that says "3D Portfolio tour" that appears at the bottom
+- Add moving rainbow border to 3D portfolio preview by background of ::after that is restricted by filter? 
+- Add portfolio projects
+- 
 - change url to correct CV path when I upload an updated CV
 - upload a picture of myself
 - 

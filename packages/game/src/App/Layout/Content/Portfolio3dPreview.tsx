@@ -13,7 +13,7 @@ type GameLoadingBarProps = {
     onClick: () => void;
 }
 
-export function GameLoadingBar({progress, isComplete, onClick, gameCanvas, isShowingGame}: GameLoadingBarProps) {
+export function Portfolio3dPreview({progress, isComplete, onClick, gameCanvas, isShowingGame}: GameLoadingBarProps) {
     const translation = 100 - (progress * 100 || 0);
 
     return (
@@ -21,16 +21,16 @@ export function GameLoadingBar({progress, isComplete, onClick, gameCanvas, isSho
             <div className={cn("w-full max-w-6xl mx-auto px-4 sm:px-6 flex justify-center flex-col gap-2")}>
                 <div className="flex justify-center">
                     <DuplicatedCanvas active={!isShowingGame} source={gameCanvas}
-                                      className={cn("w-md max-w-full h-md translate-y-10 border border-white/30 shadow-lg rounded-lg opacity-100 transition-all duration-250", !isComplete && "opacity-0")}/>
+                                      className={cn("w-full h-md border border-white/30 shadow-lg rounded-lg opacity-100 transition-all duration-250", !isComplete && "opacity-0")}/>
                 </div>
-                <div className={cn("transition-all duration-500 overflow-hidden h-6 opacity-100", isComplete && 'h-0 opacity-0')}>
+                <div className={cn("transition-all duration-500 overflow-hidden h-6 opacity-100 -translate-y-10", isComplete && 'h-0 opacity-0')}>
                     <div
                         className={`flex justify-between items-center text-sm text-blue-200`}>
                         <span><I18nText id="loading"/>...</span>
                         <span>{Math.floor(progress * 100)}%</span>
                     </div>
                 </div>
-                <div className="flex justify-center">
+                <div className="flex justify-center -translate-y-10">
                     <div
                         className={cn("flex transition-all duration-250 ease-in overflow-hidden rounded-full w-full h-2 text-center", isComplete && 'rounded-lg h-12 w-40')}>
                         <div

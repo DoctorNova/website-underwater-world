@@ -7,7 +7,7 @@ interface DuplicateCanvasProps extends ComponentProps<"canvas"> {
     active?: boolean;
 }
 
-function DuplicateCanvasComp({ source, active = true, ...props }: DuplicateCanvasProps, ref: Ref<HTMLCanvasElement>) {
+function DuplicateCanvasComp({source, active = true, ...props}: DuplicateCanvasProps, ref: Ref<HTMLCanvasElement>) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
@@ -21,7 +21,7 @@ function DuplicateCanvasComp({ source, active = true, ...props }: DuplicateCanva
     }, []);
 
     useEffect(() => {
-        if (!canvasRef.current || !source) {
+        if (!canvasRef.current || !source || !active) {
             return;
         }
 
@@ -35,16 +35,17 @@ function DuplicateCanvasComp({ source, active = true, ...props }: DuplicateCanva
         const onAnimationFrameUpdate = () => {
             animationFrameId = requestAnimationFrame(onAnimationFrameUpdate);
 
-            if (frame++ % 3 === 0 && active) {
+            if (frame++ % 3 === 0 && canvasRef.current) {
+                const ratio = canvasRef.current.height / canvasRef.current.width;
 
-                if (previewCtx){
-                    previewCtx.drawImage(
-                        source,
-                        0, 0,
-                        canvasRef.current!.width,
-                        canvasRef.current!.height
-                    );
-                }
+                previewCtx.drawImage(
+                    source,
+                    0, 0,
+                    source.width, source.width * ratio,
+                    0, 0,
+                    canvasRef.current.width,
+                    canvasRef.current.height
+                );
             }
         }
 
@@ -53,7 +54,7 @@ function DuplicateCanvasComp({ source, active = true, ...props }: DuplicateCanva
         return () => {
             cancelAnimationFrame(animationFrameId);
         }
-    }, [source]);
+    }, [source, active]);
 
     return <canvas ref={canvasRef} {...props} />
 }
