@@ -4,6 +4,7 @@ import {useEffect, useRef, useState} from "preact/hooks";
 import {ChevronLeft, ChevronRight, Circle, Pause} from "lucide-react";
 import {CursorTooltip} from "@game/App/Components/CursorTooltip.tsx";
 import {I18nText} from "@game/App/Components/I18nText.tsx";
+import {Button} from "@game/App/Components/Button.tsx";
 
 interface CarouselProps {
     children: ComponentChildren[];
@@ -111,13 +112,13 @@ export function Carousel({children, interval = 3000, className}: CarouselProps) 
                 ))}
             </div>
             <div className="flex w-full flex-row justify-center pt-5 gap-2">
-                <button onClick={prev} className="cursor-pointer">
+                <Button onClick={prev} variant="outline" className="p-0">
                     <ChevronLeft/>
-                </button>
+                </Button>
                 {indexIndicators}
-                <button onClick={next} className="cursor-pointer">
+                <Button onClick={next} variant="outline" className="p-0">
                     <ChevronRight/>
-                </button>
+                </Button>
             </div>
         </div>
     );

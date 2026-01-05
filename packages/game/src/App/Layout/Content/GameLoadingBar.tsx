@@ -18,7 +18,7 @@ export function GameLoadingBar({ progress, isComplete, onClick, gameCanvas, isSh
     return (
         <ContentSection title="portfolio">
             <div className={cn("w-full max-w-6xl mx-auto px-4 sm:px-6 flex justify-center flex-col gap-2")}>
-                <DuplicatedCanvas active={!isShowingGame} source={gameCanvas} className={cn("w-md h-md m-auto translate-y-10 border border-white/30 shadow-lg rounded-lg", !isComplete && "opacity-0")}/>
+                <DuplicatedCanvas active={!isShowingGame} source={gameCanvas} className={cn("w-md max-w-full h-md m-auto translate-y-10 border border-white/30 shadow-lg rounded-lg", !isComplete && "opacity-0")}/>
                 <div
                     className={`flex overflow-hidden justify-between items-center text-sm text-blue-200 transition-all h-xs ${isComplete && 'h-0'}`}>
                     <span><I18nText id="loading"/>...</span>

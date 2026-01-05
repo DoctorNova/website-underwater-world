@@ -8,7 +8,7 @@ export const buttonStyles = {
         destructive:
             "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
-            "border bg-background text-foreground hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+            "border border-white/0 bg-transparent text-foreground hover:bg-white/10 hover:backdrop-blur-md hover:border-white/30",
         secondary:
             "bg-white/10 backdrop-blur-md border border-white/30 text-white rounded-lg hover:bg-primary hover:border-primary hover:text-primary-foreground shadow-lg",
         ghost:
