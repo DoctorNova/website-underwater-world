@@ -33,6 +33,7 @@ export function Carousel({children, interval = 3000, className}: CarouselProps) 
     const [autoRotate, setAutoRotate] = useState(true);
     const [itemWidth, setItemWidth] = useState(400);
     const [pointerPosition, setPointerPosition] = useState({x: 0, y: 0});
+    let timeoutId: number | undefined;
 
     const itemsPerPage = Math.max(1, Math.floor((contentContainerRef.current?.clientWidth ?? 0) / itemWidth));
     const pages = Math.ceil(children.length / itemsPerPage);
@@ -45,6 +46,9 @@ export function Carousel({children, interval = 3000, className}: CarouselProps) 
     useEffect(() => {
         if (autoRotate) {
             const timer = setTimeout(() => {
+                if (timeoutId){
+                    clearTimeout(timeoutId);
+                }
                 setIndex(prev => (prev + 1) % pages);
             }, pageInterval);
             return () => clearTimeout(timer);
@@ -93,7 +97,11 @@ export function Carousel({children, interval = 3000, className}: CarouselProps) 
             onPointerEnter={() => setAutoRotate(false)}
             onPointerLeave={() => {
                 setAutoRotate(true)
-                next();
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => {
+                    next();
+                    timeoutId = undefined;
+                }, interval);
             }}
             onPointerMove={onPointerMove}
         >
