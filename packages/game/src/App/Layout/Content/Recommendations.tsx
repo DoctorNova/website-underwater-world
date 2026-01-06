@@ -1,11 +1,11 @@
-import {Button} from "@game/App/Components/Button.tsx";
-import {Card, CardContent} from "@game/App/Components/Card.tsx";
-import {Carousel} from "@game/App/Components/Carousel.tsx";
-import {I18nText} from "@game/App/Components/I18nText.tsx";
-import {ContentSection} from "@game/App/Layout/Content/ContentSection.tsx";
-import {Download, Quote} from "lucide-react";
-import {Flag} from "@game/App/Components/Flag.tsx";
-import {typedKeys} from "@game/App/utils.ts";
+import { Button } from "@game/App/Components/Button.tsx";
+import { Card, CardContent } from "@game/App/Components/Card.tsx";
+import { Carousel } from "@game/App/Components/Carousel.tsx";
+import { Flag } from "@game/App/Components/Flag.tsx";
+import { I18nText } from "@game/App/Components/I18nText.tsx";
+import { ContentSection } from "@game/App/Layout/Content/ContentSection.tsx";
+import { typedKeys } from "@game/App/utils.ts";
+import { Download, Quote } from "lucide-react";
 
 interface Recommendation {
     name: string;
