@@ -1,6 +1,7 @@
 import { Button } from "@game/App/Components/Button.tsx";
 import { CursorTooltip } from "@game/App/Components/CursorTooltip.tsx";
 import { I18nText } from "@game/App/Components/I18nText.tsx";
+import { useLastPointerType } from "@game/App/Hooks/useLastPointerType";
 import { cn } from "@game/App/utils.ts";
 import { ChevronLeft, ChevronRight, Circle, Pause } from "lucide-react";
 import type { ComponentChildren, RefObject } from "preact";
@@ -34,23 +35,34 @@ function getPositionByIndex(i: number, pages: number, itemsPerPage: number, item
   }
 
   const isLastPage = index === pages - 1;
-  const itemsOnPage = isLastPage ? el.children.length % itemsPerPage : itemsPerPage;
+  const itemsOnPage = isLastPage ? Math.max(el.children.length % itemsPerPage, 1) : itemsPerPage;
   const prevIndex = index - 1;
   return itemWidth * prevIndex * itemsPerPage + itemsOnPage * itemWidth;
 }
 
+function CalculateNumberOfPages(containerRef: RefObject<HTMLElement>, defaultItemWidth = 400) {
+  if (!containerRef.current){
+    return 0;
+  }
+
+  const firstChild = containerRef.current.firstElementChild as HTMLElement;
+  const currentItemWidth = firstChild.clientWidth ?? defaultItemWidth;
+  const currentItemsPerPage = Math.max(1, Math.floor((containerRef.current.clientWidth ?? 0) / currentItemWidth));
+  return Math.ceil(containerRef.current.children.length / currentItemsPerPage);
+}
+
 export function Carousel({ children, interval = 3000, className }: CarouselProps) {
   const contentContainerRef = useRef<HTMLDivElement | null>(null);
+  const { isMouse: isUserUsingMouse } = useLastPointerType();
   const [index, setIndex] = useState(0);
-  const [autoRotate, setAutoRotate] = useState(true);
-  const [itemWidth, setItemWidth] = useState(400);
+  const [autoRotate, setAutoRotate] = useState(isUserUsingMouse); // only auto rotate if the user is using a mouse
   const [pointerPosition, setPointerPosition] = useState({ x: 0, y: 0 });
+  const [pages, setPages] = useState(0);
   let timeoutId: number | undefined;
 
+  const itemWidth = contentContainerRef.current?.firstElementChild?.clientWidth ?? 400;
   const itemsPerPage = Math.max(1, Math.floor((contentContainerRef.current?.clientWidth ?? 0) / itemWidth));
-  const pages = Math.ceil(children.length / itemsPerPage);
   const childToScrollTo = index * itemsPerPage;
-
   const itemsDisplayed = Math.min(children.length - childToScrollTo, itemsPerPage);
   const pageInterval = interval * itemsDisplayed;
 
@@ -65,11 +77,11 @@ export function Carousel({ children, interval = 3000, className }: CarouselProps
       }, pageInterval);
       return () => clearTimeout(timer);
     }
-  }, [pages, index, autoRotate, pageInterval]);
+  }, [pages, autoRotate, pageInterval]);
 
   // Recalculate which page is showing on resize
   useEffect(() => {
-    setIndex(i => Math.min(i, pages - 1));
+    setIndex(i => Math.max(Math.min(i, pages - 1), 0));
   }, [pages]);
 
   useEffect(() => {
@@ -81,12 +93,12 @@ export function Carousel({ children, interval = 3000, className }: CarouselProps
     if (!firstItem) return;
 
     const observer = new ResizeObserver(() => {
-      const measuredItemWidth = firstItem.clientWidth;
-
-      setItemWidth(measuredItemWidth);
+      setPages(() => CalculateNumberOfPages(contentContainerRef));
     });
 
     observer.observe(container);
+    
+    setPages(() => CalculateNumberOfPages(contentContainerRef));
 
     return () => observer.disconnect();
   }, [children.length]);
@@ -107,18 +119,20 @@ export function Carousel({ children, interval = 3000, className }: CarouselProps
       className={cn("relative overflow-hidden w-full overflow-x-fadeout-mask", className)}
       onPointerEnter={() => setAutoRotate(false)}
       onPointerLeave={() => {
-        setAutoRotate(true)
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => {
-          if (autoRotate) {
-            next();
-          }
-          timeoutId = undefined;
-        }, interval);
+        if (isUserUsingMouse) {
+          setAutoRotate(true)
+          clearTimeout(timeoutId);
+          timeoutId = setTimeout(() => {
+            if (autoRotate) {
+              next();
+            }
+            timeoutId = undefined;
+          }, interval);
+        }
       }}
       onPointerMove={onPointerMove}
     >
-      <CursorTooltip cursorPosition={pointerPosition} active={!autoRotate} >
+      <CursorTooltip cursorPosition={pointerPosition} active={!autoRotate && isUserUsingMouse} >
         <Pause className="w-5 h-5 pr-1" /><span className="text-nowrap"><I18nText id="carousel-paused" /></span>
       </CursorTooltip>
       <div

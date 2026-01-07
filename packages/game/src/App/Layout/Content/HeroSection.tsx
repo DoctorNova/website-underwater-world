@@ -1,11 +1,11 @@
-import {ProfileImage} from "@game/App/Layout/Content/ProfileImage.tsx";
-import {I18nText} from "@game/App/Components/I18nText.tsx";
-import {MyTechStack} from "@game/App/Components/MyTechStack.tsx";
-import {MyContactInfo} from "@game/App/Components/MyContactInfo.tsx";
-import {Button} from "@game/App/Components/Button.tsx";
-import {ContentSection} from "@game/App/Layout/Content/ContentSection.tsx";
-import {Download} from "lucide-react";
-import {useI18n} from "@game/App/Hooks/useI18n.ts";
+import { Button } from "@game/App/Components/Button.tsx";
+import { I18nText } from "@game/App/Components/I18nText.tsx";
+import { MyContactInfo } from "@game/App/Components/MyContactInfo.tsx";
+import { MyTechStack } from "@game/App/Components/MyTechStack.tsx";
+import { useI18n } from "@game/App/Hooks/useI18n.ts";
+import { ContentSection } from "@game/App/Layout/Content/ContentSection.tsx";
+import { ProfileImage } from "@game/App/Layout/Content/ProfileImage.tsx";
+import { Download } from "lucide-react";
 
 export function HeroSection() {
     const { t } = useI18n();
@@ -15,15 +15,15 @@ export function HeroSection() {
 
     return (
         <ContentSection>
-            <div className="flex flex-col md:grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+            <div className="flex flex-col md:grid md:grid-cols-2 gap-8 md:gap-12 items-center px-3">
                 <ProfileImage/>
 
                 <div className="w-full space-y-4 sm:space-y-6">
                     <div>
                         <h1 className="mb-0.5 text-white"><I18nText id="myName"/></h1>
                         <h2 className="mb-2 sm:mb-3 text-sm"><I18nText id="myDegree"></I18nText></h2>
-                        <p className="text-blue-100 leading-relaxed text-sm sm:text-base"><I18nText id={"aboutMeJs"}/></p>
-                        <p className="text-blue-100 leading-relaxed text-sm sm:text-base" dangerouslySetInnerHTML={{ __html: aboutMeSecondPartWithLink }}></p>
+                        <p className="text-blue-100 leading-relaxed text-sm sm:text-base text-justify sm:text-left"><I18nText id={"aboutMeJs"}/></p>
+                        <p className="text-blue-100 leading-relaxed text-sm sm:text-base text-justify sm:text-left" dangerouslySetInnerHTML={{ __html: aboutMeSecondPartWithLink }}></p>
                     </div>
 
                     <MyTechStack/>
