@@ -1,5 +1,6 @@
-import type {ComponentChildren} from "preact";
-import {useEffect, useRef, useState} from "preact/hooks";
+import { cn } from "@game/App/utils";
+import type { ComponentChildren } from "preact";
+import { useEffect, useRef, useState } from "preact/hooks";
 
 
 type CursorTooltipProps = {
@@ -8,9 +9,10 @@ type CursorTooltipProps = {
     offset?: number;
     containerRef?: {current?: HTMLElement | null};
     cursorPosition: {x: number; y: number};
+    className?: string;
 };
 
-export function CursorTooltip({ containerRef, cursorPosition, active, children, offset = 16}: CursorTooltipProps) {
+export function CursorTooltip({ containerRef, cursorPosition, active, children, className, offset = 16}: CursorTooltipProps) {
     const tooltipRef = useRef<HTMLDivElement>(null);
 
     const [flipX, setFlipX] = useState(false);
@@ -35,7 +37,7 @@ export function CursorTooltip({ containerRef, cursorPosition, active, children, 
     return (
         <div
             ref={tooltipRef}
-            className="fixed z-50 pointer-events-none flex items-center gap-2 px-3 py-1 rounded-lg bg-[#2d3a4f] backdrop-blur-md border border-white/30 text-white shadow-lg transition-opacity duration-150"
+            className={cn("fixed z-50 pointer-events-none flex items-center gap-2 px-3 py-1 rounded-lg bg-[#2d3a4f] backdrop-blur-md border border-white/30 text-white shadow-lg transition-opacity duration-150", className)}
             style={{
                 left: flipX
                     ? cursorPosition.x - offset

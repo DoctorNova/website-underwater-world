@@ -2,7 +2,6 @@ import { Button } from "@game/App/Components/Button.tsx";
 import { CursorTooltip } from "@game/App/Components/CursorTooltip.tsx";
 import { DotNavigation } from "@game/App/Components/DotNavigation";
 import { I18nText } from "@game/App/Components/I18nText.tsx";
-import { useLastPointerType } from "@game/App/Hooks/useLastPointerType";
 import { cn } from "@game/App/utils.ts";
 import { ChevronLeft, ChevronRight, Pause } from "lucide-react";
 import type { ComponentChildren, RefObject } from "preact";
@@ -42,9 +41,8 @@ function CalculateNumberOfPages(containerRef: RefObject<HTMLElement>, defaultIte
 
 export function Carousel({ children, interval = 3000, className }: CarouselProps) {
   const contentContainerRef = useRef<HTMLDivElement | null>(null);
-  const { isMouse: isUserUsingMouse } = useLastPointerType();
   const [index, setIndex] = useState(0);
-  const [autoRotate, setAutoRotate] = useState(isUserUsingMouse); // only auto rotate if the user is using a mouse
+  const [autoRotate, setAutoRotate] = useState(true); // this will be ignored if the user can't hover (because mobile, etc.)
   const [pointerPosition, setPointerPosition] = useState({ x: 0, y: 0 });
   const [pages, setPages] = useState(0);
 
@@ -86,14 +84,10 @@ export function Carousel({ children, interval = 3000, className }: CarouselProps
     <div
       className={cn("relative overflow-hidden w-full overflow-x-fadeout-mask", className)}
       onPointerEnter={() => setAutoRotate(false)}
-      onPointerLeave={() => {
-        if (isUserUsingMouse) {
-          setAutoRotate(true);
-        }
-      }}
+      onPointerLeave={() => setAutoRotate(true)}
       onPointerMove={onPointerMove}
     >
-      <CursorTooltip cursorPosition={pointerPosition} active={!autoRotate && isUserUsingMouse} >
+      <CursorTooltip className="[@media(hover:none)]:hidden" cursorPosition={pointerPosition} active={!autoRotate} >
         <Pause className="w-5 h-5 pr-1" /><span className="text-nowrap"><I18nText id="carousel-paused" /></span>
       </CursorTooltip>
       <div
