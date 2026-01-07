@@ -1,0 +1,12 @@
+@keyframes dot-progress {
+  from {
+    stroke-dashoffset: var(--circumference, 88);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.pause-dot-animation {
+  animation-play-state: paused;
+}
