@@ -1,6 +1,7 @@
-import { useEffect, useRef } from "preact/hooks";
-import {forwardRef} from "preact/compat";
-import type {Ref} from "preact";
+import { cn } from "@game/App/utils.ts";
+import type { Ref } from "preact";
+import { forwardRef } from "preact/compat";
+import { useEffect, useRef, useState } from "preact/hooks";
 
 type Canvas3DProps = {
     onProgress: (progress: number) => void;
@@ -12,6 +13,7 @@ function Canvas3DComp({ onProgress, onComplete, className }: Canvas3DProps, ref:
     const containerRef = useRef<HTMLCanvasElement>(null);
     const appRef = useRef<any>(null);
     const resizeObserverRef = useRef<ResizeObserver | null>(null);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
         if (!ref) return;
@@ -36,8 +38,8 @@ function Canvas3DComp({ onProgress, onComplete, className }: Canvas3DProps, ref:
                 onProgress: (_url, itemsLoaded: number, itemsTotal: number) => {
                     onProgress(itemsLoaded / itemsTotal);
                 },
-                onSuccess: onComplete,
-                onError: onComplete,
+                onSuccess: () => setIsLoaded(true),
+                onError: () => setIsLoaded(true),
             });
             app.Initialize();
             app.GameLoop();
@@ -64,7 +66,7 @@ function Canvas3DComp({ onProgress, onComplete, className }: Canvas3DProps, ref:
     }, []);
 
     return (
-        <canvas ref={containerRef} className={className}></canvas>
+        <canvas ref={containerRef} className={cn("transition-opacity duration-500 opacity-0", isLoaded && "opacity-100", className)} onTransitionEnd={onComplete}></canvas>
     );
 }
 
