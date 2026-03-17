@@ -7,7 +7,7 @@
     overflow: hidden;
   }
 
-  .btn-shine::after {
+  .btn-shine:not(:disabled)::after {
     content: "";
     position: absolute;
     inset: 0;

@@ -1,9 +1,10 @@
-import {I18nText} from "@game/App/Components/I18nText.tsx";
-import {buttonStyles} from "@game/App/Components/Button.tsx";
-import {cn} from "@game/App/utils.ts";
-import {ContentSection} from "@game/App/Layout/Content/ContentSection.tsx";
-import {Sparkles} from "lucide-react";
-import {DuplicatedCanvas} from "@game/App/Components/DuplicateCanvas.tsx";
+import { Button, buttonStyles } from "@game/App/Components/Button.tsx";
+import { DuplicatedCanvas } from "@game/App/Components/DuplicateCanvas.tsx";
+import { I18nText } from "@game/App/Components/I18nText.tsx";
+import { useIsWebGL2Supported } from "@game/App/Hooks/useIsWebGL2Supported";
+import { ContentSection } from "@game/App/Layout/Content/ContentSection.tsx";
+import { cn } from "@game/App/utils.ts";
+import { Sparkles } from "lucide-react";
 
 type GameLoadingBarProps = {
     gameCanvas: HTMLCanvasElement | undefined | null;
@@ -15,6 +16,7 @@ type GameLoadingBarProps = {
 
 export function Portfolio3dPreview({progress, isComplete, onClick, gameCanvas, isShowingGame}: GameLoadingBarProps) {
     const translation = 100 - (progress * 100 || 0);
+    const isWebGl2Supported = useIsWebGL2Supported(gameCanvas);
 
     return (
         <ContentSection title="portfolio">
@@ -33,7 +35,8 @@ export function Portfolio3dPreview({progress, isComplete, onClick, gameCanvas, i
                 <div className="flex justify-center -translate-y-10">
                     <div
                         className={cn("flex transition-all duration-250 ease-in overflow-hidden rounded-full w-full h-2 text-center", isComplete && 'rounded-lg h-12 w-40')}>
-                        <div
+                        <Button
+                            disabled={!isWebGl2Supported.isSupported}
                             onClick={isComplete ? onClick : () => {
                             }}
                             style={{transform: `translateX(-${translation}%)`}}
@@ -48,7 +51,7 @@ export function Portfolio3dPreview({progress, isComplete, onClick, gameCanvas, i
                             <Sparkles className="h-6 w-6"/>
                             <span className="pl-2 text-lg"><I18nText id="dive-in"/></span>
                         </span>
-                        </div>
+                        </Button>
                     </div>
                 </div>
             </div>

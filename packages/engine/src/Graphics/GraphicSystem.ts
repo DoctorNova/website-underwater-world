@@ -1,6 +1,6 @@
+import type { CameraComponent } from "@engine/Graphics/CameraComponent.ts";
+import { RemoveItemFromArray } from "@engine/Utility/ArrayUtils.ts";
 import * as THREE from "three";
-import type {CameraComponent} from "@engine/Graphics/CameraComponent.ts";
-import {RemoveItemFromArray} from "@engine/Utility/ArrayUtils.ts";
 
 export type ResizeCallback = (this: Window, ev: UIEvent) => void;
 
@@ -11,7 +11,15 @@ class GraphicSystem {
   private mainCamera: CameraComponent | undefined;
 
   public Initialize(canvas: HTMLCanvasElement): void {
-    this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    const context: WebGL2RenderingContext | undefined = canvas.getContext('webgl2') ?? undefined;
+
+    // If Webgl is not supported by the browser then no context -> show error message to the user
+    if (!context) {
+      console.error('WebGL2 not supported');
+      return;
+    }
+
+    this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, context });
     this.renderer.setClearColor(0x000000, 1);
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFShadowMap; // to blur shadow edges.

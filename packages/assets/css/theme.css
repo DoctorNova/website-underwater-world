@@ -16,7 +16,7 @@
   --muted-foreground: #90caf9;
   --accent: var(--primary);
   --accent-foreground: #ffffff;
-  --destructive: #d4183d;
+  --destructive: #ff4444;
   --destructive-foreground: #ffffff;
   --border: rgba(144, 202, 249, 0.2);
   --input: transparent;
