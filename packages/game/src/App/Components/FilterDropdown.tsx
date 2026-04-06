@@ -19,7 +19,7 @@ export function FilterDropDown({placeholder, items, onFiltered}: FilterDropDownP
       return items;
     }
 
-    return items.filter((value) => !value.toLocaleLowerCase().includes(filterText.toLocaleLowerCase()));
+    return items.filter((value) => value.toLocaleLowerCase().includes(filterText.toLocaleLowerCase()));
   }, [filterText, items]);
 
   const handleInputChange = useCallback((e: Event) => {
