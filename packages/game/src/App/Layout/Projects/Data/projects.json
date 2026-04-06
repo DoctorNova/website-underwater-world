@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Stellar Veins",
+    "description": "project-description-stellar-veins",
+    "image": "images/projects/StellarVeins_HorizontalPoster.jpg",
+    "technologies": ["C++", "OpenGL"],
+    "role": "Producer, Designer, AI programmer",
+    "links": {
+      "website": "https://www.digipen.es/showcase/student-games/stellar-veins",
+      "download": {
+        "windows": "https://drive.google.com/file/d/1lOAI5ydPn1CTGlW6aNbSw9MlT8xRuw9I/view?usp=drive_link"
+      }
+    }
+  },
+  {
+    "name": "Sobel & SIMD",
+    "description": "project-description-sobel-simd",
+    "technologies": ["C++", "SIMD"],
+    "image": "images/projects/simd-sobel.png",
+    "links": {
+      "download": {
+        "windows": "https://drive.google.com/file/d/1fVNKGrdws3Aea4o41WMe8mycc2gkXgob/view?usp=drive_link"
+      }
+    }
+  }
+]

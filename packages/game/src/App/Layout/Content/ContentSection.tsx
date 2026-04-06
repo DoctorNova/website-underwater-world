@@ -1,9 +1,9 @@
-import {I18nText} from "@game/App/Components/I18nText.tsx";
-import {type ReactNode} from "preact/compat";
+import { I18nText } from "@game/App/Components/I18nText.tsx";
+import { type ReactNode } from "preact/compat";
 
 export function ContentSection({title, children}: { title?: string, children: ReactNode }) {
     return (
-        <section className="relative z-5 w-full max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12 md:py-16">
+        <section className="relative z-5 w-full max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12 md:py-16">
             {title &&
                 <div className="w-full">
                     <h2 className="text-center mb-2 text-white"><I18nText id={title}/></h2>

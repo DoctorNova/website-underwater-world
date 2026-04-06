@@ -21,6 +21,7 @@ es,Español,,
 loading,Loading,Lädt,Cargando
 download-cv,Download CV,Lebenslauf,Descargar CV
 portfolio,Portfolio,Portfolio,Portafolio
+3d-portfolio-tour,3D Portfolio Tour,3D Portfolio Tour,Recorrido por el portafolio en 3D
 dive-in,Dive In,Tauch Ein,Sumérgete
 recommendations,Professional Testimonials,Referenzen & Empfehlungen,Referencias y recomendaciones
 myDegree,B.Sc. in Computer Science – Real-Time Interactive Simulation,,
@@ -46,3 +47,12 @@ month-09,September,September,septiembre
 month-10,October,Oktober,octubre
 month-11,November,November,noviembre
 month-12,December,Dezember,diciembre
+website,Website,Webseite,Página web
+filter-by-technology,Filter by technology,Nach Technologie filtern,Filtrar por tecnología
+showingResults,Showing,Ergebnisse,Se muestran
+project,project,Projekt,proyecto
+projects,projects,Projekte,proyectos
+role,Position,Position,Puesto
+technologies,Technologies,Technologien,Tecnologías
+project-description-stellar-veins,"A real-time survival strategy game built in C++ with OpenGL. We developed the engine and scene editor completely from scratch. I focused on the enemy AI, implementing pathfinding, collision detection, and a sprite-based animation pipeline integrated with game state logic to bring enemies to life.","Ein Echtzeit-Überlebensstrategiespiel, entwickelt in C++ mit OpenGL. Wir haben die Engine und den Szeneneditor komplett von Grund auf neu entwickelt. Ich konzentrierte mich auf die Gegner-KI und implementierte Pathfinding, Kollisionserkennung sowie eine sprite-basierte Animationspipeline, die mit der Spielzustandslogik verknüpft ist, um die Gegner zum Leben zu erwecken.","Un juego de estrategia de supervivencia en tiempo real desarrollado en C++ con OpenGL. Desarrollamos el motor y el editor de escenas completamente desde cero. Me centré en la IA de los enemigos, implementando pathfinding, detección de colisiones y un pipeline de animación basado en sprites integrado con la lógica de estado del juego para dar vida a los enemigos."
+project-description-sobel-simd,"Implemented a high-performance Sobel Filter for real-time edge detection, optimized using Intel's SSE (Streaming SIMD Extensions) SIMD instruction set. The Sobel Filter identifies edges in an image by detecting sharp discontinuities and significant shifts in colour. A foundational technique used in applications like feature extraction, object recognition, and face detection.","Implementierte einen hochleistungsfähigen Sobel-Filter zur Echtzeit-Kantenerkennung, optimiert mit Intels SSE (Streaming SIMD Extensions). Der Sobel-Filter erkennt Kanten in einem Bild, indem er starke Diskontinuitäten und deutliche Farbänderungen identifiziert. Eine grundlegende Technik, die in Anwendungen wie Feature-Extraktion, Objekterkennung und Gesichtserkennung eingesetzt wird.","Implementé un filtro Sobel de alto rendimiento para la detección de bordes en tiempo real, optimizado mediante el conjunto de instrucciones SSE (Streaming SIMD Extensions) de Intel. El filtro Sobel identifica bordes en una imagen detectando discontinuidades bruscas y cambios significativos de color. Es una técnica fundamental utilizada en aplicaciones como la extracción de características, el reconocimiento de objetos y la detección de rostros."

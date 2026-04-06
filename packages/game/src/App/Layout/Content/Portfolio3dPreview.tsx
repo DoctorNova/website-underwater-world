@@ -19,7 +19,7 @@ export function Portfolio3dPreview({progress, isComplete, onClick, gameCanvas, i
     const isWebGl2Supported = useIsWebGL2Supported(gameCanvas);
 
     return (
-        <ContentSection title="portfolio">
+        <ContentSection title="3d-portfolio-tour">
             <div className={cn("w-full max-w-6xl mx-auto px-4 sm:px-6 flex justify-center flex-col gap-2")}>
                 <div className="flex justify-center">
                     <DuplicatedCanvas active={!isShowingGame} source={gameCanvas}

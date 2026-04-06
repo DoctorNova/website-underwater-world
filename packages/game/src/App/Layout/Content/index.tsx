@@ -1,10 +1,11 @@
-import {Canvas3D} from "@game/App/Components/Canvas3D.tsx";
-import {useRef, useState} from "preact/hooks";
-import {Recommendations} from "@game/App/Layout/Content/Recommendations.tsx";
-import {HeroSection} from "@game/App/Layout/Content/HeroSection.tsx";
-import {Portfolio3dPreview} from "@game/App/Layout/Content/Portfolio3dPreview.tsx";
-import {Background} from "@game/App/Layout/Background.tsx";
-import {cn} from "@game/App/utils.ts";
+import { Canvas3D } from "@game/App/Components/Canvas3D.tsx";
+import { Background } from "@game/App/Layout/Background.tsx";
+import { HeroSection } from "@game/App/Layout/Content/HeroSection.tsx";
+import { Portfolio3dPreview } from "@game/App/Layout/Content/Portfolio3dPreview.tsx";
+import { Recommendations } from "@game/App/Layout/Content/Recommendations.tsx";
+import { ProjectsSection } from "@game/App/Layout/Projects/Projects";
+import { cn } from "@game/App/utils.ts";
+import { useRef, useState } from "preact/hooks";
 
 export function Content({ runGame, onRunGame }: { runGame: boolean, onRunGame: (enable: boolean) => void}) {
     const [progress, setProgress] = useState(0);
@@ -36,6 +37,7 @@ export function Content({ runGame, onRunGame }: { runGame: boolean, onRunGame: (
                     onRunGame(true);
                 }} />
             </div>
+            <ProjectsSection/>
         </div>
     );
 }
