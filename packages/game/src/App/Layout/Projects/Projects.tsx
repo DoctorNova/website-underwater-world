@@ -41,7 +41,11 @@ export function ProjectsSection() {
   const [filteredProjects, setFilteredProjects] = useState(PROJECTS);
 
   const onFiltered = useCallback((filter: string) => {
-    const matchingProjects = PROJECTS.filter((project) => project.technologies.join(" ").includes(filter));
+    const lowerCaseFilter = filter.toLocaleLowerCase();
+    const matchingProjects = PROJECTS.filter((project) => {
+      const t = project.technologies.join(" ").toLocaleLowerCase();
+      return t.includes(lowerCaseFilter);
+    });
     setFilteredProjects(matchingProjects);
   }, []);
 
@@ -61,13 +65,8 @@ export function ProjectsSection() {
           return (
             <div
               key={project.name}
-              className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden hover:border-white/30 transition-all duration-300 group flex flex-col"
+              className="backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden hover:border-white/30 transition-all duration-300 group flex flex-col"
             >
-              {/* Animated Rainbow Background */}
-              <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10">
-                <div className="absolute inset-0 rounded-lg animate-pulse bg-fuchsia-700"></div>
-              </div>
-
               {/* Project Image */}
               <div className="w-full h-48 overflow-hidden bg-gray-900 relative">
                 <img

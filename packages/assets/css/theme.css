@@ -4,7 +4,7 @@
   --font-size: 16px;
   --background: #0a1929;
   --foreground: #e3f2fd;
-  --card: rgba(255, 255, 255, 0.05);
+  --card: #0a1929/95;
   --card-foreground: #e3f2fd;
   --popover: #0f2942;
   --popover-foreground: #e3f2fd;

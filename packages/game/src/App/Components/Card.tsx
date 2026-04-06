@@ -1,12 +1,12 @@
-import type {ComponentProps} from "preact";
-import {cn} from "@game/App/utils.ts";
+import { cn } from "@game/App/utils.ts";
+import type { ComponentProps } from "preact";
 
 function Card({ className, ...props }: {className?: string} & ComponentProps<"div">) {
     return (
         <div
             data-slot="card"
             className={cn(
-                "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border",
+                "bg-[#0a1929]/95 transition-shadow backdrop-blur-sm border border-white/10 hover:border-white/30 text-card-foreground flex flex-col gap-6 rounded-xl",
                 className,
             )}
             {...props}
@@ -81,11 +81,6 @@ function CardFooter({ className, ...props }: {className?: string} & ComponentPro
 }
 
 export {
-    Card,
-    CardHeader,
-    CardFooter,
-    CardTitle,
-    CardAction,
-    CardDescription,
-    CardContent,
+  Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle
 };
+
