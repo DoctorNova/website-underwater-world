@@ -2,8 +2,8 @@
   {
     "name": "Stellar Veins",
     "description": "project-description-stellar-veins",
-    "image": "images/projects/StellarVeins_HorizontalPoster.jpg",
-    "technologies": ["C++", "OpenGL"],
+    "image": "images/projects/stellar-veins.png",
+    "technologies": ["C++", "OpenGL",  "Custom Game Engine", "2D"],
     "role": "Producer, Designer, AI programmer",
     "links": {
       "website": "https://www.digipen.es/showcase/student-games/stellar-veins",
@@ -21,6 +21,16 @@
       "download": {
         "windows": "https://drive.google.com/file/d/1fVNKGrdws3Aea4o41WMe8mycc2gkXgob/view?usp=drive_link"
       }
+    }
+  },
+  {
+    "name": "Drop-Off Duty",
+    "description": "project-description-drop-off-duty",
+    "technologies": ["C++", "OpenGL", "Custom Game Engine", "3D"],
+    "role": "Producer, Tools developer, Gameplay programmer",
+    "image": "images/projects/drop-off-duty.png",
+    "links": {
+      "website": "https://www.digipen.es/showcase/student-games/drop-off-duty"
     }
   }
 ]
