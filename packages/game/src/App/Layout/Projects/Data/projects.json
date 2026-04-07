@@ -33,5 +33,16 @@
       "website": "https://www.digipen.es/showcase/student-games/drop-off-duty",
       "steam": "https://www.digipen.es/showcase/student-games/drop-off-duty"
     }
+  },
+  {
+    "name": "BOID Movement",
+    "description": "project-description-boid-movement",
+    "technologies": ["C++", "SDL", "ImGui"],
+    "image": "images/projects/boid-movement-multithreaded.png",
+    "links": {
+      "download": {
+        "windows": "https://drive.google.com/file/d/15F21z7vwc-MB3GDbB-huaiOQ4dnQVbj4/view?usp=drive_link"
+      }
+    }
   }
 ]
