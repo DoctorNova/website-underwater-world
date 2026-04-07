@@ -34,7 +34,7 @@ export function ProjectLinks({ website, steam, download }: ProjectData["links"])
           className="flex items-center gap-2 py-2"
           title={t("downloadLinux")}
         >
-          <Button className="rounded-full text-xs font-medium bg-[#fcc624] hover:bg-[#f9b208] text-black hover:text-black ">
+          <Button className="rounded-full text-xs font-medium bg-[#0078d4] text-white hover:text-white border-[#0078d4]">
             <Download className="w-4 h-4" />
             <span className="hidden sm:inline">Linux</span>
           </Button>

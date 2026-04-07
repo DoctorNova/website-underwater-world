@@ -44,5 +44,30 @@
         "windows": "https://drive.google.com/file/d/15F21z7vwc-MB3GDbB-huaiOQ4dnQVbj4/view?usp=drive_link"
       }
     }
+  },
+  {
+    "name": "Chip-8 Emulator",
+    "description": "project-description-chip-8-emulator",
+    "technologies": ["C++", "Assembly"],
+    "image": "images/projects/chip-8-emulator.jpeg",
+    "links": {
+      "download": {
+        "windows": "https://drive.google.com/file/d/1YplIKveIRE6JxDCLjAWSivGRmwLE4Vc0/view?usp=drive_link",
+        "linux": "https://drive.google.com/file/d/1Yu0Popzv_qZiSUOXG8eUgqgFlvm60sjm/view?usp=drive_link"
+      }
+    }
+  },
+  {
+    "name": "Edax Animae",
+    "description": "project-description-edax-animae",
+    "technologies": ["C#", "Unity"],
+    "role": "Producer, AI Programmer, Level design",
+    "image": "images/projects/edax-animae.png",
+    "links": {
+      "download": {
+        "windows": "https://drive.google.com/file/d/1tUDnHksPMhQEmZ8t9_AparSb34Ug4WRA/view?usp=drive_link"
+      }
+    }
   }
+  
 ]
