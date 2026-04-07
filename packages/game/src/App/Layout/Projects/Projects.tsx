@@ -77,7 +77,7 @@ export function ProjectsSection() {
               </div>
 
               {/* Project Info */}
-              <div className="p-6 flex flex-col grow bg-[#0a1929]/95">
+              <div className="p-6 flex flex-col grow bg-[#16293d]/95">
                 <h3 className="text-white mb-2">{project.name}</h3>
 
                 <div className="mb-3 space-y-1">
