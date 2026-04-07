@@ -1,14 +1,12 @@
-import { Button } from "@game/App/Components/Button";
 import { FilterDropDown } from "@game/App/Components/FilterDropdown";
-import { I18nText } from "@game/App/Components/I18nText";
 import { useI18n } from "@game/App/Hooks/useI18n";
 import { ContentSection } from "@game/App/Layout/Content/ContentSection";
+import { ProjectLinks } from "@game/App/Layout/Projects/ProjectLinks";
 import { cn } from "@game/App/utils";
-import { Download, ExternalLink } from "lucide-react";
 import { useCallback, useState } from "preact/hooks";
 import projectsJson from './Data/projects.json';
 
-interface ProjectData {
+export interface ProjectData {
   "name": string,
   "description": string,
   "image": string,
@@ -93,32 +91,7 @@ export function ProjectsSection() {
                   {t(project.description)}
                 </p>
 
-                <div className="flex w-full justify-between">
-                  {project.links?.download && (
-                    <a href={project.links.download.windows} target="_blank" rel="noopener noreferrer">
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        className="text-xs sm:text-sm"
-                      >
-                        <Download className="w-4 h-4" />
-                        <I18nText id="download" />
-                      </Button>
-                    </a>
-                  )}
-                  {project.links?.website && (
-                    <a href={project.links.website} target="_blank" rel="noopener noreferrer">
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        className="text-xs sm:text-sm"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                        <I18nText id="website" />
-                      </Button>
-                    </a>
-                  )}
-                </div>
+                <ProjectLinks {...project.links}/>
               </div>
             </div>
           );
