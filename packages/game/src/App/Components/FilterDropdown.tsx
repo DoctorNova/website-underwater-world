@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks"
 
 export interface FilterDropDownProps {
   placeholder: string;
-  items: string[];
+  items: Array<string>;
   onFiltered: (text: string, filteredList: string[]) => void;
 }
 
@@ -16,10 +16,10 @@ export function FilterDropDown({placeholder, items, onFiltered}: FilterDropDownP
 
   const matchingItems = useMemo(() => {
     if (!filterText.trim()) {
-      return items;
+      return [...items].sort();
     }
 
-    return items.filter((value) => value.toLocaleLowerCase().includes(filterText.toLocaleLowerCase()));
+    return items.filter((value) => value.toLocaleLowerCase().includes(filterText.toLocaleLowerCase())).sort();
   }, [filterText, items]);
 
   const handleInputChange = useCallback((e: Event) => {
