@@ -68,6 +68,28 @@
         "windows": "https://drive.google.com/file/d/1tUDnHksPMhQEmZ8t9_AparSb34Ug4WRA/view?usp=drive_link"
       }
     }
+  },
+  {
+    "name": "Triple S",
+    "description": "project-description-triple-s",
+    "technologies": ["C++", "Custom Game Engine", "2D"],
+    "role": "Producer, Gameplay Programmer",
+    "image": "images/projects/triple-s.png",
+    "links": {
+      "download": {
+        "windows": "https://drive.google.com/file/d/1XeIX5rftLRakzywyq4SZkPiIMuS44TNa/view?usp=drive_link"
+      }
+    }
+  }, {
+    "name": "CPU Rasterizer",
+    "description": "project-description-cpu-rasterizer",
+    "technologies": ["C++", "ImGui"],
+    "image": "images/projects/cpu-rasterizer.png",
+    "links": {
+      "download": {
+        "windows": "https://drive.google.com/file/d/16A-fCOh-DhDg7Mg5phARu8kegMz4ZjaC/view?usp=drive_link"
+      }
+    }
   }
   
 ]
