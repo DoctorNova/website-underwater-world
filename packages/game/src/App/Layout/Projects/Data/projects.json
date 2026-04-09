@@ -59,7 +59,7 @@
     }
   },
   {
-    "name": "BOID Movement",
+    "name": "CPU Multithreading: BOID Movement",
     "description": "project-description-boid-movement",
     "technologies": ["C++", "SDL", "ImGui"],
     "image": "images/projects/boid-movement-multithreaded.png",
