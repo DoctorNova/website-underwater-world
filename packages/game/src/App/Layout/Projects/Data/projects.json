@@ -1,5 +1,16 @@
 [
   {
+    "name": "Drop-Off Duty",
+    "description": "project-description-drop-off-duty",
+    "technologies": ["C++", "OpenGL", "Custom Game Engine", "3D"],
+    "role": "Producer, Tools developer, Gameplay programmer",
+    "image": "images/projects/drop-off-duty.png",
+    "links": {
+      "website": "https://www.digipen.es/showcase/student-games/drop-off-duty",
+      "steam": "https://www.digipen.es/showcase/student-games/drop-off-duty"
+    }
+  },
+  {
     "name": "Stellar Veins",
     "description": "project-description-stellar-veins",
     "image": "images/projects/stellar-veins.png",
@@ -13,6 +24,30 @@
     }
   },
   {
+    "name": "Triple S",
+    "description": "project-description-triple-s",
+    "technologies": ["C++", "Custom Game Engine", "2D"],
+    "role": "Producer, Gameplay Programmer",
+    "image": "images/projects/triple-s.png",
+    "links": {
+      "download": {
+        "windows": "https://drive.google.com/file/d/1XeIX5rftLRakzywyq4SZkPiIMuS44TNa/view?usp=drive_link"
+      }
+    }
+  }, 
+  {
+    "name": "Edax Animae",
+    "description": "project-description-edax-animae",
+    "technologies": ["C#", "Unity"],
+    "role": "Producer, AI Programmer, Level design",
+    "image": "images/projects/edax-animae.png",
+    "links": {
+      "download": {
+        "windows": "https://drive.google.com/file/d/1tUDnHksPMhQEmZ8t9_AparSb34Ug4WRA/view?usp=drive_link"
+      }
+    }
+  },
+  {
     "name": "Sobel & SIMD",
     "description": "project-description-sobel-simd",
     "technologies": ["C++", "SIMD"],
@@ -21,17 +56,6 @@
       "download": {
         "windows": "https://drive.google.com/file/d/1fVNKGrdws3Aea4o41WMe8mycc2gkXgob/view?usp=drive_link"
       }
-    }
-  },
-  {
-    "name": "Drop-Off Duty",
-    "description": "project-description-drop-off-duty",
-    "technologies": ["C++", "OpenGL", "Custom Game Engine", "3D"],
-    "role": "Producer, Tools developer, Gameplay programmer",
-    "image": "images/projects/drop-off-duty.png",
-    "links": {
-      "website": "https://www.digipen.es/showcase/student-games/drop-off-duty",
-      "steam": "https://www.digipen.es/showcase/student-games/drop-off-duty"
     }
   },
   {
@@ -58,29 +82,6 @@
     }
   },
   {
-    "name": "Edax Animae",
-    "description": "project-description-edax-animae",
-    "technologies": ["C#", "Unity"],
-    "role": "Producer, AI Programmer, Level design",
-    "image": "images/projects/edax-animae.png",
-    "links": {
-      "download": {
-        "windows": "https://drive.google.com/file/d/1tUDnHksPMhQEmZ8t9_AparSb34Ug4WRA/view?usp=drive_link"
-      }
-    }
-  },
-  {
-    "name": "Triple S",
-    "description": "project-description-triple-s",
-    "technologies": ["C++", "Custom Game Engine", "2D"],
-    "role": "Producer, Gameplay Programmer",
-    "image": "images/projects/triple-s.png",
-    "links": {
-      "download": {
-        "windows": "https://drive.google.com/file/d/1XeIX5rftLRakzywyq4SZkPiIMuS44TNa/view?usp=drive_link"
-      }
-    }
-  }, {
     "name": "CPU Rasterizer",
     "description": "project-description-cpu-rasterizer",
     "technologies": ["C++", "ImGui"],
