@@ -1,10 +1,10 @@
 - Add hover effect to 3D portfolio preview that says "3D Portfolio tour" that appears at the bottom
 - I think this might be to much: Add moving rainbow border to 3D portfolio preview by background of ::after that is restricted by filter?
 - Add portfolio projects
-  - add readme files explaining how to run command line tools (Sobel & SIMD, Chip-8 Emulator)
   - update sobel & simd project with a faster implementation
   - add drop of duty steam link
 - Add picture from LinkedIn and link to linkedIn to each persons recommendation card.
+- change to webgl1 for firefox support
 -
 - change url to correct CV path when I upload an updated CV
 - upload a picture of myself
