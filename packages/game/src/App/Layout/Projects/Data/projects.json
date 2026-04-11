@@ -91,6 +91,17 @@
         "windows": "https://drive.google.com/file/d/16A-fCOh-DhDg7Mg5phARu8kegMz4ZjaC/view?usp=drive_link"
       }
     }
+  },
+  {
+    "name": "CPU Graphics Pipeline",
+    "description": "project-description-cpu-graphics-pipeline",
+    "technologies": ["C++", "SFML"],
+    "image": "images/projects/cpu-graphics-pipeline.png",
+    "links": {
+      "download": {
+        "windows": "https://drive.google.com/file/d/1qw8KcSZ1Tr-uFsNV_eNeJq1xgCC35QVV/view?usp=drive_link"
+      }
+    }
   }
   
 ]
