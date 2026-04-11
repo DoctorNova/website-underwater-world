@@ -63,31 +63,31 @@ export function ProjectsSection() {
           return (
             <div
               key={project.name}
-              className="backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden hover:border-white/30 transition-all duration-300 group flex flex-col"
+              className="backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden hover:border-white/30 transition-all duration-300 group hover:-translate-y-1 flex flex-col"
             >
               {/* Project Image */}
-              <div className="w-full h-48 overflow-hidden bg-gray-900 relative">
+              <div className="w-full h-48 overflow-hidden bg-gray-800 relative z-10">
                 <img
                   src={project.image}
                   alt={project.name}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                 />
               </div>
 
               {/* Project Info */}
-              <div className="p-6 flex flex-col grow bg-[#16293d]/95">
+              <div className="p-5 flex flex-col grow bg-[#16293d]/95">
                 <h3 className="text-white mb-2">{project.name}</h3>
 
                 <div className="mb-3 space-y-1">
-                  <p className={cn("text-orange-300 text-sm", !project.role && 'hidden')}>
+                  <p className={cn("text-blue-200 text-sm", !project.role && 'hidden')}>
                     <span className="font-semibold">{t("role")}:</span> {project.role}
                   </p>
-                  <p className="text-blue-200 text-sm">
+                  <p className="text-orange-300 text-sm">
                     <span className="font-semibold">{t("technologies")}:</span> {project.technologies.join(", ")}
                   </p>
                 </div>
 
-                <p className="text-blue-100 text-sm mb-4 grow">
+                <p className="text-blue-100 text-sm mb-4 grow text-justify">
                   {t(project.description)}
                 </p>
 

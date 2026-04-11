@@ -110,7 +110,7 @@ export function Recommendations() {
             <Card className="relative w-xs">
               <CardContent className="p-4 sm:p-4 min-w-2xs">
                 <Quote className="w-6 h-6 sm:w-8 sm:h-8 text-orange-300 mb-3 sm:mb-4" />
-                <p className="text-blue-100 mb-4 sm:mb-6 italic text-sm sm:text-base line-clamp-9 h-55 text-justify sm:text-left">
+                <p className="text-blue-100 mb-4 sm:mb-6 italic text-sm sm:text-base line-clamp-9 h-55 text-justify">
                   "<I18nText id={rec.quote} />"
                 </p>
                 <div className="border-t border-white/20 pt-3 sm:pt-4 mb-3 sm:mb-4">
