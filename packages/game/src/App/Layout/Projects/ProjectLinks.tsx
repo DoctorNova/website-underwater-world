@@ -1,7 +1,7 @@
 import { Button } from "@game/App/Components/Button";
 import { useI18n } from "@game/App/Hooks/useI18n";
 import type { ProjectData } from "@game/App/Layout/Projects/Projects";
-import { Download, Globe } from "lucide-react";
+import { Download, ExternalLink } from "lucide-react";
 
 export function ProjectLinks({ website, steam, download }: ProjectData["links"]) {
   const { t } = useI18n();
@@ -67,7 +67,7 @@ export function ProjectLinks({ website, steam, download }: ProjectData["links"])
           title={t("website")}
         >
           <Button className="rounded-full text-xs font-medium">
-            <Globe className="w-4 h-4" />
+            <ExternalLink className="w-4 h-4" />
             <span className="hidden sm:inline">{t("website")}</span>
           </Button>
         </a>

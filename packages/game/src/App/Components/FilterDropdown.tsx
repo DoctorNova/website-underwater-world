@@ -61,7 +61,7 @@ export function FilterDropDown({placeholder, items, onFiltered}: FilterDropDownP
             onChange={handleInputChange}
             onFocus={() => setShowDropdown(true)}
             placeholder={t(placeholder)}
-            className="w-full pl-10 pr-10 py-3 bg-white/10 backdrop-blur-sm border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:border-transparent placeholder-blue-300/60 transition-all"
+            className="w-full pl-10 pr-10 py-3 bg-white/10 backdrop-blur-sm border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent placeholder-blue-300/60 transition-all"
           />
           {filterText && (
             <button
@@ -75,12 +75,12 @@ export function FilterDropDown({placeholder, items, onFiltered}: FilterDropDownP
 
         {/* Dropdown with matching technologies */}
         {showDropdown && matchingItems.length > 0 && (
-          <div className="absolute z-10 w-full mt-2 bg-[#0a1929]/95 backdrop-blur-sm border border-white/20 rounded-lg shadow-xl max-h-60 overflow-y-auto">
+          <div className="absolute z-10 w-full mt-2 backdrop-blur-sm border border-white/20 rounded-lg shadow-xl max-h-60 overflow-y-auto">
             {matchingItems.map((item) => (
               <button
                 key={item}
                 onClick={() => handleItemSelect(item)}
-                className="w-full px-4 py-3 text-left text-white hover:bg-[#ff6b35]/20 transition-colors border-b border-white/10 last:border-b-0"
+                className="w-full px-4 py-3 text-left text-white hover:text-[#0a1929] bg-[#0a1929]/95 hover:bg-primary/90 border-b border-white/10 last:border-b-0 cursor-pointer"
               >
                 {item}
               </button>
