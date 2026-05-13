@@ -37,7 +37,9 @@ export function Content({ runGame, onRunGame }: { runGame: boolean, onRunGame: (
                     onRunGame(true);
                 }} />
             </div>
-            <ProjectsSection/>
+            <div className={cn("transition-all duration-200 relative z-10 opacity-100", runGame && "opacity-0 pointer-events-none h-0 overflow-hidden")}>
+              <ProjectsSection/>
+            </div>
         </div>
     );
 }
