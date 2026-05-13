@@ -1,5 +1,15 @@
 [
   {
+    "name": "ORUN",
+    "description": "project-description-orun",
+    "technologies": ["Unreal Engine", "3D"],
+    "role": "Gameplay programmer",
+    "image": "images/projects/orun.jpg",
+    "links": {
+      "steam": "https://store.steampowered.com/app/4598370/ORUN"
+    }
+  },
+  {
     "name": "Drop-Off Duty",
     "description": "project-description-drop-off-duty",
     "technologies": ["C++", "OpenGL", "Custom Game Engine", "3D"],
@@ -7,7 +17,7 @@
     "image": "images/projects/drop-off-duty.png",
     "links": {
       "website": "https://www.digipen.es/showcase/student-games/drop-off-duty",
-      "steam": "https://www.digipen.es/showcase/student-games/drop-off-duty"
+      "steam": "https://store.steampowered.com/app/4598360/DropOff_Duty"
     }
   },
   {
@@ -38,7 +48,7 @@
   {
     "name": "Edax Animae",
     "description": "project-description-edax-animae",
-    "technologies": ["C#", "Unity"],
+    "technologies": ["C#", "Unity", "2D"],
     "role": "Producer, AI Programmer, Level design",
     "image": "images/projects/edax-animae.png",
     "links": {
@@ -70,9 +80,20 @@
     }
   },
   {
+    "name": "Collision Avoidance: Crowd Simulation",
+    "description": "project-description-crowd-simulation",
+    "technologies": ["C++", "Unreal Engine"],
+    "image": "images/projects/crowd-simulation.png",
+    "links": {
+      "download": {
+        "windows": "https://drive.google.com/file/d/1QHaTeBKwmM2gd0gbc2zPoal1ffFofhJn/view?usp=drive_link"
+      }
+    }
+  },
+  {
     "name": "Chip-8 Emulator",
     "description": "project-description-chip-8-emulator",
-    "technologies": ["C++", "Assembly"],
+    "technologies": ["C++", "SDL", "Assembly"],
     "image": "images/projects/chip-8-emulator.jpeg",
     "links": {
       "download": {

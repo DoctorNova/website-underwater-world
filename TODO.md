@@ -1,9 +1,13 @@
+- Make 3D Portfolio as the first project in portfolio section
 - Add hover effect to 3D portfolio preview that says "3D Portfolio tour" that appears at the bottom
-- I think this might be to much: Add moving rainbow border to 3D portfolio preview by background of ::after that is restricted by filter?
+-
+- redesign Digipen link in bio
 - Add portfolio projects
   - upload cs388 assignments
   - update sobel & simd project with a faster implementation
-  - add drop of duty steam link
+  - add ORUN website
+  - Add README files to each project
+- Replace download icon with icon of os that download is for.
 - Add picture from LinkedIn and link to linkedIn to each persons recommendation card.
 - change to webgl1 for firefox support
 -

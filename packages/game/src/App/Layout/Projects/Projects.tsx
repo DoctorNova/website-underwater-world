@@ -66,7 +66,7 @@ export function ProjectsSection() {
               className="backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden hover:border-white/30 transition-all duration-300 group hover:-translate-y-1 flex flex-col"
             >
               {/* Project Image */}
-              <div className="w-full h-48 overflow-hidden bg-gray-800 relative z-10">
+              <div className="w-full aspect-video overflow-hidden bg-gray-800 relative z-10">
                 <img
                   src={project.image}
                   alt={project.name}
